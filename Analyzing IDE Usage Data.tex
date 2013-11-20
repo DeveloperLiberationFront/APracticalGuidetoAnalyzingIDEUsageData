@@ -1,0 +1,90 @@
+\documentclass{article}
+
+\usepackage{cite}
+\usepackage{anysize}
+\marginsize{1in}{1in}{1in}{1in}
+
+\begin{document}
+
+\title{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
+\date{}
+
+\author{
+Will Snipes, Emerson Murphy-Hill,
+Thomas Fritz, \\
+Kostadin Damevski,
+Anil R. Nair, David Shepherd
+}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{abstract}
+As software development evolved, Integrated Development Environments (IDEs) sprang up to aid the developer in managing the ever increasing complexity of software programs.  Meant to increase productivity, modern IDEs such as Eclipse and Visual Studio provide tools and capabilities to perform tasks such as navigating among classes and methods, continuous compilation, code refactoring, automated testing, and integrated debugging.  The breadth of development activities supported by the IDE makes collecting editor, command, and tool usage data valuable for analyzing developers’' work patterns.  
+
+Prior work in the RSSE book on Collecting and processing data for recommendation systems provides a description of tools, analysis methods, and important findings from developer usage data analysis.  The RSSE chapter is also a great introduction to prior research applying usage data to solve issues that challenge developers.  In this chapter, we will provide a practical how-to description for collecting and analyzing usage data from IDEs.  Each topic will provide practical guidance with how-to examples and exercises.  We also provide a role-based view of analysis describing what a software engineering researcher can do with the data, what a developer can do, and what toolsmiths can learn from the data.
+
+Instrumenting the IDE to collect usage data and observing developers’' work through ethnographic studies gives researchers a greater level of detail on developers’' work than previously possible. Instrumenting the IDE involves extending the IDE within the provided API framework.  Eclipse and Visual Studio support a rich API framework allowing logging of many commands and actions  as they occur.  Tools used for research that instrument the Visual Studio IDE include Hackystat\cite{V:johnson2003beyond}, Blaze, and Codealike.  Tools that instrument the Eclipse IDE include Mylyn Monitor, CodeingSpectator, Hackystat\cite{V:johnson2003beyond}, and Zorro\cite{Kou2010Operational}.
+
+Assembling IDE usage data across developers and temporally across many development sessions allows researchers to study differences and similarities in work patterns.   Raw usage data must be transformed to answer specific research questions.  Techniques to transform usage data include classification, attribute extraction, deriving sequences, state-based models, and  multi-event sequences.  
+
+Usage data supports analysis of how developers spend their time\cite{V:johnson2003beyond}, what activities might benefit from greater tool support \cite{V:MurphyHill2012How}, where developers have difficulty comprehending code \cite{Carter2010Are}, even whether they are following specific practices such as test-driven development\cite{Kou2010Operational}.  Combining usage data with additional data dimensions such as change history or code analysis, researchers can understand larger influences of low-level developer practices.  With these data we can answer questions such as the level of expertise developers have for an area of source code. \cite{Fritz2010Degreeofknowledge}
+
+Currently, few developers study their own work habits with such data.  However, in a world of devices such as fitbit \footnote{fitbit device to track physical activity www.fitbit.com}, we may see self-analysis play a more important role.  By studying their own usage patterns, developers may learn how to improve their own practices or help their peers advance.
+
+There are limits, however, to what IDE usage data can tell us.  The missing elements include things like how well the developer knows the subject code base, what their mental model of the code is, or how they intend to alter the code to suit new requirements.  The developers'' experience, design ideas, and constraints they keep in mind during an implementation activity are factors that we must obtain separately.  
+
+Looking forward, usage data from development environments provides a platform for greater understanding of developer's low-level practices.  We expect to uncover more nuggets of how developers create mental models, how they investigate code, how they perform mini trial and error experiments, and what might release further productivity improvements for everyone.
+
+\end{abstract}
+
+\input{1_what_is_usage_data}
+\input{2_How_to_Collect_Data}
+\input{3_How_to_Extract}
+\input{4_Perspectives_on_Data_Analysis}
+\input{5_Reasearch_combining_usage_data}
+\input{6_limits}
+\input{7_look_ahead}
+
+\pagebreak
+%\section*{Table of Contents}
+%\begin{enumerate}
+%  \item What Is Usage Data and Why Analyze It?
+%  \item How to Collect Data or Get Pre-Existing Data
+%  \begin{enumerate}
+%  \item Data sources
+%  \item Building Data Collection %(Dave and Kosta)
+%  \item Instrumenting the IDE %(Will \& ?)
+%  \item Video studies %(?)
+%  \item Other methods
+%  \end{enumerate}
+%  \item How to Extract Attributes from Usage Data
+%  \begin{enumerate}
+%  \item Creating meaningful classification of events
+%  \item Defining useful and balanced sequences % (Will, Anil)
+%  \item Dealing with multi-event dependent sequences
+%  \item  Modeling sequences with state models %(Anil)
+%  \end{enumerate}
+%\item{Perspectives on Data Analysis}
+%\begin{enumerate}
+%\item Creating and communicating developer oriented feedback
+%\item Tailoring usage data to provide value to toolsmiths
+%\item Research perspectives and opportunities
+%\end{enumerate}
+%\item Reasearch combining usage data with other sources 
+%  \begin{enumerate}
+%  \item Tasks 
+%  \item Change history
+%  \item Program elements
+%  \item News feeds
+%  \end{enumerate}
+%  \item Limits of What You Can Learn from Usage Data 
+%  \item A Look Ahead
+%\end{enumerate}
+
+  
+\bibliographystyle{abbrv}
+\bibliography{paper_id1} 
+
+\end{document}
+
