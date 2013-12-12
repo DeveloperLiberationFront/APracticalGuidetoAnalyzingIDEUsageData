@@ -15,11 +15,27 @@
       Privacy and anonymity considerations when collecting data. (what not to collect, using hashes to protect user identities)
     \end{itemize}
 
-  \item Instrumenting the IDE %(Will \& ?)
+  \item Instrumenting the IDE -- Using an Existing Framework %Emerson
+  
+  \begin{enumerate}
+	\item 
+	There are many existing frameworks to use. We suggest picking on and building off one. (Note: Clone these on github? include packaged with IDE?)
+	
+	\item Eclipse: Mylyn Monitor. Format: What it was originally intended to be used for. What data it collects. Where to get it. How to install it (w/version info). Example output. Deployment(?)
+	
+	\item CodingSpectator %https://github.com/vazexqi/CodingSpectator	
+	
+	\item Hackystat\cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
+
+	\item Zorro\cite{Kou2010Operational}. %same as Hackystat? How about VS tool?
+	
+\end{enumerate}
+
+  \item Instrumenting the IDE -- Building it Yourself %(Will \& ?)
 
 \begin{enumerate}
 	\item 
-	Identify the goal and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
+	Identify the goal (or research questions) and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
 	\item
 	Identifying  IDE API interfaces necessary to accomplish the measurement goal.  Examples window showing events, scrolling in the editor, clicking on code lines, Command events, automated events (e.g. build begin and end).
 	\item
