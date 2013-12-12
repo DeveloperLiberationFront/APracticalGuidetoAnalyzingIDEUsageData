@@ -10,15 +10,27 @@
     \item
       What data is relevant to collect? (data granularity depends on needs of subsequent analysis and anticipated space and time overhead; collecting aggregate data vs. individual events; mention that data should be timestamped as a lot of subsequent analyses depend on that)
     \item
-      How to modify existing tools to collect data? (events are a good communication paradigm; centralizing the logger in the code allows for consistent log messages and easy mainteance; trade-offs in storing logs as highly structured or somewhat unstructured data)
+      How to modify existing tools to collect data? (events are a good communication paradigm; centralizing the logger in the code allows for consistent log messages and easy maintenance; trade-offs in storing logs as highly structured or somewhat unstructured data)
     \item
       Privacy and anonymity considerations when collecting data. (what not to collect, using hashes to protect user identities)
     \end{itemize}
 
   \item Instrumenting the IDE %(Will \& ?)
 
-  \item Video studies %(?)
-
-  \item Other methods
+\begin{enumerate}
+	\item 
+	Identify the goal and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
+	\item
+	Identifying  IDE API interfaces necessary to accomplish the measurement goal.  Examples window showing events, scrolling in the editor, clicking on code lines, Command events, automated events (e.g. build begin and end).
+	\item
+	The event interceptor model, intercepting IDE events transparently to the user.  consider Throttling the capture of near real-time events such as scrolling.
+	\item
+	Considerations for anonymizing the collected data
+	\item
+	IDE data collection tooling.  Build tooling for ease of use and installation.  Planning logging interface for offline and online data collection.  Handling data store access.  Ways to address security.  
+	\item
+	End user communication including anonymity, statement of intended use, restrictions on use, optional participation
+	
+\end{enumerate}
 
   \end{enumerate}
