@@ -3,6 +3,16 @@
 
   \begin{enumerate}
   \item Data sources
+    \begin{itemize}
+    \item
+	- usage data from tools of course
+\item
+	- usage data in user study smaller setting is augmented by user explicit feedback to establish ground truth (e.g. search result was good) 
+\item
+	- smaller studies can ask questions about user activities that add rationale to the usage data that tells why user is doing what they are doing
+\item 
+	- small studies can generate a metric you can use with larger data source that does not have augmented data.  E.g. structured navigation that Robillard did supports a larger study such as what we did at ABB.
+    \end{itemize}
 
   \item Building Data Collection %(Dave and Kosta)
   
@@ -17,7 +27,7 @@
 
   \item Instrumenting the IDE -- Using an Existing Framework %Emerson
   
-  \begin{enumerate}
+\begin{enumerate}
 	\item 
 	There are many existing frameworks to use. We suggest picking on and building off one. (Note: Clone these on github? include packaged with IDE?)
 	
@@ -28,11 +38,14 @@
 	\item Hackystat\cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
 
 	\item Zorro\cite{Kou2010Operational}. %same as Hackystat? How about VS tool?
-	
+
+	\item Codealike %https://codealike.org
+
+	\item Romain Robbes univ of chile 	
 \end{enumerate}
 
-  \item Instrumenting the IDE -- Building it Yourself %(Will \& ?)
-
+  \item Instrumenting the IDE -- Building it Yourself for Visual Studio %(Will \& ?)
+ summary:
 \begin{enumerate}
 	\item 
 	Identify the goal (or research questions) and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
@@ -48,5 +61,5 @@
 	End user communication including anonymity, statement of intended use, restrictions on use, optional participation
 	
 \end{enumerate}
-
+- detailed how to walkthrough 
   \end{enumerate}
