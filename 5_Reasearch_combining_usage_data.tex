@@ -1,8 +1,42 @@
-\section{ Reasearch combining usage data with other sources}
+\section{Research combining usage data with other sources}
 
-  \begin{enumerate}
-  \item Tasks 
-  \item Change history
-  \item Program elements
-  \item News feeds
-  \end{enumerate}
+Other data sources, such as task descriptions, change histories, and
+news feeds provide context for usage data collection and enable a new
+set of applications. In this section, we outline the related work that
+combines usage data with other software engineering data sources.
+
+
+\subsection{Tasks}
+
+%Mylin
+Mylin is a popular extension to the Eclipse IDE that performs task
+management, reducing the effort for a developer to switch between
+tasks and to maintain relevant information for each
+task~\cite{Kersten-Mylin}. In the context of a specific task, Mylin
+collects usage data in order to compute a degree-of-interest (DOI)
+value for each program element, which represents the interest the
+developer has in a particular program element for a specific
+task. Program elements that are frequently interacted with have a
+higher DOI value, and are displayed to the programmer as part of his
+or her task context.  In this way, Mylin filters unnecessary
+information from the IDE, displaying only program elements relevant to
+the specific developer task.
+
+
+\subsection{Change History}
+
+
+%FastDash
+The FastDash tool enables real-time awareness of other developers'
+actions (e.g. focus or edits to a specific file) by utilizing usage
+data in concert with the source files and
+directories~\cite{FastDash}. FastDash's purpose is to reduce faults
+caused by lack of communication and lack of awareness of activities
+that other developers are performing on the same code base. The tool
+highlights other developer's activity as it is occuring using a
+sophisticated dashboard on the developer's screen.
+
+
+
+\subsection{News Feeds}
+
