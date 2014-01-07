@@ -68,3 +68,130 @@
 \end{enumerate}
 - detailed how to walkthrough 
   \end{enumerate}
+
+\subsection{Eclipse Usage Data Collector}
+
+This section outlines how to collect IDE usage data using Eclipse's Usage Data Collector (UDC)(\url{http://www.eclipse.org/epp/usagedata/}).
+The UDC framework was originally build by the Eclipse Foundation, as a way to measure how the 
+community was using the Eclipse IDE.
+While UDC was included in official Eclipse releases and data was collected from
+hundreds of thousands of Eclipse users between 2008 and 2011, the project was eventually shut down, 
+and UDC was removed from official Eclipse releases.
+However, the source code for UDC remains available and researchers can still use and deploy it.
+
+\subsubsection{What Data is Collected}
+
+The Eclipse Data Collector records the following types of Eclipse information:
+
+\begin{itemize}
+ 
+\item Information about the runtime environment, such as the operating system and Java Virtual Machine.
+
+\item Information about the Eclipse environment, such as which bundles are loaded and when Eclipse
+starts up and shuts down
+
+\item Information about actions and commands that are executed, via menus, buttons, toolbars, and hotkeys.
+
+\item Information about when views, editors, and perspectives are invoked.
+
+\end{itemize}
+
+\noindent
+
+Let's look at an example of an event that UDC produces on a developer's machine:
+\vspace{4mm}
+
+\begin{tabular}{llllll}
+\textbf{what}&\textbf{kind}&\textbf{bundleId}&\textbf{bundleVersion}&\textbf{description}&\textbf{time}\\
+executed&command&org.eclipse.ui&3.7.0.v20110928-1505&org.eclipse.ui.edit.paste&1389111843130\\
+\end{tabular}
+
+\vspace{4mm}
+The first column tells us what kind of thing happened -- in this case, something was executed.
+The second column tells us what was executed -- in this case, a command.
+The third column tells us what bundle this event belonged to -- in this case, Eclipse's user interface bundle.
+The fourth column gives us the version of the bundle.
+The fifth tells us the name of the command that was executed -- in this case, paste.
+The final column tells us when the command was executed, in Greenwich Mean Time -- in this case, January 7th, 2014 at 16:24:03 GMT.
+
+
+\subsubsection{Limitations}
+
+Apart from general limitations of collecting usage data~\ref{sec:limitations},
+one significant limitation of UDC that we have found is that sometimes it has 
+unexpectedly incomplete data.
+For example, in planning for a study involving when people ran their JUnit tests,
+we found that UDC recorded an event when the ``Run>Run As>Run as JUnit Test'' menu item was selected,
+but not when the ``Run As'' button was pressed on the toolbar.
+We suspect that the reason has to do with how different user interface affordances 
+invoke the same functionality.
+In general, when you are planning on running a study with UDC, be sure to know what 
+types of events you are looking for, and test them to make sure UDC captures those events.
+
+\subsection{How to Use It}
+
+Collecting data for your own research is fairly straightforward with Eclipse UDC,
+and we describe how to do so here.
+We also include an accompanying screencast that shows the basics: 
+\url{https://docs.google.com/file/d/0B7DV-T4_2mpKRWgwRnJnTWpvN0E/edit}
+%TODO move this screencast to youtube, once you're happy
+
+\paragraph{Gathering Data in Experiments using the UDC Client.}
+
+Let's talk about how data is collected on a local machine.
+Since UDC was last included in the Eclipse Indigo SR2 release 
+(\url{http://www.eclipse.org/downloads/packages/release/indigo/sr2}), 
+if you have the option of which Eclipse to use, we recommend downloading
+that version.
+
+By default, UDC starts collecting data when Eclipse is start up. 
+You can verify this by going to $Windows > Preferences$, then 
+select the \textit{Usage Data Collector} item (Figure~\ref{fig:prefPage1}).
+The \textit{Enable capture} option should be checked.
+
+First, try out a few commands and views in Eclipse.
+Then, on your file system, open the following path as a subdirectory
+of your current workspace: \texttt{.metadata/.plugins/org.eclipse.epp.usagedata.recording}
+(Figure~\ref{fig:filesystem}).
+In that folder, depending on how many UDC events have been gathered 
+a number of comma seperated value (CSV) files will appear, where \texttt{upload0.csv} is the oldest
+and \texttt{usagedata.csv} is the newest.
+Open up \texttt{usagedata.csv} -- you should notice a large number and a variety of events.
+
+Before doing a study, be aware that Eclipse will ask and periodically attempt to upload
+data to the Eclipse foundation server.
+You should \emph{not} allow it to do this, because each time data is uploaded, the underlying
+CSV files are deleted.
+Furthermore, because the UDC project is no longer officially supported, the official Eclipse
+UDC server no longer accepts the data, so your usage data is, in effect, lost permanently.
+
+Unfortunately, there is no easy way to tell the UDC client to permanently store
+usage data.
+An easy workaround is to increase the upload period to 90 days (Figure~\ref{fig:upload}),
+which should be enough time to complete the experiment.
+The long-term fix for this issue is to modify the source code, as we will explain
+how to do shortly, to never upload data.
+
+If you're doing a lab experiment, collecting data should be simply a matter of 
+copying and deleting the CSV files after each participant has done the experiment.
+You can append the files together or put them in a database for analysis.
+
+\paragraph{Modifying the UDC Client.}
+
+\paragraph{Transmitting Data over the Internet}
+
+
+Alt:
+Newer version of Eclipse, integrate from source. (but no guarantees)
+If you want to make modifications, checkout also. Use branch associated with release. 
+Tried with Indigo R2 + branch.
+
+How to install it (w/version info). 
+
+\subsection{Deployment.}
+
+(Not sure if we want this section. Mostly just point to update sites.)
+
+\subsection{Existing Data}
+
+Maybe where to get some archived data. 
