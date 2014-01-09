@@ -7,23 +7,23 @@
     \item
 	- usage data from tools of course
 \item
-	- usage data in user study smaller setting is augmented by user explicit feedback to establish ground truth (e.g. search result was good) 
+	- usage data in user study smaller setting is augmented by user explicit feedback to establish ground truth (e.g. search result was good)
 \item
 	- smaller studies can ask questions about user activities that add rationale to the usage data that tells why user is doing what they are doing
-\item 
+\item
 	- small studies can generate a metric you can use with larger data source that does not have augmented data.  E.g. structured navigation that Robillard did supports a larger study such as what we did at ABB.
     \end{itemize}
 
 \subsection{ Building Data Collection} %(Dave and Kosta)
-  
+
 
 	Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While a general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can improve the result.  A process for defining the desired data can follow structures such as Goal-Question-Metric \ref{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, to study the navigation practices of developers, we perfrom the GQM process as follows:
     \begin{itemize}
-\item 
+\item
 	Goal
-\subitem 
+\subitem
 	To assess and compare the use of structured navigation by developers in our study
-\item 
+\item
 	Possible Question(s)
 \subitem
 	What is the frequency  of navigation commands developers use when modifying source code?
@@ -38,14 +38,14 @@
 
 The next step is selecting the data to collect from the IDE related to the Metric defined for Navigation Ratio.  For this we identify the  commands related to structured navigation (in Visual Studio) as follows:
 \begin{itemize}
-\item 
- Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string 
-\item Go To Definition (F12) brings up the code that defines the selected identifier 
+\item
+ Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string
+\item Go To Definition (F12) brings up the code that defines the selected identifier
 \item View Call Hierarchy (Ctrl+K Ctrl+T) provides a two way analysis of an identifier's dependencies and uses
 \item Class View (Ctrl+W, C) provides a browser and search function for classes and class hierarchy
 \item Find All References (Ctrl+K,R) provides a list of lines that reference an identifier
 \item Navigate to Event Handler in the XAML editor shows the event handler for an object
-\item View Class Diagram generates a class diagram 
+\item View Class Diagram generates a class diagram
 \item View Object Browser is a search tool and browser
 \end{itemize}
 
@@ -54,7 +54,7 @@ Next we identify the commands related to unstrctured navigation as follows:
 \item selecting a file in an explorer window
 \item selecting the tab for a file
 \item using arrow and page up/down keys to go up/down through a file
-\item scrolling, 
+\item scrolling,
 \item clicking on a file element
 \item using GoTo Line command
 \item using Find In Files command
@@ -65,7 +65,7 @@ These identified commands form the set of actions that usage data needs to colle
 
 Assessing commands within a time duration (e.g. day) requires that we collect a time-stamp for each command.  Simply using the time as a "by variable" where we stratify data according to time is a straight-forward conversion.  However, calculating duration or elapsed time for a command or set of commands adds new requirements to monitoring.  Specifically, the need to collect events that relate to when the application or IDE is being used and when it is not and the need to collect additional events that occur when the user has moved on from the command of interest.  This is discussed in further detail in section \ref{buildItYourself}.
 
-Concerns over privacy intrusion makes usage monitoring a flash point for some people.  Privacy concerns can be divided into concerns about what data is collected that may expose the user or parts of the source code to prying eyes and who the data and aggregates of it are shared with.  
+Concerns over privacy intrusion makes usage monitoring a flash point for some people.  Privacy concerns can be divided into concerns about what data is collected that may expose the user or parts of the source code to prying eyes and who the data and aggregates of it are shared with.
 
 To alleviate concerns about what data is collected, steps such as hashing sensitive pieces of infomation can reduce the concern. If you collect information like window titles they can contain filenames, web site titles, or even email titles.  Hashing these names provides a measure of assurance that the data are less easily identifiable with the user of the system and with sensitive subjects they may be working on.   Collecting a user identification makes this data very helpful for understanding distribution of practices, however, this makes it more sensitive as well.  Generating an anonymous identifier to identify distinct users helps alleviate the concern that data will be associated with the user.
 
@@ -79,17 +79,17 @@ To reduce concernes about who the data are shared with, create a statement of po
       How to modify existing tools to collect data? (events are a good communication paradigm; centralizing the logger in the code allows for consistent log messages and easy maintenance; trade-offs in storing logs as highly structured or somewhat unstructured data)
     \item
       Privacy and anonymity considerations when collecting data. (what not to collect, using hashes to protect user identities)
-      
-     
+
+
     \item
-    	Existing usage data (Mylyn's 99 developers, UDC, etc). %Emerson 
-     
+    	Existing usage data (Mylyn's 99 developers, UDC, etc). %Emerson
+
     \end{itemize}
 
 \subsection{Instrumenting the IDE -- Using an Existing Framework} %Emerson
-  
+
 \begin{enumerate}
-	\item 
+	\item
 	There are many existing frameworks to use. We suggest picking on and building off one. (Note: Clone these on github? include packaged with IDE?)
 	
 	\item Eclipse: Mylyn Monitor. Format: What it was originally intended to be used for. What data it collects. Where to get it. How to install it (w/version info). Example output. Deployment(?)
@@ -109,7 +109,7 @@ To reduce concernes about who the data are shared with, create a statement of po
 \label{buildItYourself}
  summary:
 \begin{enumerate}
-	\item 
+	\item
 	Identify the goal (or research questions) and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
 	\item
 	Identifying  IDE API interfaces necessary to accomplish the measurement goal.  Examples window showing events, scrolling in the editor, clicking on code lines, Command events, automated events (e.g. build begin and end).
@@ -118,21 +118,20 @@ To reduce concernes about who the data are shared with, create a statement of po
 	\item
 	Considerations for anonymizing the collected data
 	\item
-	IDE data collection tooling.  Build tooling for ease of use and installation.  Planning logging interface for offline and online data collection.  Handling data store access.  Ways to address security.  
+	IDE data collection tooling.  Build tooling for ease of use and installation.  Planning logging interface for offline and online data collection.  Handling data store access.  Ways to address security.
 	\item
 	End user communication including anonymity, statement of intended use, restrictions on use, optional participation
 	
 \end{enumerate}
-- detailed how to walkthrough 
-<<<<<<< Updated upstream
+- detailed how to walkthrough
 
 \subsection{Eclipse Usage Data Collector}
 
 This section outlines how to collect IDE usage data using Eclipse's Usage Data Collector (UDC)(\url{http://www.eclipse.org/epp/usagedata/}).
-The UDC framework was originally build by the Eclipse Foundation, as a way to measure how the 
+The UDC framework was originally build by the Eclipse Foundation, as a way to measure how the
 community was using the Eclipse IDE.
 While UDC was included in official Eclipse releases and data was collected from
-hundreds of thousands of Eclipse users between 2008 and 2011, the project was eventually shut down, 
+hundreds of thousands of Eclipse users between 2008 and 2011, the project was eventually shut down,
 and UDC was removed from official Eclipse releases.
 However, the source code for UDC remains available and researchers can still use and deploy it.
 
@@ -141,7 +140,7 @@ However, the source code for UDC remains available and researchers can still use
 The Eclipse Data Collector records the following types of Eclipse information:
 
 \begin{itemize}
- 
+
 \item Information about the runtime environment, such as the operating system and Java Virtual Machine.
 
 \item Information about the Eclipse environment, such as which bundles are loaded and when Eclipse
@@ -175,34 +174,34 @@ The final column tells us when the command was executed, in Greenwich Mean Time 
 \subsubsection{Limitations}
 
 Apart from general limitations of collecting usage data~\ref{sec:limitations},
-one significant limitation of UDC that we have found is that sometimes it has 
+one significant limitation of UDC that we have found is that sometimes it has
 unexpectedly incomplete data.
 For example, in planning for a study involving when people ran their JUnit tests,
 we found that UDC recorded an event when the ``Run>Run As>Run as JUnit Test'' menu item was selected,
 but not when the ``Run As'' button was pressed on the toolbar.
-We suspect that the reason has to do with how different user interface affordances 
+We suspect that the reason has to do with how different user interface affordances
 invoke the same functionality.
-In general, when you are planning on running a study with UDC, be sure to know what 
+In general, when you are planning on running a study with UDC, be sure to know what
 types of events you are looking for, and test them to make sure UDC captures those events.
 
 \subsection{How to Use It}
 
 Collecting data for your own research is fairly straightforward with Eclipse UDC,
 and we describe how to do so here.
-We also include an accompanying screencast that shows the basics: 
+We also include an accompanying screencast that shows the basics:
 \url{https://docs.google.com/file/d/0B7DV-T4_2mpKRWgwRnJnTWpvN0E/edit}
 %TODO move this screencast to youtube, once you're happy
 
 \paragraph{Gathering Data in Experiments using the UDC Client.}
 
 Let's talk about how data is collected on a local machine.
-Since UDC was last included in the Eclipse Indigo SR2 release 
-(\url{http://www.eclipse.org/downloads/packages/release/indigo/sr2}), 
+Since UDC was last included in the Eclipse Indigo SR2 release
+(\url{http://www.eclipse.org/downloads/packages/release/indigo/sr2}),
 if you have the option of which Eclipse to use, we recommend downloading
 that version.
 
-By default, UDC starts collecting data when Eclipse is start up. 
-You can verify this by going to $Windows > Preferences$, then 
+By default, UDC starts collecting data when Eclipse is start up.
+You can verify this by going to $Windows > Preferences$, then
 select the \textit{Usage Data Collector} item (Figure~\ref{fig:prefPage1}).
 The \textit{Enable capture} option should be checked.
 
@@ -210,7 +209,7 @@ First, try out a few commands and views in Eclipse.
 Then, on your file system, open the following path as a subdirectory
 of your current workspace: \texttt{.metadata/.plugins/org.eclipse.epp.usagedata.recording}
 (Figure~\ref{fig:filesystem}).
-In that folder, depending on how many UDC events have been gathered 
+In that folder, depending on how many UDC events have been gathered
 a number of comma seperated value (CSV) files will appear, where \texttt{upload0.csv} is the oldest
 and \texttt{usagedata.csv} is the newest.
 Open up \texttt{usagedata.csv} -- you should notice a large number and a variety of events.
@@ -229,7 +228,7 @@ which should be enough time to complete the experiment.
 The long-term fix for this issue is to modify the source code, as we will explain
 how to do shortly, to never upload data.
 
-If you're doing a lab experiment, collecting data should be simply a matter of 
+If you're doing a lab experiment, collecting data should be simply a matter of
 copying and deleting the CSV files after each participant has done the experiment.
 You can append the files together or put them in a database for analysis.
 
@@ -240,10 +239,10 @@ You can append the files together or put them in a database for analysis.
 
 Alt:
 Newer version of Eclipse, integrate from source. (but no guarantees)
-If you want to make modifications, checkout also. Use branch associated with release. 
+If you want to make modifications, checkout also. Use branch associated with release.
 Tried with Indigo R2 + branch.
 
-How to install it (w/version info). 
+How to install it (w/version info).
 
 \subsection{Deployment.}
 
@@ -251,19 +250,19 @@ How to install it (w/version info).
 
 \subsection{Existing Data}
 
-Maybe where to get some archived data. 
-=======
-
+Maybe where to get some archived data.
 
 \begin{ExerciseList}
- \Exercise[type={long}, difficulty={0}]Define GQM? 
+ \Exercise[type={long}, difficulty={0}]Define GQM?
   \Answer Goal-Question-Metric is a methodology for refining a level goal into specific metrics to generate from data
- \Exercise[ type={long}, difficulty={1}]How is GQM Relevant to usage data collection? 
+ \Exercise[ type={long}, difficulty={1}]How is GQM Relevant to usage data collection?
   \Answer It helps the researcher to identify a more specific set of IDE commands useful to their research so they do not have to track all commands in the IDE.
-  \Exercise[ type={long}, difficulty={2}]Take an idea for usage monitoring and define a GQM for your idea. 
+  \Exercise[ type={long}, difficulty={2}]Take an idea for usage monitoring and define a GQM for your idea.
   \Answer Open-ended question asking students to apply the GQM method to their work.  Check to see that Goals are appropriate goal statements, questions refine the goal and lead the reader towards a specific measureable entity, and metrics are defined with all appropriate dimensions (such as time, and scale).
-  \Exercise[ type={long}, difficulty={2}]Using your GQM, identify the usage data attributes you need to collect. 
-  \Answer Open-ended question deriving a set of usage data elements from the student's defined GQM.  Usage data atrributes should consist of specific IDE commands, user actions within the editor, or another element measurable with soruce code and IDE access. 
+  \Exercise[ type={long}, difficulty={2}]Using your GQM, identify the usage data attributes you need to collect.
+  \Answer Open-ended question deriving a set of usage data elements from the student's defined GQM.  Usage data atrributes should consist of specific IDE commands, user actions within the editor, or another element measurable with soruce code and IDE access.
 
 \end{ExerciseList}
->>>>>>> Stashed changes
+
+
+\subsection{Eclipse Mylyn Monitor}
