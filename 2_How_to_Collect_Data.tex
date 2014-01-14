@@ -128,7 +128,7 @@ invoke the same functionality.
 In general, when you are planning on running a study with UDC, be sure to know what 
 types of events you are looking for, and test them to make sure UDC captures those events.
 
-\subsection{How to Use It}
+\subsubsection{How to Use It}
 
 Collecting data for your own research is fairly straightforward with Eclipse UDC,
 and we describe how to do so here.
@@ -178,20 +178,248 @@ You can append the files together or put them in a database for analysis.
 
 \paragraph{Modifying the UDC Client.}
 
+%TODO spell check
+
+You may wish to modify the UDC client yourself, perhaps to add a custom filter for events
+or to increase the default upload period.
+Whatever the reason, making modifications to the client is fairly easy.
+
+The first step is to check out the UDC source code into your Eclipse
+workspace using git.
+Here we will again use Eclipse Indigo SR2, but we will also be using the 
+``Eclipse for RCP and RAP Developers'' download package.
+The official git repository for UDC is housed here:
+
+\noindent
+\url{http://git.eclipse.org/c/epp/org.eclipse.epp.usagedata.git/}
+
+We recommend switching to the Indigo SR2 tag, to assure compatibility with
+Eclipse.
+To do so, clone the repository locally, open up Tags, right click on ``Indigo SR 2'',
+then choose ``Checkout''.
+
+To import the projects into Eclipse, right click on the repository, then click 
+``Import Projects,'' then ``Import Existing Projects.''
+The three core projects to import are:
+
+\begin{itemize}
+\item org.eclipse.epp.usagedata.internal.gathering
+\item org.eclipse.epp.usagedata.internal.recording
+\item org.eclipse.epp.usagedata.internal.ui
+\end{itemize}
+
+Next, we recommend a quick smoke test to determine whether you 
+can actually make changes to the UDC client.
+Open up UsageDataRecordingSettings, then modify the value of UPLOAD\_URL\_DEFAULT
+to ``my\_changed\_server''.
+Then, create a new debug configuration that is an Eclipse Application, and press 
+Debug (Figure~\ref{fig:XXX}).
+Finally, you can verify that your change worked by going to UDC's Uploading 
+preference page, and noticing that the Upload URL is now ``my\_changed\_server''.
+
+From here, you can make any changes to the UDC client that you wish.
+One thing you may wish to do is upgrade UDC to work with more recent versions
+of Eclipse.
+This should be quite possible, but the code is likely currently out of date
+because it has not been maintained since it was shut down.
+Another thing you may wish to do is deploy your new version of UDC via
+an Eclipse update site to the developers you want to study.
+There are many resources on the web for plugin deployment instructions,
+including \url{http://www.vogella.com/tutorials/EclipsePlugIn/article.html#deployplugin_tutorial}.
+
 \paragraph{Transmitting Data over the Internet}
 
+If you do not plan on doing a lab study where you can manually collect UDC usage
+files, you will want to have the UDC client send the data to you,
+rather than to the Eclipse foundation.
+As we mentioned, the best way to do this is probably by changing the default
+server URL in the client source code.
+An easy way to change the server when debugging is by adding the following Java
+virtual machine arguments:
 
-Alt:
-Newer version of Eclipse, integrate from source. (but no guarantees)
-If you want to make modifications, checkout also. Use branch associated with release. 
-Tried with Indigo R2 + branch.
+\noindent-Dorg.eclipse.epp.usagedata.recording.upload-url=http://localhost:8080
 
-How to install it (w/version info). 
+However, simply changing the client to point at a new URL is insufficient, 
+because there actually has to be a working server at that URL, ready to 
+receive UDC data.
+While the source code of official Eclipse server was not officially made 
+available, Wayne Beaton from the Eclipse Foundation unofficially released
+some of the PHP code from the Eclipse Foundation's server.
+If you would like to download that code, please see our git repository.
+%TODO need to put this code into git
+However, our PHP skills are very basic and we were not immediately able
+to get the server working as expected, but we expect that anyone familiar with
+debugging PHP should be able to.
 
-\subsection{Deployment.}
+Creating a server that recieves UDC data is fairly straightforward.
+Below, we include a server in Java that recieves UDC data upload requests
+on port 8080 and prints them to the console:
 
-(Not sure if we want this section. Mostly just point to update sites.)
+\begin{lstlisting}
+
+package edu.ncsu.csc.dlf.BasicUDCServer;
+
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.apache.http.ConnectionClosedException;
+import org.apache.http.HttpConnectionFactory;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpServerConnection;
+import org.apache.http.impl.DefaultBHttpServerConnection;
+import org.apache.http.impl.DefaultBHttpServerConnectionFactory;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpProcessor;
+import org.apache.http.protocol.HttpProcessorBuilder;
+import org.apache.http.protocol.HttpRequestHandler;
+import org.apache.http.protocol.HttpService;
+import org.apache.http.protocol.ResponseConnControl;
+import org.apache.http.protocol.ResponseContent;
+import org.apache.http.protocol.ResponseDate;
+import org.apache.http.protocol.ResponseServer;
+import org.apache.http.protocol.UriHttpRequestHandlerMapper;
+import org.apache.http.util.EntityUtils;
+
+/**
+ * Based on
+ * http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache
+ * /http/examples/ElementalHttpServer.java
+ * 
+ * 
+ * @author emerson
+ */
+public class BasicUDCServer {
+
+	public static void main(String[] args) throws IOException {
+
+		int port = 8080;
+
+		HttpProcessor httpproc = HttpProcessorBuilder.create()
+				.add(new ResponseDate()).add(new ResponseServer())
+				.add(new ResponseContent()).add(new ResponseConnControl())
+				.build();
+
+		UriHttpRequestHandlerMapper reqistry = new UriHttpRequestHandlerMapper();
+		reqistry.register("*", new HttpRequestHandler() {
+
+			@Override
+			public void handle(HttpRequest request, HttpResponse response,
+					HttpContext context) throws HttpException, IOException {
+
+
+				HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest)request;
+				
+				String userID = request.getHeaders("USERID")[0].getValue();
+				String workspaceID = request.getHeaders("WORKSPACEID")[0].getValue();
+				long time = Long.parseLong(request.getHeaders("TIME")[0].getValue());
+
+				System.out.println(userID + "," + workspaceID + "," + time);
+				System.out.println(EntityUtils.toString(entityRequest.getEntity()));		
+			}
+		});
+
+		HttpService httpService = new HttpService(httpproc, reqistry);
+
+		Thread t = new RequestListenerThread(port, httpService);
+		t.setDaemon(false);
+		t.start();
+	}
+
+	static class RequestListenerThread extends Thread {
+
+		private final HttpConnectionFactory<DefaultBHttpServerConnection> connFactory;
+		private final ServerSocket serversocket;
+		private final HttpService httpService;
+
+		public RequestListenerThread(final int port,
+				final HttpService httpService) throws IOException {
+			this.connFactory = DefaultBHttpServerConnectionFactory.INSTANCE;
+			this.serversocket = new ServerSocket(port);
+			this.httpService = httpService;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("Listening on port "
+					+ this.serversocket.getLocalPort());
+			while (!Thread.interrupted()) {
+				try {
+					// Set up HTTP connection
+					Socket socket = this.serversocket.accept();
+					System.out.println("Incoming connection from "
+							+ socket.getInetAddress());
+					HttpServerConnection conn = this.connFactory
+							.createConnection(socket);
+
+					// Start worker thread
+					Thread t = new WorkerThread(this.httpService, conn);
+					t.setDaemon(true);
+					t.start();
+				} catch (InterruptedIOException ex) {
+					break;
+				} catch (IOException e) {
+					System.err
+							.println("I/O error initialising connection thread: "
+									+ e.getMessage());
+					break;
+				}
+			}
+		}
+	}
+
+	static class WorkerThread extends Thread {
+
+		private final HttpService httpservice;
+		private final HttpServerConnection conn;
+
+		public WorkerThread(final HttpService httpservice,
+				final HttpServerConnection conn) {
+			super();
+			this.httpservice = httpservice;
+			this.conn = conn;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("New connection thread");
+			HttpContext context = new BasicHttpContext(null);
+			try {
+				while (!Thread.interrupted() && this.conn.isOpen()) {
+					this.httpservice.handleRequest(this.conn, context);
+				}
+			} catch (ConnectionClosedException ex) {
+				System.err.println("Client closed connection");
+			} catch (IOException ex) {
+				System.err.println("I/O error: " + ex.getMessage());
+			} catch (HttpException ex) {
+				System.err.println("Unrecoverable HTTP protocol violation: "
+						+ ex.getMessage());
+			} finally {
+				try {
+					this.conn.shutdown();
+				} catch (IOException ignore) {
+				}
+			}
+		}
+
+	}
+}
+
+\end{lstlisting}
+
+This code can be modified to fit your needs.
+We have provided a github repository where you can checkout 
+and change this code as you see fit.
+%TODO provide code on server
 
 \subsection{Existing Data}
 
-Maybe where to get some archived data. 
+Existing UDC data is available through the Eclipse foundation at this URL:
+\url{http://archive.eclipse.org/projects/usagedata/}
+%could provide more analysis, maybe even BigData
