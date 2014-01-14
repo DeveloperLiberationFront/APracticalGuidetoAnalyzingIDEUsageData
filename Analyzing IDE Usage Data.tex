@@ -1,9 +1,9 @@
-\documentclass{article}
+\documentclass{book}
 
 \usepackage{url}
 \usepackage{cite}
 \usepackage{anysize}
-\marginsize{1in}{1in}{1in}{1in}
+\usepackage{exercise,chngcntr}
 \usepackage{listings}
 \usepackage{color}
 
@@ -28,11 +28,17 @@
   tabsize=3
 }
 
+\counterwithin{Exercise}{chapter}
+\counterwithin{Answer}{chapter}
+
+\marginsize{1in}{1in}{1in}{1in}
+
+
 \begin{document}
 
-\title{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
-\date{}
+\title{ASD}
 
+\chapter{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
 \author{
 Will Snipes, Emerson Murphy-Hill,
 Thomas Fritz, \\
@@ -43,7 +49,7 @@ Anil R. Nair, David Shepherd
 \thispagestyle{empty}
 \pagestyle{empty}
 
-\begin{abstract}
+\section{Abstract}
 As software development evolved, Integrated Development Environments (IDEs) sprang up to aid the developer in managing the ever increasing complexity of software programs.  Meant to increase productivity, modern IDEs such as Eclipse and Visual Studio provide tools and capabilities to perform tasks such as navigating among classes and methods, continuous compilation, code refactoring, automated testing, and integrated debugging.  The breadth of development activities supported by the IDE makes collecting editor, command, and tool usage data valuable for analyzing developers’' work patterns.  
 
 Prior work in the RSSE book on Collecting and processing data for recommendation systems provides a description of tools, analysis methods, and important findings from developer usage data analysis.  The RSSE chapter is also a great introduction to prior research applying usage data to solve issues that challenge developers.  In this chapter, we will provide a practical how-to description for collecting and analyzing usage data from IDEs.  Each topic will provide practical guidance with how-to examples and exercises.  We also provide a role-based view of analysis describing what a software engineering researcher can do with the data, what a developer can do, and what toolsmiths can learn from the data.
@@ -60,7 +66,6 @@ There are limits, however, to what IDE usage data can tell us.  The missing elem
 
 Looking forward, usage data from development environments provides a platform for greater understanding of developer's low-level practices.  We expect to uncover more nuggets of how developers create mental models, how they investigate code, how they perform mini trial and error experiments, and what might release further productivity improvements for everyone.
 
-\end{abstract}
 
 \input{1_what_is_usage_data}
 \input{2_How_to_Collect_Data}
