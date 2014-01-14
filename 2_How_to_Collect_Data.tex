@@ -17,7 +17,7 @@
 \subsection{ Building Data Collection} %(Dave and Kosta)
 
 
-	Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While a general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can improve the result.  A process for defining the desired data can follow structures such as Goal-Question-Metric \ref{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, to study the navigation practices of developers, we perfrom the GQM process as follows:
+	Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While a general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can improve the result.  A process for defining the desired data can follow structures such as Goal-Question-Metric~\cite{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, to study the navigation practices of developers, we perfrom the GQM process as follows:
     \begin{itemize}
 \item
 	Goal
@@ -157,10 +157,14 @@ starts up and shuts down
 Let's look at an example of an event that UDC produces on a developer's machine:
 \vspace{4mm}
 
+\noindent
+\begin{small}
 \begin{tabular}{llllll}
 \textbf{what}&\textbf{kind}&\textbf{bundleId}&\textbf{bundleVersion}&\textbf{description}&\textbf{time}\\
+\hline
 executed&command&org.eclipse.ui&3.7.0.v20110928-1505&org.eclipse.ui.edit.paste&1389111843130\\
 \end{tabular}
+\end{small}
 
 \vspace{4mm}
 The first column tells us what kind of thing happened -- in this case, something was executed.
@@ -205,14 +209,35 @@ You can verify this by going to $Windows > Preferences$, then
 select the \textit{Usage Data Collector} item (Figure~\ref{fig:prefPage1}).
 The \textit{Enable capture} option should be checked.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{prefPage1}
+  \caption{Eclipse Usage Data Collector preference page.}\label{fig:prefPage1}
+\end{figure}
+
 First, try out a few commands and views in Eclipse.
 Then, on your file system, open the following path as a subdirectory
-of your current workspace: \texttt{.metadata/.plugins/org.eclipse.epp.usagedata.recording}
-(Figure~\ref{fig:filesystem}).
+of your current workspace (Figure~\ref{fig:filesystem}): 
+
+\noindent
+\texttt{.metadata/.plugins/org.eclipse.epp.usagedata.recording}
+
 In that folder, depending on how many UDC events have been gathered
 a number of comma seperated value (CSV) files will appear, where \texttt{upload0.csv} is the oldest
 and \texttt{usagedata.csv} is the newest.
 Open up \texttt{usagedata.csv} -- you should notice a large number and a variety of events.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{filesystem}
+  \caption{UDC data files.}\label{fig:filesystem}
+\end{figure}
+%TODO figure fixes
+%		turn off truetype
+%		check margins
+%		maybe width?
+%		try not to have window in foreground
+%		constant scaling (can do with scale=.7, etc)
 
 Before doing a study, be aware that Eclipse will ask and periodically attempt to upload
 data to the Eclipse foundation server.
@@ -227,6 +252,12 @@ An easy workaround is to increase the upload period to 90 days (Figure~\ref{fig:
 which should be enough time to complete the experiment.
 The long-term fix for this issue is to modify the source code, as we will explain
 how to do shortly, to never upload data.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{upload}
+  \caption{Changing the UDC upload frequency.}\label{fig:upload}
+\end{figure}
 
 If you're doing a lab experiment, collecting data should be simply a matter of
 copying and deleting the CSV files after each participant has done the experiment.
@@ -269,9 +300,15 @@ can actually make changes to the UDC client.
 Open up UsageDataRecordingSettings, then modify the value of UPLOAD\_URL\_DEFAULT
 to ``my\_changed\_server''.
 Then, create a new debug configuration that is an Eclipse Application, and press 
-Debug (Figure~\ref{fig:XXX}).
+Debug (Figure~\ref{fig:debugconfig}).
 Finally, you can verify that your change worked by going to UDC's Uploading 
 preference page, and noticing that the Upload URL is now ``my\_changed\_server''.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{debugconfig}
+  \caption{Debugging the UDC client.}\label{fig:debugconfig}
+\end{figure}
 
 From here, you can make any changes to the UDC client that you wish.
 One thing you may wish to do is upgrade UDC to work with more recent versions
