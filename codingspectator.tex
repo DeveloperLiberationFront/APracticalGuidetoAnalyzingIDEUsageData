@@ -1,0 +1,76 @@
+\newcommand\CodingSpectator{\textsc{CodingSpectator}}
+
+\newcommand\CodingTracker{\textsc{CodingTracker}}
+
+\newcommand\Performed{\texttt{performed}}
+
+\newcommand\Canceled{\texttt{canceled}}
+
+\newcommand\Unavailable{\texttt{unavailable}}
+
+\Def{NumberOfEclipseAutomatedRefactorings}{33}
+
+\Def{NumberOfCodingSpectatorSupportedRefactorings}{23}
+
+\subsection{\CodingSpectator}
+
+\CodingSpectator~\cite{CodingSpectatorWebPage, VakilianETAL2011Richer,
+VakilianETAL2012UseDisuseMisuse, VakilianETAL2013Compositional} is an extensible
+framework for collecting Eclipse usage data. Although researchers at the
+University of Illinois at Urbana-Champaign developed \CodingSpectator{}
+primarily for collecting detailed data about the use of Eclipse refactoring
+tool, it also provides a reusable infrastructure for \emph{submitting usage
+data} from users to a central repository.
+\CodingTracker~\cite{NegaraETAL2012Dangerous, NegaraETAL2013ManualRefactorings,
+CodingTrackerWebPage} is another data collector developed at Illinois, which
+reuses the data submission infrastructure provided by \CodingSpectator.
+
+\subsubsection{What Data Is Collected}
+
+\CodingSpectator{} was designed for capturing detailed data about the use of
+automated refactorings. It collects three kinds of refactoring events:
+\Canceled, \Performed, and \Unavailable. If a programmer starts an automated
+refactoring but quits it before it finishes, \CodingSpectator{} records a
+\Canceled{} refactoring event. If a programmer applies an automated refactoring,
+\CodingSpectator{} records a \Performed{} refactoring event. Finally, if
+programmer invokes an automated refactoring but the IDE refuses to start the
+automated refactoring saying that the refactoring is not applicable to the
+selected program element, \CodingSpectator{} records an \Unavailable{}
+refactoring event.
+
+Eclipse creates a \emph{refactoring descriptor} object for each \Performed{}
+refactoring events and serializes it in an XML file. \CodingSpectator{} saves
+more data in Eclipse refactoring descriptors of \Performed{} refactorings. In
+addition, it creates and serializes refactoring descriptors for \Canceled{} and
+\Unavailable{} refactoring events. \CodingSpectator{} supports
+\Use{NumberOfCodingSpectatorSupportedRefactorings} of the
+\Use{NumberOfEclipseAutomatedRefactorings} automated refactorings that Eclipse
+supports.
+
+\CodingSpectator{} records the following information in its refactoring
+descriptors:
+
+\begin{enumerate}
+
+\item a timestamp recording when a refactoring event occurred
+
+\item the location and contents of the selection that the programmer made before
+  invoking the automated refactoring
+
+\item the automated refactoring's identifier
+
+\item configuration options, \eg{} input elements, project, and settings that
+  programmers can set to control the effect of the refactoring
+
+\item any problems reported by the automated refactoring to the programmer
+
+\item the time that the programmer spent on each page of a refactoring wizard
+
+\item whether the automated refactoring was invoked using Quick Assist
+
+\end{enumerate}
+
+% LocalWords: CodingSpectator Urbana Champaign IDE timestamp
+%
+% LocalWords: CodingTracker refactoring refactorings refactoring's
+

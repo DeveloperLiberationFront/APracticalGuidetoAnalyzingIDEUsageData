@@ -1,0 +1,26 @@
+% The following commands make LaTeX not consider the periods in a few
+% abbreviations as periods at the end of sentences.
+\newcommand*{\eg}{e.g.\@}
+%
+\newcommand*{\ie}{i.e.\@}
+%
+\makeatletter
+%
+\newcommand*{\etal}{\@ifnextchar{.}{et al}{et al.\@}}
+%
+\makeatother
+
+% The following commands should be used to define key and value pairs.
+\newcommand{\Def}[2]{\expandafter\newcommand\csname rmk-#1\endcsname{#2}}
+%
+\newcommand{\Use}[1]{\csname rmk-#1\endcsname}
+
+% Wraps notes on what needs to get fixed.
+\newcommand{\Fix}[1]{\textcolor{red}{[#1]}}
+
+% Wraps junk text.
+\newcommand{\Comment}[1]{}
+
+% Wraps good text that needs to be excluded, e.g., due to space limits.
+\newcommand{\Space}[1]{}
+
