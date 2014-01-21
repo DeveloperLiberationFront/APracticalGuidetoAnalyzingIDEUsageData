@@ -47,28 +47,114 @@ addition, it creates and serializes refactoring descriptors for \Canceled{} and
 \Use{NumberOfEclipseAutomatedRefactorings} automated refactorings that Eclipse
 supports.
 
-\CodingSpectator{} records the following information in its refactoring
-descriptors:
+We show a concrete example of the data that \CodingSpectator{} collects for an
+invocation of the automated Extract Method refactoring. Eclipse provides an
+automated refactoring called Extract Method for extracting a piece of code into
+a new method. This refactoring moves the selected piece of code into a new
+method and replaces the selected code by an invocation to the new method. To use
+an automated Extract Method refactoring, a programmer has to go through multiple
+steps. First, the programmer selects a piece of code
+(\FigRef{FigCodingSpectatorExtractMethodSelectionExample}). Second, the
+programmer invokes the automated Extract Method and configures it
+(\FigRef{FigCodingSpectatorExtractMethodConfigurationExample}). In this case,
+the programmer sets the name of the new method. The configuration page provides
+a number of other options including method accessibility, the ordering and names
+of method parameters, and the generation of method comments. Third, after
+configuring the refactoring, the programmer hits the ``Preview'' button and the
+automated refactoring reports the problems that the refactoring may introduce
+(\FigRef{FigCodingSpectatorExtractMethodErrorExample}). In this example, the
+automated refactoring complains that the selected name of the new method
+conflicts with the name of an existing method. Finally, the programmer decides
+to cancel the refactoring and \CodingSpectator{} records a refactoring
+descriptor for this \Canceled{} refactoring as shown in
+\FigRef{FigCodingSpectatorDescriptorExample}. The type of a refactoring event
+(\ie, \Unavailable, \Canceled, and \Performed) can be inferred from the
+directory in which the XML file containing the refactoring descriptor resides.
+\CodingSpectator{} captures the following attributes for the canceled automated
+Extract Method refactoring in the above example.
 
 \begin{enumerate}
 
-\item a timestamp recording when a refactoring event occurred
+\item \texttt{captured-by-codingspectator}: indicates that \CodingSpectator{}
+  created the refactoring descriptor.
 
-\item the location and contents of the selection that the programmer made before
-  invoking the automated refactoring
+\item \texttt{stamp}: a timestamp recording when the refactoring event occurred
 
-\item the automated refactoring's identifier
+\item \texttt{code-snippet}, \texttt{selection},
+  \texttt{selection-in-code-snippet}, \texttt{selection-text}: the location and
+  contents of the selection that the programmer made before invoking the
+  automated refactoring
 
-\item configuration options, \eg{} input elements, project, and settings that
-  programmers can set to control the effect of the refactoring
+\item \texttt{id}: the automated refactoring's identifier
 
-\item any problems reported by the automated refactoring to the programmer
+\item \texttt{comment}, \texttt{description}, \texttt{comments},
+  \texttt{destination}, \texttt{exceptions}, \texttt{flags}, \texttt{input},
+  \texttt{name}, \texttt{visibility}: configuration options, \eg{} input
+  elements, project, and settings that programmers can set to control the effect
+  of the refactoring
 
-\item the time that the programmer spent on each page of a refactoring wizard
+\item \texttt{status}: any problems reported by the automated refactoring to the
+  programmer
 
-\item whether the automated refactoring was invoked using Quick Assist
+\item \texttt{navigation-history}: when the programmer pressed a button to
+  navigate from one page of the refactoring wizard to another
+
+\item \texttt{invoked-through-structured-selection},
+  \texttt{invoked-by-quick-assist}: selection method (\eg{} structured or
+  textual selection and whether the automated refactoring was invoked using
+  Quick Assist
 
 \end{enumerate}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=\textwidth]{codingspectator-extract-method-selection.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodSelectionExample}A programmer
+selects a piece of code to extract into a new method. The selected code is part
+of class \texttt{SingleCustomOperationRequestBuilder} from commit
+\texttt{bdb1992} of the open-source Elasticsearch project
+(\texttt{https://github.com/elasticsearch/elasticsearch}).}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=0.5\textwidth]{codingspectator-extract-method-configuration.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodConfigurationExample}A programmer
+configures an automated Extract Method refactoring by entering the desired name
+of the new method.}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=0.6\textwidth]{codingspectator-extract-method-error.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodErrorExample}The Extract Method
+refactoring reports a name conflict problem to the programmer. The programmer
+can either ignore the problem and continue the refactoring, go back to the
+configuration page to provide a different name, or cancel the refactoring.}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=\textwidth]{codingspectator-refactoring-xml.png}
+%
+\caption{\label{FigCodingSpectatorDescriptorExample}An example refactoring
+descriptor recorded by \CodingSpectator.}
+%
+\end{figure}
 
 % LocalWords: CodingSpectator Urbana Champaign IDE timestamp
 %

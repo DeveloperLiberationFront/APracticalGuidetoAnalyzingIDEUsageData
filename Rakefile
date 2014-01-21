@@ -7,7 +7,7 @@ $tex = "pdflatex"
 task :default => $target_pdf
 
 def inputs()
-  FileList["*.tex", "*.bib"]
+  FileList["*.tex", "*.bib", "images/*.png", "Graphics/*.png"]
 end
 
 file $target_pdf => inputs do
