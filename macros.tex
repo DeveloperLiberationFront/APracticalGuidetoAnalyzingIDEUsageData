@@ -1,3 +1,13 @@
+\usepackage{url}
+\usepackage{cite}
+\usepackage{anysize}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{exercise,chngcntr}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{graphicx}
+
 % The following commands make LaTeX not consider the periods in a few
 % abbreviations as periods at the end of sentences.
 \newcommand*{\eg}{e.g.\@}
@@ -25,4 +35,33 @@
 \newcommand{\Space}[1]{}
 
 \newcommand{\FigRef}[1]{Figure~\ref{#1}}
+
+\graphicspath{{images/}}
+\DeclareGraphicsExtensions{.pdf, .png, .ps}   % NOT .jpg  because it throws away the detail.
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\counterwithin{Exercise}{chapter}
+\counterwithin{Answer}{chapter}
+
+\marginsize{1in}{1in}{1in}{1in}
 
