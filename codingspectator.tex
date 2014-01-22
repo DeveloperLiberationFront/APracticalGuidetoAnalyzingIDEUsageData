@@ -233,6 +233,46 @@ packed in the existing JAR files hosted at the Eclipse update site of
 ways that involve changes to its source code, you should follow the instructions
 for building \CodingSpectator's update site from source code.
 
+\subsubsection{Extending \CodingSpectator}
+
+In addition to collecting detailed refactoring data, \CodingSpectator provides a
+reusable infrastructure for collecting Eclipse usage data. Extending
+\CodingSpectator frees researchers from having to develop many features from
+scratch, \eg, Subversion communications, automatic merge conflict detection and
+resolution, secure storage of Subversion credentials, and periodic update
+reminders.
+
+\CodingSpectator provides an Eclipse extension point (id =
+\texttt{edu.\-illinois.\-codingspectator.\-monitor.\-core.\-submitter}) and the
+following interface:
+
+\begin{lstlisting}
+public interface SubmitterListener {
+  // hook before svn add
+  void preSubmit();
+  // hook after svn add and before svn commit
+  void preCommit();
+  // hook after svn commit
+  void postSubmit(boolean succeeded);
+}
+\end{lstlisting}
+
+The above interface provides three hooks to \CodingSpectator's submission
+process. \CodingSpectator{} checks out the Subversion repository into a folder,
+which we refer to as the \emph{watched folder}. Then, it executes the Subversion
+commands (\eg, add and commit) on the watched folder. A plug-in that extends the
+\Code{submitter} extension point and implements the \Code{SubmitterListener}
+interface can do actions before or after two of the Subversion commands that
+\CodingSpectator{} executes: add and commit.
+%
+For example, \CodingSpectator{} overrides the method \Code{preSubmit} to copy
+the recorded refactoring descriptors to the watched folder. As another example,
+the developers of \CodingSpectator{} made the Eclipse UDC plug-in use the
+\Code{submitter} extension point and copy the UDC data to the watched folder. As
+a result, \CodingSpectator{} submits the UDC data to the Subversion repository.
+Effectively, this is an alternative method to the one presented in
+\SecRef{SecUDCHowToUseIt} for collecting UDC data in a central repository.
+
 % LocalWords: CodingSpectator Urbana Champaign IDE timestamp
 %
 % LocalWords: CodingTracker refactoring refactorings refactoring's
