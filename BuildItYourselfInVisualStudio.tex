@@ -20,7 +20,16 @@ The first step in instrumenting Visual Stuidio is to create a Visual Studio Exte
 	\label{fig:ProjectCreation}
 \end{figure}
 
-Give the project and solution a name and follow the default options for each step of the wizard.  When asked to specify what type of extension, click only the option to generate a menu command.  In the following step, give the menu command a name of "Stop Monitoring" and a command ID of "StopCollector".  This menu option will allow the user to halt collection of data if they wish without quitting Visual Studio.  
+For Name put "Collector" and Solution name put "VisualStudioMonitor", then follow the default options forthe first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, click only the option to generate a menu command.  In the following step, give the menu command a name of "Stop Monitoring" and a command ID of "StopMonitoring".  This menu option will allow the user to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
+
+Next step is to instruct the extension package to load when Visual Studio starts. This is accomplished through an attribute set on the package class declaration for ProvideAutoLoad.  The file CollectorPackage.cs contains the class declaration for the extension package.   There are several optoins for when to load the package that are controlled by the GUID of the attribute.  Place the attribute as shown in the listing below before the package declaration.  This GUID will load the package when Visual Studio starts.
+
+\begin{lstlisting}
+    // This attribute starts the package when Visual Studio starts 
+    [ProvideAutoLoad("{ADFC4E64-0397-11D1-9F4E-00A0C911004F}")]
+    [Guid(GuidList.guidCollectorPkgString)]
+    public sealed class CollectorPackage : Package
+\end{lstlisting}
 \end{enumerate}
 \end{Exercise}
 
@@ -41,12 +50,11 @@ After creating the project and solution, the solution explorer should look like 
 \begin{Exercise}[type={program}, difficulty={1}]
 \begin{enumerate}
 \item
-Good practice in extension development is to create a separate project (dll) for logic specific to the extension.  Add a class library type project to  the "Monitor" solution provide the data collection from Visual Studio and call it "Monitor".
+Good practice in extension development is to create a separate project (dll) for logic specific to the extension.  Add a class library type project to  the "Monitor" solution provide the data collection from Visual Studio and call it "Monitor".  the class library must be signed.  Go to the Properties for the Monitor project and select Signing from the list at the right.  In the Signing tab, check the "sign the assembly" checkbox then under "Choose a strong name key file", select Browse and browse over to the Key.snk file in the collector project (the file was created with the solution).
 \item
-The next step is to create a static class that will manage the log file including starting, stopping recording data, and inserting data into the log file.  We will call this class "DataRecorder".   
-Create a "DataRecorder" Class in the Collector project.  Because we don't want more than one recorder running at a time and want to access this class without instantiating it, make the class static.  Have the DataRecorder write a message to the file whenever it starts and stops.
+The next step is to create a static class that will manage the log file including starting, stopping recording data, and inserting data into the log file.  Rename the class created by Visual Studio in the Monitor project to "DataRecorder".    Because we don't want more than one recorder running at a time and want to access this class without instantiating it, make the class static.  Create a method to Start the recorder that generates a file name for the log file and sets a flag that the recording has started. A Stop method resets that flag and perhaps clears the file name.  A method to write a log message to the file completes DataRecorder.
 \item
-Finally, insert a call to DataMonitor.Start() at the end of the Initialize() method in the CollectorPackage class.  This will start the monitoring each time Visual Studio starts.  You will need to add a reference for the "Monitor" project to the Collector project, sign the Monitor project (you can use the snk file generated when the solution was created in step 1), then rebuild the solution.
+Finally, insert a call to DataRecorder.Start() at the end of the Initialize() method in the CollectorPackage class.  This will start the monitoring each time Visual Studio starts.  You will need to add a reference for the "Monitor" project to the Collector project, make sure you sign the Monitor project, then rebuild the solution.
 \end{enumerate}
 \end{Exercise}
 
@@ -150,7 +158,7 @@ Visual Studio processes all command events through the DTE object that also prov
 \begin{enumerate}
 \item
 
- Fortunately the DTE object has a query method that lists all the commands it manages.   The DTE query method is Commands that returns an IEnumerable collection of EnvDTE.Command objects.  You will need to get a reference to the DTE object and then process the Commands object results in a loop.  Listing below provides a method to try to get a reference to the DTE.  It depends on references to EnvDTE, Microsoft.VisualStudio.Shell.12.0, and Microsoft.VisualStudio.OLE.Interop.  
+Fortunately the DTE object has a query method that lists all the commands it manages.   The DTE query method is Commands that returns an IEnumerable collection of EnvDTE.Command objects.  You will need to get a reference to the DTE object and then process the Commands object results in a loop.  The listing below provides a method to try to get an instance of the DTE.  It depends on references to EnvDTE, Microsoft.VisualStudio.Shell.12.0, and Microsoft.VisualStudio.OLE.Interop.  
 
 %\begin{lstlisting}[caption=Method to get a DTE Reference,label=code:tryGetDTEObject,float=ht]
 \begin{lstlisting}
@@ -241,7 +249,7 @@ protected virtual void Dispose(bool disposing) {
 }
 \end{lstlisting}
 
-Finally, place a non-virtual To-Log method that will unify the log output for all derived classes.  ToLog can call the WriteLog method of the DataRecorder class created in a previous exercise.
+Finally, place a non-virtual To-Log method in the AbstractMonitoredEvent class that will unify the log output for all derived classes.  ToLog can call the WriteLog method of the DataRecorder class created in a previous exercise.
 
 Now that the abstract class is ready, a walkthrough of the MonitoredCommandEvent class is in order.  The class needs a field of the class EnvDTE.CommandEvents to store the specific DTE command monitored in each instance of a MonitoredCommandEvent.  Then it is time to override the virtual RegisterEventForMonitoring method using this field and the DTE.  Registering first must find the event in the DTE and assign it to the field, then attach a new event hander to the event.  The following code performs the finding and assignment:
 
@@ -267,7 +275,10 @@ return (eventTypeObject != null);
 \end{lstlisting}              
 
 Use the Visual Studio "Generate" command to generate a method stub for OnAfterExecute and the
-code will compile.  Place a call to log the event information in the OnAfterExecute event handler.
+code will compile.  In the OnAfterExecute method, call ToLog so the event data is captured in the log.
+
+Run the solution and use a few commands in Visual Studio, then check the log file.  You should see output like the following:
+
 
 \end{Exercise}
 
