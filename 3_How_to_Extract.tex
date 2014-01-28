@@ -42,10 +42,9 @@ we can analyse the data accurately and efficiently by transforming the serially 
                 \begin{enumerate}
                 \item Convert sequence data to usage data :
 In the sequence data, each event is important as a standalone event. However, in the WDG representation, the importance shifts to adjacent pairs of events. We do this type of a transformation to record the order in which events happened. Therefore, each unique event in the sequence data is represented by a unique node in the WDG. An edge exists from one node (head) to another (tail) if there is an occurrence of the event representing the tail node immediately after the event representing the head node in the original log file. For example if event B follows event A in the log file, then there is directed edge from node A to node B in the WDG. The edges are labeled with the number of times this transition has occurred.  For example if B occurs a fifty times after A in the log file, then the edge from node A to node B in the WDG is labeled with 50. Typically, we keep track of the actual count as the weight of the edge, when building the graph. 
-
 \begin{figure}[!t]
 \centering
-\includegraphics[width=3in]{WDG_example.pdf}
+\includegraphics[width=4in]{Graphics/op-profile-example.png}
 \caption{Weighted Directed Graph of the Example Log File}
 \label{WDG_example}
 \end{figure}
@@ -159,8 +158,8 @@ end
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.58]{op-profile-example}
-  \caption{WDG example}\label{fig:op-profile-example}
+  \includegraphics[scale=.58]{Graphics/op-profile-example.png}
+  \caption{WDG example}\label{fig:Graphics/op-profile-example.png}
 \end{figure}
 
 
@@ -168,13 +167,13 @@ A sequence data with hundreds of thousands of lines can be quickly convereted to
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.20]{log_with_color}
+  \includegraphics[scale=.20]{Graphics/log_with_color.png}
   \caption{WDG example with probaility}\label{fig:log_with_color}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.58]{sample_log}
+  \includegraphics[scale=.58]{Graphics/sample_log.png}
   \caption{WDG example with probaility}\label{fig:sample_log}
 \end{figure}
 
