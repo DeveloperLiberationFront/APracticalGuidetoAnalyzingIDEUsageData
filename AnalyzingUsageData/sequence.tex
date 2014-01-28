@@ -1,0 +1,12 @@
+Magnitude analysis and categorization both are appropriate for answering simple research questions. However, potentially the most powerful way of analyzing activity logs is through sequence analysis. 
+This approach to processing logs breaks activity sequences into sessions, according to some criteria, and then reports upon characteristics of that session. Consider a researcher investigating file search. He may break activity logs into sessions, starting with a search being executed and ending on the last interaction with that result set. He could calculate additional characteristics from this raw data, such as the amount of time spent per session, the number of results reviewed, and the number of files opened.   
+This type of analysis can address more complex research questions. Consider the research question ``Are users satisfied with file search results?''. This question, while impossible to answer via simple magnitude analysis can be investigated via session analysis. Using assumptions from in-lab studies that show that opening a search result followed by a long pause correlates with user satisfaction we can analyze activitiy logs to determine how often user behavior indicated satisfaction in the field. 
+
+\begin{figure*}[t]
+ \centering
+\includegraphics[width=1\columnwidth]{../Graphics/activityLogActual.pdf}
+%\caption{Pairwise matches across categories, including matching and mismatching pairs.}
+\label{fig:actual}
+\end{figure*}
+
+Sequence analysis is currently the most powerful tool we have for analyzing logs. While there has been preliminary work to complete annotate activity logs into tasks or even states (e.g., editing, searching, navigating, testing, etc.) these analyses are currently unreliable. In fact, we believe that because user behavior is often multi-purposed there will remain major obstacles to inferring higher-level user states from activity streams, ultimately limiting the usefulness of any full log analysis. 
