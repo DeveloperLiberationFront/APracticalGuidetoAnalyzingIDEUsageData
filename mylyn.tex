@@ -1,0 +1,130 @@
+%\usepackage{color}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+
+\subsection{Mylyn and the Eclipse Mylyn Monitor}
+Mylyn~\cite{mylyn-web,Kersten-Mylar2005,Kersten-Mylin,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
+
+The first versions of Mylyn, originally called Mylar, were developed as part of the PhD research of Mik Kersten and contained an explicit Mylyn Monitor component to collect and upload a user's activity within the Eclipse IDE~\cite{mylyn-monitor}. While the source code of the Mylyn Monitor can still be found online, it is not an active part of the Mylyn project anymore.
+
+
+\subsubsection{What Data Is Collected}
+Mylyn captures three types of developer interactions with the Eclipse development environment:
+\begin{itemize}
+    \item the \textit{selection} of elements,
+    \item the \textit{editing} of elements, and
+    \item \textit{commands} in the IDE, such as saving or refactoring commands.
+\end{itemize}
+
+These interaction events are monitored and then stored in XML format in a log file. An interaction event log example of a developer selecting a java class \texttt{TaskEditorBloatMonitor.java} in the package explorer of the Eclipse IDE is:
+
+\lstdefinelanguage{XML}
+{
+  basicstyle=\ttfamily,
+  morestring=[s]{"}{"},
+  morecomment=[s]{?}{?},
+  morecomment=[s]{!--}{--},
+  commentstyle=\color{darkgreen},
+  moredelim=[s][\color{darkblue}]{>}{<},
+  moredelim=[s][\color{red}]{\ }{=},
+  stringstyle=\color{blue},
+  identifierstyle=\color{maroon},
+  morekeywords={StructureKind}
+}
+
+
+\lstset{
+  language=XML,
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray}\upshape
+}
+
+
+\begin{lstlisting}
+<InteractionEvent 
+    StructureKind="java"
+    StructureHandle="=org.eclipse.mylyn.tasks.ui/src&lt;org.eclipse.mylyn.
+        internal.tasks.ui{TaskEditorBloatMonitor.java" 
+    StartDate="2012-04-10 02:05:53.451 CEST"
+    OriginId="org.eclipse.jdt.ui.PackageExplorer" 
+    Navigation="null" 
+    Kind="selection" 
+    Interest="1.0" 
+    EndDate="2012-04-10 02:05:53.451 CEST" 
+    Delta="null"
+/>
+\end{lstlisting}
+
+The log entry contains among other information the interaction event kind, in this case a selection, the full identifier of the element the developer interacted with, a Java type called TaskEditorBloatMonitor, the time when the interaction event occurred, in this case October 4th, 2012, at 02:05:52 CEST, and the place where the interaction event occurred, in this case the package explorer view of Eclipse. 
+
+You may notice that the log also contains an interest value, in this case 1.0. This value is used by Mylyn to calculate the interest a developer shows in a code element, the so-called degree-of-interest. The degree-of-interest of a code element, such as a class, method or field, is based on the recency and frequency of interactions while working on a task. The more frequent and recent a developer selected and/or edited a code element, the higher the degree-of-interest. This degree-of-interest value is then used to highlight and/or filter elements in views of the IDE (see~\cite{ker07a}).
+
+The Mylyn Usage Monitor developed for the original research project and study, writes the interaction events sequentially into the interaction log file, while the developer is interacting with the IDE. The monitor that is used in later versions of Mylyn, including the current one, compresses the log for performance reasons and aggregates interaction events where possible. The compression looses the information on the time sequence and it is not possible to fully reconstruct the order and exact time in which each interaction event occurred. Since the task context in Mylyn is mainly used for calculating the degree-of-interest of an element, the exact time order is not necessary.
+
+
+\subsubsection{Logging Interactions with the Mylyn Monitor}
+While the code for the Mylyn Monitor is not part of the active Mylyn project anymore, the code for the monitor and example code for using it can be found in the incubator project online\footnote{http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/} (see also \cite{mylyn-monitor}). In the following, we will present relevant parts of the code from these examples to log the interactions.
+
+To be able to use the Mylyn Monitor code and log the events of interest there are two important classes you have to implement. First, you will need a plugin class that extends the \texttt{org.eclipse.ui.plugin.AbstractUIPlugin} and add a listener for the events that you are interested in to the \texttt{org.eclipse.mylyn.internal.monitor.ui.MonitorUiPlugin}. Second, you will need to write the listener that creates the interaction event objects when an interaction event occurs. Let's assume you want to write a listener for selections of Java elements in the IDE. In this case you can extend the class \texttt{org.eclipse.mylyn.monitor.ui.AbstractUserInteractionMonitor} and simply overwrite the \texttt{selectionChanged} method. By extending the \texttt{AbstractUserInteractionMonitor}, your listener will automatically be added as a post selection listener to all windows in the current workbench so that all selection events in the windows are forwarded to your listener. The relevant code for the \texttt{selectionChanged} method is:
+
+
+% Revert list settings
+\lstset{language=Java,
+captionpos=b,
+tabsize=3,
+frame=lines,
+numbers=left,
+numberstyle=\tiny,
+numbersep=5pt,
+breaklines=true,
+showstringspaces=false,
+basicstyle=\footnotesize,
+emph={label}}
+
+\begin{lstlisting}
+/** 
+ * Based on
+ * http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/
+ * org.eclipse.mylyn.examples.monitor.study/src/org/eclipse/mylyn/examples/
+ * monitor/study/SelectionMonitor.java
+ */
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.mylyn.monitor.core.InteractionEvent;
+import org.eclipse.jdt.core.IJavaElement;
+
+...
+
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		InteractionEvent.Kind interactionKind = InteractionEvent.Kind.SELECTION;
+		if (selection instanceof StructuredSelection) {
+			StructuredSelection structuredSelection = (StructuredSelection) selection;
+			Object selectedObject = structuredSelection.getFirstElement();
+			if (selectedObject == null) {
+				return;
+			}
+
+			if (selectedObject instanceof IJavaElement) {
+				IJavaElement javaElement = (IJavaElement) selectedObject;
+				structureKind = STRUCTURE_KIND_JAVA;
+				elementHandle = javaElement.getHandleIdentifier();
+			}
+		}
+
+		...
+
+		InteractionEvent event = new InteractionEvent(interactionKind, structureKind,
+                                elementHandle, ...);
+		MonitorUiPlugin.getDefault().notifyInteractionObserved(event);
+	}
+
+...
+\end{lstlisting}
+
+The code first checks what type the selection has. If the selection is structured, and the first part of it is a Java Element, it collects the relevant information and then creates an \texttt{InteractionEvent} with the gathered information, such as the interaction kind, the structure kind and the element handle. At the end of the method, the \texttt{MonitorUiPlugin} is notified about the observed interaction event. The \texttt{MonitorUiPlugin} will then go through all registered interaction event listeners and forward the event to them. Since there is an \texttt{InteractionEventLogger} registered as part of the mylyn code, the interaction event object will be forwarded to the logger and then written out into a file. 
+
