@@ -18,7 +18,7 @@ file $target_pdf => inputs do
 end
 
 task :clean do
-  generated_files = FileList["*"].select{|f| File.file?(f)} - inputs() - [File.basename(__FILE__), "README.md"]
+  generated_files = FileList["*"].select{|f| File.file?(f)} - inputs() - [File.basename(__FILE__), "README.md"] - FileList["*.tcp"]
   generated_files.each{|f| File.delete(f)}
 end
 
