@@ -1,6 +1,55 @@
 \section{Limits of What You Can Learn from Usage Data}\label{sec:limitations}
 
-  \begin{enumerate}
-  \item - 
-  \item -
-  \end{enumerate}
+Collecting usage data is potentially a boon to research, and as we have
+pointed out, has many interesting and impactful applications.
+Nonetheless, there are limits to what you can learn as a researcher
+from usage data.
+In fact, our experience is that researchers (and practitioners) have 
+high expectations about what they can learn from usage data, and those
+expecations often come crashing down after significant effort implementing
+and deploying a data collection sytem.
+So before you begin your usage data collection and analysis, consider
+the following two limitations of usage data.
+
+\textbf{Rationale is Hard to Capture.}
+Usage data tells you what a software developer did, but not
+why she did it.
+For example, if your usage data tells you that a developer used 
+new refactoring tool for the first time, from a trace alone you cannot determine whether
+(a) she learned about the tool for the first time, (b) she had used the tool before,
+but before you started collecting data, or (c) her finger slipped and 
+she pressed a hotkey by accident.
+A researcher may be able to distinguish between these by collecting additional information,
+like asking the developer just after she used the tool why she used it,
+but it is impossible to definitively separate these based on the 
+usage data alone.
+
+\textbf{Usage Data Never Captures Everything.}
+Researchers often want to capture ``everything,'' or at least 
+everything that a developer does.
+This is fundamentally impossible, and the reason we introduced the 
+goal-question metric.
+If you have a system that captures all key presses, you are still 
+lacking information about mouse movements.
+If you have a system that also captures mouse movements, you're still
+missing the files that the developer is working with.
+If your system captures also the files, you still lacking the 
+histories of those files.
+And so on.
+Ultimately, usage data is all about fitness for purpose -- is the data
+you are analyzing fit for the purpose of your research questions.
+
+To avoid these limitations, we recommend not thinking about 
+usage data collection abstractly, but thinking about it concretely before
+you begin.
+Invent an ideal usage data trace, and ask yourself:
+
+\begin{itemize}
+  \item Does the data support my hypothesis?
+  \item Are there alternative hypotheses that the data would support?
+  \item Can the data be feasibly generated?
+\end{itemize}
+
+\noindent
+Answering these questions will help you determine whether you can sidestep
+the limitations of collecting and analyzing usage data.
