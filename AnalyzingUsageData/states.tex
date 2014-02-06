@@ -1,16 +1,11 @@
 A seqencial data is highly complex and difficult to understand. Once the sequence data is collected, we have to convert the data into a meaningful representation. Information in log files can be analyzed by building operational profiles \cite{hmf08}\cite{nwv09}. In operational profiling, we determine how many times each subset of events occurs in the sequence data. Serial ordering of events in a sequence data is very unintuitive to perform any analyses. In an editor, we can view maybe 60-70 lines at any one point. However, many times,we need to go through thousands of lines in the sequence data to arrive at some meningful information due to repeating patterns. Hence, it is difficult to compare events that are separated by other events. For example if a specific sequence of 4 events occurs 5\% of the times in a log file with 500,000 events, then that is 25,000 (5\% of 500,000) events that we have to analyze to make any conclusion. In addition, the remaining events will be in between these repeating patterns.
 
-we can analyse the data accurately and efficiently by transforming the serially ordered events in a sequence data to a Weighted Directed Graph (WDG) data structure. Only the information needed for the analysis need to be maintained and condensed into a compact view of the log file. We can abstract the information in the log line to any level, such as, event level, method level, class level, file level, sub-module level, or module level.
+We can analyse the data accurately and efficiently by transforming the serially ordered events in a sequence data to a Weighted Directed Graph (WDG) data structure. Only the information needed for the analysis need to be maintained and condensed into a compact view of the log file. We can abstract the information in the log line to any level, such as, event level, method level, class level, file level, sub-module level, or module level.
 
                 \begin{enumerate}
                 \item Convert sequence data to usage data :
 In the sequence data, each event is important as a standalone event. However, in the WDG representation, the importance shifts to adjacent pairs of events. We do this type of a transformation to record the order in which events happened. Therefore, each unique event in the sequence data is represented by a unique node in the WDG. An edge exists from one node (head) to another (tail) if there is an occurrence of the event representing the tail node immediately after the event representing the head node in the original log file. For example if event B follows event A in the log file, then there is directed edge from node A to node B in the WDG. The edges are labeled with the number of times this transition has occurred.  For example if B occurs a fifty times after A in the log file, then the edge from node A to node B in the WDG is labeled with 50. Typically, we keep track of the actual count as the weight of the edge, when building the graph. 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=4in]{Graphics/op-profile-example.png}
-\caption{Weighted Directed Graph of the Example Log File}
-\label{WDG_example}
-\end{figure}
+
 
 In the graph we display the percentage value as the label. This percentage is propotional to the total number of transitions.  The cumulative probability of out-edges of a node is 1. The transitional probabilities of each out-edges are calculated by dividing the number of transactions of that out-edge with the sum of all outward transactions from that node. We could also store the dynamic parameter information in each log line as a list along the edges. We now present the steps involved in this transformation. Consider that the input log file is with $N$ log lines. We need to convert this log file WDG.
 \begin{enumerate}
@@ -20,9 +15,9 @@ In the graph we display the percentage value as the label. This percentage is pr
 \item Once the entire log file has been transformed into the adjacency matrix, we can render the graph using tools like Graphviz \cite{gviz} or ORA \cite{ora}.  Alternately, we could apply analysis algorithms on the adjacency matrix $G$, and highlight the results when the graph is rendered.
 \end{enumerate}
 
-The complexity of this transformation is linear in the size of the log file, i.e. $O(N)$, where $N$ is the number of lines in the log file. Step 1 makes a single pass through the log file, and examines each log line. Hence, the time complexity of step 1 is $O(N)$. In step 1, we inspect each line of the log file. For each line, we do an array access in the two-dimensional adjacency matrix $G[M][M]$. Since array access takes constant time, this step too is $O(N)$. Step 6 iterates through each element of the adjacency matrix $G[M][M]$. Thus, it is of the order $O(M^2)$. Since\[ M << N\$, \$M^2 < N \] Hence the order of time complexity for the transformation is $O(N)$, or linear in the size of the log file. The two data structures we create from the log file with N log lines is the index of size $O(M)$, and the adjacency matrix $G[M][M]$ of size $O(M^2)$. Since $M^2 < N$, the space occupied by the output is much smaller than the input log file.
+%The complexity of this transformation is linear in the size of the log file, i.e. $O(N)$, where $N$ is the number of lines in the log file. Step 1 makes a single pass through the log file, and examines each log line. Hence, the time complexity of step 1 is $O(N)$. In step 1, we inspect each line of the log file. For each line, we do an array access in the two-dimensional adjacency matrix $G[M][M]$. Since array access takes constant time, this step too is $O(N)$. Step 6 iterates through each element of the adjacency matrix $G[M][M]$. Thus, it is of the order $O(M^2)$. Since\[ M << N\$, \$M^2 < N \] Hence the order of time complexity for the transformation is $O(N)$, or linear in the size of the log file. The two data structures we create from the log file with N log lines is the index of size $O(M)$, and the adjacency matrix $G[M][M]$ of size $O(M^2)$. Since $M^2 < N$, the space occupied by the output is much smaller than the input log file.
 
-To explain the steps with an example, consider a simple log file where the activities are spearated by commas. $1-2, 2-3, 3-4, 4-5, 5-4, 4-5, 5-4, 4-6, 6-7, 7-5, 5-4, 4-5, 5-4, 4-5, 5-8, 8-9$. The events in the log file are mapped to their corresponding event IDs: $1, 2, 3, 4, 5, 4, 5, 4, 6, 7, 5, 4, 5, 4, 5, 8, 9$. Each node is a unique event. An edge between nodes 1 and 2 signifies that the event 2  appears after event 1  in the log file. The labels on the edges have the actual count and could have the transitional probabilities as well. The transitional probability from node 1 to node 2 is 1.0, whereas the transitional probability from node 4 to node 6 is 0.2. The adjacency matrix representation of the example WDG is in table \ref{Adjacency_example_log}. This is depicted in Fig \ref{WDG_example}.
+To explain the steps with an example, consider a simple log file where the activities are spearated by commas. $1-2, 2-3, 3-4, 4-5, 5-4, 4-5, 5-4, 4-6, 6-7, 7-5, 5-4, 4-5, 5-4, 4-5, 5-8, 8-9$. The events in the log file are mapped to their corresponding event IDs: $1, 2, 3, 4, 5, 4, 5, 4, 6, 7, 5, 4, 5, 4, 5, 8, 9$. Each node is a unique event. An edge between nodes 1 and 2 signifies that the event 2  appears after event 1  in the log file. The labels on the edges have the actual count and could have the transitional probabilities as well. The transitional probability from node 1 to node 2 is 1.0, whereas the transitional probability from node 4 to node 6 is 0.2. The adjacency matrix representation of the example WDG is in table \ref{Adjacency_example_log}. This is depicted in Fig \ref{op-profile-example}.
 
 \begin{table}[!t]
 %\renewcommand{\arraystretch}{1.3}
@@ -65,7 +60,7 @@ JUMBL (Java Usage Model Builder Library) developed by Software Quality Research 
 \item Assessing testing by providing test measures, including expected system reliability in the field.
 \end{itemize}
 
-WDG along with the transitional probability are used to determine the state probabilities of each component . We have used JUMBL to create the state probabilities \cite{anil}. We have converted the WDG to JUMBL readable TML \cite{tug} language. We have developed tools, which will mine the log file and convert the log file to an adjacency matrix representation with the number of transitions from each node, which is translated directly to TML script. A sample log file is and the corresponding TML fileare given below. The TML script has information about the nodes, the out edges from each node along with the number of transitions from each node to another. This TML script is used in JUMBL to arrive at the state probabilities of each node. State probabilities give information about the percentage of usage of each node. Corresponding graph is depicted in Fig. \ref{fig:op-profile-example}
+WDG along with the transitional probability are used to determine the state probabilities of each component . We have used JUMBL to create the state probabilities \cite{anil}. We have converted the WDG to JUMBL readable TML \cite{tug} language. We have developed tools, which will mine the log file and convert the log file to an adjacency matrix representation with the number of transitions from each node, which is translated directly to TML script. A sample log file is and the corresponding TML fileare given below. The TML script has information about the nodes, the out edges from each node along with the number of transitions from each node to another. This TML script is used in JUMBL to arrive at the state probabilities of each node. State probabilities give information about the percentage of usage of each node. Corresponding graph is depicted in Fig. \ref{op-profile-example}
 
 
 
@@ -121,23 +116,23 @@ end
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.58]{../Graphics/op-profile-example.png}
-  \caption{WDG example}\label{fig:../Graphics/op-profile-example.png}
+  \includegraphics[scale=.40]{../Graphics/op-profile-example.png}
+  \caption{Weighted Directed Graph of the Example Log}\label{op-profile-example}
 \end{figure}
 
 
-A sequence data with hundreds of thousands of lines can be quickly convereted to more meaningful graphical represeantation using this method. Once the TML file is generated, we can use JUMBL to find out the state probabilities of each states. usaing the state probaility and the usage patterns we can arrive conclusions and can visualize them easily like mentioned in figures  \ref{sample_log} and \ref{fig:log_with_color}
+A sequence data with hundreds of thousands of lines can be quickly convereted to more meaningful graphical represeantation using this method. Once the TML file is generated, we can use JUMBL to find out the state probabilities of each states. usaing the state probaility and the usage patterns we can arrive conclusions and can visualize them easily like mentioned in figures  \ref{fig:sample_log} and \ref{fig:log_with_color}
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.20]{../Graphics/log_with_color.png}
-  \caption{WDG example with probaility}\label{fig:log_with_color}
+  \includegraphics[scale=.15]{../Graphics/log_with_color.png}
+  \caption{WDG example with probability}\label{fig:log_with_color}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[scale=.58]{../Graphics/sample_log.png}
-  \caption{WDG example with probaility}\label{fig:sample_log}
+  \includegraphics[scale=.50]{../Graphics/sample_log.png}
+  \caption{WDG example with count}\label{fig:sample_log}
 \end{figure}
 
                 
