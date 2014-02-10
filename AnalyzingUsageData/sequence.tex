@@ -1,5 +1,5 @@
 %intro to seqence analysis, sessions
-Magnitude analysis and categorization are both appropriate for answering simple research questions. However, a more powerful way of analyzing activity logs is through sequence analysis, which first breaks activity sequences into session, according to some criteria, and then reports upon characteristics of that session. A session is a particular interaction with an IDE by a specific user in order to complete a task (e.g. refactoring, looking for a starting point for a maintenance task, etc.), consisting of all of IDE events in a given time span.
+Magnitude analysis and categorization are both appropriate for answering research questions that are simply manifested in the IDE data stream. However, a more powerful way of analyzing activity logs is through sequence analysis, which first breaks activity sequences into session, according to some criteria, and then reports upon characteristics of that session. A session is a particular interaction with an IDE by a specific user in order to complete a task (e.g. refactoring, looking for a starting point for a maintenance task, etc.), consisting of all of IDE events in a given time span.
 For instance, answering the research question of ``Are developers successful at finding initial points in the code for a software maintenance task?'' requires that the sequence of IDE events corresponding to each maintenance task be identified, before we can perform further analysis using either magnitude or categorization analysis. The granularity of a session is determined by the guiding research question. For certain research questions, we may be interested in a smaller session (e.g. searching the code base), while for others we may need to consider a longer time span (e.g. performing a maintenance task, developing a new feature). 
 
 %how difficult or easy is it to determine sessions
@@ -10,12 +10,12 @@ In many cases, extracting sessions from activity sequences can be challenging as
 As an example of sequnce analysis, consider a researcher investigating finding initial points in the code for a software maintenance task. Specifically, the developer is interested in the following research question ``Are users satisfied with file search results?''. This question, while impossible to answer via simple magnitude analysis can be investigated via session analysis. Using assumptions from in-lab studies that show that opening a search result followed by a long pause correlates with user satisfaction we can analyze activitiy logs to determine how often user behavior indicated satisfaction in the field. The researcher may break activity logs into sessions, starting with a search being executed and ending on the last interaction with that result set. He could calculate additional characteristics from this raw data, such as the amount of time spent per session, the number of results reviewed, and the number of files opened.   
 
 
-\begin{figure*}[t]
- \centering
-\includegraphics[width=1\columnwidth]{../Graphics/activityLogActual.pdf}
+%\begin{figure*}[t]
+%\centering
+%\includegraphics[width=1\columnwidth]{../Graphics/activityLogActual.pdf}
 %\caption{Pairwise matches across categories, including matching and mismatching pairs.}
-\label{fig:actual}
-\end{figure*}
+%\label{fig:actual}
+%\end{figure*}
 
 %Sequence analysis is currently the most powerful tool we have for analyzing logs. While there has been preliminary work to complete annotate activity logs into tasks or even states (e.g., editing, searching, navigating, testing, etc.) these analyses are currently unreliable. In fact, we believe that because user behavior is often multi-purposed there will remain major obstacles to inferring higher-level user states from activity streams, ultimately limiting the usefulness of any full log analysis. 
 
