@@ -283,22 +283,26 @@ The previous step adds a feature to query the DTE and save the commands to a fil
 \item
 The AbstractMonitoredEvent class in listing %\ref{code:AbstractMonitoredEvent}
  provides an abstraction of what data and methods are needed to setup event monitoring in VisualStudio.  Initially the class only deals with data that we save about the event, later it will include methods and parameters used to register an event listerner with the DTE and dispose of it as needed.
-\lstinputlisting[caption=Abstract Monitored Event, label=code:AbstractMonitoredEvent,   float=h]{VisualStudioMonitor-Step2/Monitor/AbstractMonitoredEvent.cs}
+%TODO(Will Snipes): Please add the .cs file to the repo.
+%\lstinputlisting[caption=Abstract Monitored Event, label=code:AbstractMonitoredEvent,   float=h]{VisualStudioMonitor-Step2/Monitor/AbstractMonitoredEvent.cs}
 
 \item
 The MonitoredCommandEvent in listing %\ref{code:MonitoredCommandEvent}
 makes the AbstractMonitoredEvent class concrete for Visual Studio commands.  It implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE or a default constructor.  
-\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredCommandEvent.cs}
+%TODO(Will Snipes): Please add the .cs file to the repo.
+%\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredCommandEvent.cs}
 
 \item
 The MonitoredEventFactory in listing %\ref{code:MonitoredEventFactory}
  is a static class that completes our Simple Abstract Factory pattern provding the methods to create an object inheriting from AbstractMonitoredEvent from a Command object.  
-\lstinputlisting[caption=MonitoredEventFactory,  label=code:MonitoredEventFactory,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventFactory.cs}
+%TODO(Will Snipes): Please add the .cs file to the repo.
+%\lstinputlisting[caption=MonitoredEventFactory,  label=code:MonitoredEventFactory,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventFactory.cs}
 
 \item
 The MonitoredEventCollection in listing %ref{code:MonitoredEventCollection}
  is the Client in our pattern that maintains a "stock" of all the monitored events we need to manage.  It currently provides methods to read MonitoredEvents from a serialized XML file, save them to a serialized XML file, and query them from the Visual Studio DTE.  Events are managed in a List object belonging to this class.   The constructor initializes the List object from a configuration file if the file exists, otherwise it initializes the List object from the Visual Studio DTE's Command object and saves the List to the configuration file. 
-\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventCollection.cs}
+%TODO(Will Snipes): Please add the .cs file to the repo.
+%\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventCollection.cs}
 \end{enumerate}
 
 
@@ -386,19 +390,23 @@ Collector Stopped
 
 \item
 The Listings for AbstractMonitoredEvent \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
-\lstinputlisting[caption=AbstractMonitoredEvent,  label=code:AbstractMonitoredEvent_4,  float=h]{VisualStudioMonitor-Ex4/Monitor/AbstractMonitoredEvent.cs}
+%TODO(Will Snipes): Please add the .cs file to the repository.
+%\lstinputlisting[caption=AbstractMonitoredEvent,  label=code:AbstractMonitoredEvent_4,  float=h]{VisualStudioMonitor-Ex4/Monitor/AbstractMonitoredEvent.cs}
 
 \item
 The listing for CommandMonitoredEvent \ref{code:MonitoredCommandEvent_4} shows methods implemented for registration and disposal.
-\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredCommandEvent.cs}
+%TODO(Will Snipes): Please add the .cs file to the repository.
+%\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredCommandEvent.cs}
 
 \item
 The listing for MonitoredEventCollection.cs \ref{code:MonitoredEventCollection_4} shows list processing in calls to respective registration and de-registration methods for the List object.
-\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredEventCollection.cs}
+%TODO(Will Snipes): Please add the .cs file to the repository.
+%\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredEventCollection.cs}
 
 \item
 The DataRecorder class was modified in this exercise, see the listing \ref{code:DataRecorder_4}.
-\lstinputlisting[caption=DataRecorder,  label=code:DataRecorder_4,  float=h]{VisualStudioMonitor-ex4/Monitor/DataRecorder.cs}
+%TODO(Will Snipes): Please add the .cs file to the repository.
+%\lstinputlisting[caption=DataRecorder,  label=code:DataRecorder_4,  float=h]{VisualStudioMonitor-ex4/Monitor/DataRecorder.cs}
 \end{enumerate}
 
 \subsection{Classification of Events}
