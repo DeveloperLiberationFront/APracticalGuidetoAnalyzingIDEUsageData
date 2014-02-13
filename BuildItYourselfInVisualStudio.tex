@@ -8,7 +8,8 @@ The goal is to build a Visual Studio Extension that collects key command events 
 
 The Visual Studio Automation Object Model describes the API available to Visual Studio Extensions.  The model provides the interface through the DTE object that provides access to all lower level obejcts in the automation model.  One of the objects is the Command object that provides access to Visual Studio's menu and keyboard command event handlers.  Using the Command object an extension can observe commands (and trigger them) by registering an event handler for each command.  Once captured, the extension can log the event which meets the goal stated above.
 
- \begin{Exercise}[type={program}, difficulty={1}]
+\subsubsection{Build a Visual Studio Extension}
+
 \begin{enumerate}
 \item
 The first step in instrumenting Visual Stuidio is to create a Visual Studio Extension that creates a log file when it starts.   Microsoft provides a project creation wizard for generating a Visual Stuido extension (called a Package) when you install the Visual Studio SDK.  So first install the Visual Studio SDK.  
@@ -31,12 +32,7 @@ Next step is to instruct the extension package to load when Visual Studio starts
     [Guid(GuidList.guidCollectorPkgString)]
     public sealed class CollectorPackage : Package
 \end{lstlisting}
-\end{enumerate}
-\end{Exercise}
 
- \begin{Answer}
-
-\begin{enumerate}
 \item
 After creating the project and solution, the solution explorer should look like figure \ref{fig:SolutionExplorer} showing the project files necessary for the extension to work.
 \begin{figure}
@@ -46,9 +42,9 @@ After creating the project and solution, the solution explorer should look like 
 	\label{fig:SolutionExplorer}
 \end{figure}
 \end{enumerate}
-\end{Answer}
 
-\begin{Exercise}[type={program}, difficulty={1}]
+\subsubsection{Create Monitor Project}
+
 \begin{enumerate}
 \item
 Good practice in extension development is to create a separate project (dll) for logic specific to the extension.  Add a class library type project to  the "Monitor" solution provide the data collection from Visual Studio and call it "Monitor".  the class library must be signed.  Go to the Properties for the Monitor project and select Signing from the list at the right.  In the Signing tab, check the "sign the assembly" checkbox then under "Choose a strong name key file", select Browse and browse over to the Key.snk file in the collector project (the file was created with the solution).
@@ -56,11 +52,7 @@ Good practice in extension development is to create a separate project (dll) for
 The next step is to create a static class that will manage the log file including starting, stopping recording data, and inserting data into the log file.  Rename the class created by Visual Studio in the Monitor project to "DataRecorder".    Because we don't want more than one recorder running at a time and want to access this class without instantiating it, make the class static.  Create a method to Start the recorder that generates a file name for the log file and sets a flag that the recording has started. A Stop method resets that flag and perhaps clears the file name.  A method to write a log message to the file completes DataRecorder.
 \item
 Finally, insert a call to DataRecorder.Start() at the end of the Initialize() method in the CollectorPackage class.  This will start the monitoring each time Visual Studio starts.  You will need to add a reference for the "Monitor" project to the Collector project, make sure you sign the Monitor project, then rebuild the solution.
-\end{enumerate}
-\end{Exercise}
 
-
-\begin{Answer}
 
 The call to DataRecorder.Start() is inserted in the CollectorPackage as shown in Listing \ref{code:StartCall}.
 \begin{lstlisting}[caption=Call to DataRecorder.Start(),label=code:StartCall]
@@ -150,9 +142,9 @@ namespace Monitor
 }
 
 \end{lstlisting}
-\end{Answer}
+\end{enumerate}
 
- \begin{Exercise}[ type={program}, difficulty={1}]
+\subsubsection{Create the Class Framework}
 
 The next step creates a framework for storing and managing event monitoring for Visual Studio.  Because there are several different types of events, it makes sense to build an abstract class to manage the core data and use the Simple Factory pattern to generate each type of event monitoring.  With this pattern an abstract base class, called AbstractMonitoredEvent, provides common definitions for class fields that will be used for monitoring different Visual Studio events, conversion of those fields to and from the storage format, and (eventually) calling the WriteLog method in the recorder when the event fires.  This concrete class implements methods specific to Visual Studio commands that manages the fields available from the DTE.Command class.  The client in the Simple Factory pattern is a class that maintains the collection of events that either gets read from the file or queried from Visual Studio.   In this exercise we focus on the elements needed to store event information, and manage the configuration file data in XML format.
 
@@ -282,43 +274,39 @@ A persistent configuration file helps independently manage the events that get m
 
 \end{enumerate}
 
+\subsubsection{Save and Retrieve DTE Commands}
 
+The previous step adds a feature to query the DTE and save the commands to a file.  The instruction hinted that more than one class may be used, though the implementation could take place without class members that hold the DTE Command attributes.  The following class design provides the ability to store and retrieve command attributes and anticipates other types of monitored events outside the scope of commands.
 
-\end{Exercise}
-
-\begin{Answer}
-The previous exercise adds a feature to query the DTE and save the commands to a file.  The instruction hinted that more than one class may be used, though the implementation could take place without class members that hold the DTE Command attributes.  The following class design provides the ability to store and retrieve command attributes and anticipates other types of monitored events outside the scope of commands.
 \begin{enumerate}
 
 \item
 The AbstractMonitoredEvent class in listing %\ref{code:AbstractMonitoredEvent}
  provides an abstraction of what data and methods are needed to setup event monitoring in VisualStudio.  Initially the class only deals with data that we save about the event, later it will include methods and parameters used to register an event listerner with the DTE and dispose of it as needed.
-%\lstinputlisting[caption=Abstract Monitored Event, label=code:AbstractMonitoredEvent,   float=h]{C:/Workspace/VisualStudioMonitor-Step2/Monitor/AbstractMonitoredEvent.cs}
+\lstinputlisting[caption=Abstract Monitored Event, label=code:AbstractMonitoredEvent,   float=h]{VisualStudioMonitor-Step2/Monitor/AbstractMonitoredEvent.cs}
 
 \item
 The MonitoredCommandEvent in listing %\ref{code:MonitoredCommandEvent}
 makes the AbstractMonitoredEvent class concrete for Visual Studio commands.  It implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE or a default constructor.  
-%\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent,  float=h]{c:/Workspace/VisualStudioMonitor-Step2/Monitor/MonitoredCommandEvent.cs}
+\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredCommandEvent.cs}
 
 \item
 The MonitoredEventFactory in listing %\ref{code:MonitoredEventFactory}
  is a static class that completes our Simple Abstract Factory pattern provding the methods to create an object inheriting from AbstractMonitoredEvent from a Command object.  
-%\lstinputlisting[caption=MonitoredEventFactory,  label=code:MonitoredEventFactory,  float=h]{c:/Workspace/VisualStudioMonitor-Step2/Monitor/MonitoredEventFactory.cs}
+\lstinputlisting[caption=MonitoredEventFactory,  label=code:MonitoredEventFactory,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventFactory.cs}
 
 \item
 The MonitoredEventCollection in listing %ref{code:MonitoredEventCollection}
  is the Client in our pattern that maintains a "stock" of all the monitored events we need to manage.  It currently provides methods to read MonitoredEvents from a serialized XML file, save them to a serialized XML file, and query them from the Visual Studio DTE.  Events are managed in a List object belonging to this class.   The constructor initializes the List object from a configuration file if the file exists, otherwise it initializes the List object from the Visual Studio DTE's Command object and saves the List to the configuration file. 
-%\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection,  float=h]{c:/Workspace/VisualStudioMonitor-Step2/Monitor/MonitoredEventCollection.cs}
+\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection,  float=h]{VisualStudioMonitor-Step2/Monitor/MonitoredEventCollection.cs}
 \end{enumerate}
-\end{Answer}
+
 
 \newpage
 
 
 
-
-\begin{Exercise}
-
+\subsubsection{Register Event Handlers}
 
 Now that the framework is complete and a configuration file for all command events to be monitored is ready, the methods to hook Visual Studio into event handlers that log each command can be created.  This exercise will add methods and member objects to AbstractMonitoredEvent and MonitoredCommandEvent classes to register event handlers with the DTE and dispose of them appropriately when necessary.  The MonitoredEventCollection class gets a new method to perform the registration from the objects in the list and another method to deregister them.
 
@@ -395,42 +383,59 @@ Collector Started
 2014-02-02 13:46:56Z,Tools.ExtensionsandUpdates,Tools
 Collector Stopped
 \end{verbatim}
-\end{enumerate}
-\end{Exercise}
 
-\begin{Answer}
-\begin{enumerate}
 \item
-The exercise provided a detailed step-by-step approach for this part of the work.  Listings for AbstractMonitoredEvent \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
-%\lstinputlisting[caption=AbstractMonitoredEvent,  label=code:AbstractMonitoredEvent_4,  float=h]{c:/Workspace/VisualStudioMonitor-Ex4/Monitor/AbstractMonitoredEvent.cs}
+The Listings for AbstractMonitoredEvent \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
+\lstinputlisting[caption=AbstractMonitoredEvent,  label=code:AbstractMonitoredEvent_4,  float=h]{VisualStudioMonitor-Ex4/Monitor/AbstractMonitoredEvent.cs}
 
 \item
 The listing for CommandMonitoredEvent \ref{code:MonitoredCommandEvent_4} shows methods implemented for registration and disposal.
-%\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent_4,  float=h]{c:/Workspace/VisualStudioMonitor-ex4/Monitor/MonitoredCommandEvent.cs}
+\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredCommandEvent.cs}
 
 \item
-The listing for MonitoredEventCollection \ref{code:MonitoredEventCollection_4} shows list processing in calls to respective registration and de-registration methods for the List object.
-%\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection_4,  float=h]{c:/Workspace/VisualStudioMonitor-ex4/Monitor/MonitoredEventCollection.cs}
+The listing for MonitoredEventCollection.cs \ref{code:MonitoredEventCollection_4} shows list processing in calls to respective registration and de-registration methods for the List object.
+\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection_4,  float=h]{VisualStudioMonitor-ex4/Monitor/MonitoredEventCollection.cs}
 
 \item
 The DataRecorder class was modified in this exercise, see the listing \ref{code:DataRecorder_4}.
-%\lstinputlisting[caption=DataRecorder,  label=code:DataRecorder_4,  float=h]{c:/Workspace/VisualStudioMonitor-ex4/Monitor/DataRecorder.cs}
+\lstinputlisting[caption=DataRecorder,  label=code:DataRecorder_4,  float=h]{VisualStudioMonitor-ex4/Monitor/DataRecorder.cs}
 \end{enumerate}
-\end{Answer}
 
- summary:
-\begin{enumerate}
-	\item 
-	Identify the goal (or research questions) and metrics for measurement that requires IDE data.  express attributes of the goal such as how time should be measured, how events should be classified or grouped, and derived calculations.
-	\item
-	Identifying  IDE API interfaces necessary to accomplish the measurement goal.  Examples window showing events, scrolling in the editor, clicking on code lines, Command events, automated events (e.g. build begin and end).
-	\item
-	The event interceptor model, intercepting IDE events transparently to the user.  consider Throttling the capture of near real-time events such as scrolling.
-	\item
-	Considerations for anonymizing the collected data
-	\item
-	IDE data collection tooling.  Build tooling for ease of use and installation.  Planning logging interface for offline and online data collection.  Handling data store access.  Ways to address security.  
-	\item
-	End user communication including anonymity, statement of intended use, restrictions on use, optional participation
-	
-\end{enumerate}
+\subsection{Classification of Events}
+Now that the data collector is working, let's look at the classification of commands in Visual Studio according to the goal of understanding structured vs. unstructured navigation commands.  If you look at the generated XML file from MonitoredEventCollection, there are literally four thousand commands to choose from.  The sample program generates a base classification from the command family (usually a menu association), however, that does not distingush between navigation types.  
+
+The next step is selecting the data to collect from the IDE related to the Metric defined for Navigation Ratio.  For this we identify the  commands related to structured navigation (in Visual Studio) as follows:
+\begin{itemize}
+\item
+ Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string
+\item Go To Definition (F12) brings up the code that defines the selected identifier
+\item View Call Hierarchy (Ctrl+K Ctrl+T) provides a two way analysis of an identifier's dependencies and uses
+\item Class View (Ctrl+W, C) provides a browser and search function for classes and class hierarchy
+\item Find All References (Ctrl+K,R) provides a list of lines that reference an identifier
+\item Navigate to Event Handler in the XAML editor shows the event handler for an object
+\item View Class Diagram generates a class diagram
+\item View Object Browser is a search tool and browser
+\end{itemize}
+
+Next we identify the commands related to unstrctured navigation as follows:
+\begin{itemize}
+\item selecting a file in an explorer window
+\item selecting the tab for a file
+\item using arrow and page up/down keys to go up/down through a file
+\item scrolling,
+\item clicking on a file element
+\item using GoTo Line command
+\item using Find In Files command
+\item using Quick Find command
+\end{itemize}
+
+These identified commands form the set of actions that usage data needs to collect to calculate the navigation ratio metric.  Notice that the commands are a mixture of defined actions within the tool and actions that result from mouse actions such as selecting a window or a window tab.  The latter need further refinement to determine how the usage monitor can identify these actions from available events in the IDE. 
+
+%\subsubsection{Unstructured Navigation Events}
+%For this step, an important set of code is added to Monitor so users unstructured navigation actions can be captured.  Since unsturcutured navigation includes actions like scrolling through a soruce file or opening a source file from a project browser, the event collection requires a different part of the Visual Studio DTE api.  
+
+%Add a reference to EnvDTE80 to get access to this portion of the API.  
+
+%Add a reference to Microsoft.VisualStudio.TextManager.Interop to get access to the text editor manager.
+
+
