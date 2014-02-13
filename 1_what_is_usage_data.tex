@@ -4,8 +4,10 @@
 
 We refer to the data about the interactions of users with an IDE as the IDE's
 usage data or simply \emph{usage data}.
-%
+
 % Who are the stakeholders in this domain?
+%
+% How do the stakeholders benefit from usage data?
 Several stakeholders benefit from capturing and analyzing usage data. First, IDE
 vendors leverage the data to get insight about ways to improve their product
 based on how their users use the IDE in practice. Second, researchers both
@@ -15,7 +17,37 @@ broader contributions to our understanding of programmers' coding practices and
 programmers benefit from the analysis conducted on the usage data because these
 analyses lead to more effective IDEs that make programmers more productive.
 
-types of data
+% What are some examples of usage data?
+Abstractly, an IDE can be modeled as a complex state machine. In this model, a
+user performs an action at each step that moves the IDE from one state to
+another.
+%
+% The following is related to the subsection on "Usage Data Never Captures
+% Everything".
+Perhaps a video recording of the IDE accompanied by the keyboard strokes and
+mouse clicks of the user would provide a complete set of usage data.
+%
+While this usage data in multimedia format may be suitable for small lab
+studies, it suffers from two major limitations. First, it is difficult to
+automatically analyze usage data in this format. Second, the storage and
+collection of usage data in this format is inefficient.
+
+% Give examples of usage data.
+To enable experiments beyond small labs, researchers and IDE vendors have
+developed various usage data collectors (\SecRef{SecHowToCollectData}).
+Depending on the goals of the experiments, the usage data collector captures a
+subset of the IDE's state machine.
+%
+Mylar~\cite{V:Murphy2006How} was one of the first usage data collectors. Mylar
+was implemented as a plug-in for the Eclipse IDE. It captured users' navigation
+histories and their command invocations. For example, Mylar recorded changes to
+selections, views, perspectives as well as invocations of commands such as
+delete, copy, and automated refactorings.
+
+Later, Eclipse incorporated a system similar to Mylar, called the Eclipse Usage
+Data Collector (UDC), as part of its standard distribution package for several
+years.
+
 	-tool usage
 	-resource usage (file/method/etc)
 	-click streams
