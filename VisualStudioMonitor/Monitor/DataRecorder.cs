@@ -24,15 +24,11 @@ namespace Monitor
             myEvents = new MonitoredEventCollection();
             myEvents.RegisterEventInventoryForEventMonitoring();
         }
-
-        static MonitoredEventCollection myEvents;
         
         public static void Stop()
         {
             myEvents.DeRegisterEventMonitoringForInventory();
             WriteLog("Collector Stopped");
-
-
         }
 
         public static void WriteLog(string logToWrite)
@@ -50,9 +46,9 @@ namespace Monitor
             {
                 Console.WriteLine("Error writing to log file " + ioexception);
             }
-
         }
 
+        static MonitoredEventCollection myEvents;
         private static string logFileName;
         private static string logDirectoryPath;
     }

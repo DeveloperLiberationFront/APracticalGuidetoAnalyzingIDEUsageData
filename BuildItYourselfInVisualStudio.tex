@@ -169,7 +169,7 @@ Create the AbstractMonitoredEvent class in the Monitor project in Visual Studio.
    }
 \end{lstlisting}
 
-So that we can store events in a configuration file then manipulate that configuration file later, we provision this abstract class for XML serialization of itself and its derived classes.  Dot NET attributes support the XML serialization in this structure.  The attribute for [XMLInclude(typeof(MonitoredCommandEvent))] tells serialization that the MonitoredCommandEvent class is a derived class of AbstractMonitoredEvent that we will create next.  This provides the abiltiy to serialize and deserialize the public objects of the derived class by referencing the type of AbstractMonitoredEvent when creating a serializer.  The [XmlRoot(ElementName = "MonitoredEvent", Namespace = "http://Monitor")] attribute creates an XML namespace that all derived classes will share with the AbstractMonitoredEvent class.
+So that we can store events in a configuration file then manipulate that configuration file later, we provision this abstract class for XML serialization of itself and its derived classes.  Dot NET attributes support the XML serialization in this structure.  The first attribute tells XML serialization that the MonitoredCommandEvent class is a derived class of AbstractMonitoredEvent that we will create next.  This provides the abiltiy to serialize and deserialize the public objects of the derived class by referencing the type of AbstractMonitoredEvent when creating a serializer.  The second attribute creates an XML namespace that all derived classes will share with the AbstractMonitoredEvent class.
 
 \item
 The next step is to create a derived class called MonitoredCommandEvent that inherits from AbstractMonitoredEvent.  MonitoredCommandEvent implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE and a constructor that builds from an XElement.  An output method ToXElement translates the object to XML for saving.
@@ -209,9 +209,11 @@ The EnvDTE.Command object contains fields for Guid (a GUID string), ID and integ
 
 \item
 To complete the Simple Factory pattern, a static factory class provides static factory methods that creates an object of type  MonitoredCommandEvent from a DTE Command object and returns it as an AbstractMonitoredEvent.  For now the only class to consider is the MonitoredCommandEvent derived class, however, a future step will add more derived classes.  
+\end{enumerate}
 
 \subsubsection{Query Save and Retrieve Visual Studio Command Event Info}
 
+\begin{enumerate}
 \item
 In this step, build the MonitoredEventCollection class that manages a List object of AbstractMonitoredEvent type.  The List object gets populated from an XML file that stores the configuration data.  The MonitoredEventCollection class provides a method to query the DTE for all commands and initialize the list.  Another method called after the DTE query stores the List contents in the same XML format file.  These two methods should be called in sequence the first time the extension launches. After that, it  reads the XML file on startup to initialize the List.  Call the method(s) to query, store and load the event list from the Start() method of the DataRecorder class in the previous step so that the Monitor will load the commands on startup.
 
@@ -362,31 +364,20 @@ Collector Stopped
 
 \end{enumerate}
 
+
 Below are descriptions of the code listings for the example code we discussed in this section.  Code listings are located at the end of the chapter.
 \begin{itemize}
 \item
 The Listings for AbstractMonitoredEvent.cs in Code Listing \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
-\lstinputlisting[caption=AbstractMonitoredEvent,  label=code:AbstractMonitoredEvent_4,  float=h]{VisualStudioMonitor/Monitor/AbstractMonitoredEvent.cs}
-The Listings for AbstractMonitoredEvent \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
-
-
 \item
 The listing for CommandMonitoredEvent.cs in Code Listing \ref{code:MonitoredCommandEvent_4} shows methods implemented for registration and disposal.
-\lstinputlisting[caption=MonitoredCommandEvent,  label=code:MonitoredCommandEvent_4,  float=h]{VisualStudioMonitor/Monitor/MonitoredCommandEvent.cs}
-The listing for CommandMonitoredEvent \ref{code:MonitoredCommandEvent_4} shows methods implemented for registration and disposal.
-
 \item
 The listing for MonitoredEventCollection.cs in Code Listing \ref{code:MonitoredEventCollection_4} shows list processing in calls to respective registration and de-registration methods for the List object.
-\lstinputlisting[caption=MonitoredEventCollection,  label=code:MonitoredEventCollection_4,  float=h]{VisualStudioMonitor/Monitor/MonitoredEventCollection.cs}
-
-
 \item
 The DataRecorder class is shown in listing \ref{code:DataRecorder_4}.
-\lstinputlisting[caption=DataRecorder,  label=code:DataRecorder_4,  float=h]{VisualStudioMonitor/Monitor/DataRecorder.cs}
-The DataRecorder class was modified in this exercise, see the listing \ref{code:DataRecorder_4}.
-
-
 \end{itemize}
+
+
 
 \subsection{Classification of Events}
 Now that the data collector is working, let's look at the classification of commands in Visual Studio according to the goal of understanding structured vs. unstructured navigation commands.  If you look at the generated XML file from MonitoredEventCollection, there are literally four thousand commands to choose from.  The sample program generates a base classification from the command family (usually a menu association), however, that does not distingush between navigation types.    The navigation events of interest relate to the prior stated metric Navigation Ratio.  For this metric,  we identify the  commands related to structured navigation (in Visual Studio) as follows:
