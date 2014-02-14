@@ -13,9 +13,10 @@ vendors leverage the data to get insight about ways to improve their product
 based on how their users use the IDE in practice. Second, researchers both
 develop usage data collectors and conduct rigorous experiments to (1)~make
 broader contributions to our understanding of programmers' coding practices and
-(2)~improve the state-of-the-art productivity programming tools. Finally,
-programmers benefit from the analysis conducted on the usage data because these
-analyses lead to more effective IDEs that make programmers more productive.
+(2)~improve the state-of-the-art productivity programming tools (\eg, debuggers
+and refactoring tools). Finally, programmers benefit from the analysis conducted
+on the usage data because these analyses lead to more effective IDEs that make
+programmers more productive.
 
 % What are some examples of usage data?
 Abstractly, an IDE can be modeled as a complex state machine. In this model, a
@@ -29,24 +30,35 @@ mouse clicks of the user would provide a complete set of usage data.
 %
 While this usage data in multimedia format may be suitable for small lab
 studies, it suffers from two major limitations. First, it is difficult to
-automatically analyze usage data in this format. Second, the storage and
+automatically analyze the usage data in this format. Second, the storage and
 collection of usage data in this format is inefficient.
 
-% Give examples of usage data.
+% Give examples of usage data and their uses.
 To enable experiments beyond small labs, researchers and IDE vendors have
 developed various usage data collectors (\SecRef{SecHowToCollectData}).
-Depending on the goals of the experiments, the usage data collector captures a
-subset of the IDE's state machine.
+Depending on the goals of the experiments, the usage data collector captures
+data about a subset of the IDE's state machine.
 %
-Mylar~\cite{V:Murphy2006How} was one of the first usage data collectors. Mylar
-was implemented as a plug-in for the Eclipse IDE. It captured users' navigation
+Mylar~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
+implemented as a plug-in for the Eclipse IDE. Mylar captured users' navigation
 histories and their command invocations. For example, Mylar recorded changes to
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactorings.
 
 Later, Eclipse incorporated a system similar to Mylar, called the Eclipse Usage
-Data Collector (UDC), as part of its standard distribution package for several
-years.
+Data Collector (UDC)\Fix{Cite the UDC page}, as part of the Eclipse standard
+distribution package for several years. UDC collected data from hundreds of
+thousands of Eclipse users every month. To the best of our knowledge, the UDC
+data set is the largest set of IDE usage data\Fix{Cite the UDC data set}.
+Several researchers have mined this large data set to analyze to 
+%
+(1)~gain insight about programmers'
+practices~\cite{VakilianJohnson2014Alternate, VakilianETAL2013Compositional,
+V:MurphyHill2012How} and
+%
+(2)~develop new tools that better fit programmers'
+practices~\cite{MurphyHill2012Improving, VakilianETAL2013Compositional}.
+
 
 	-tool usage
 	-resource usage (file/method/etc)
