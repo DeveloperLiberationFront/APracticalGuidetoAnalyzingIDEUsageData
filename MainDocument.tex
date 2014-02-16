@@ -1,8 +1,15 @@
 
 \section{Usage Data Research Concepts}
 
+In this section we discuss background on usage data research provides motivation for analyzing usage data, what we can learn from and even innovate with usage data, how to focus usage data on specific research goals, and additional considerations such as privacy and additional data sources to support your research.
+
+
 \subsection{What Is Usage Data and Why Analyze It?}
 \input{UsageDataResearchConcepts/WhatIsUsageData}
+
+
+\subsection{Selecting Relevant Data Based on a Goal}
+\input{UsageDataResearchConcepts/ResearchGoals}
 
 \subsection{Privacy Concerns}
 \input{UsageDataResearchConcepts/PrivacyConcerns}
@@ -10,19 +17,15 @@
 \subsection{Other Data sources}
 \input{UsageDataResearchConcepts/OtherDataSources}
 
+With this background in mind, we can dig deeper into specifics on how to collect data in the next section.
 
 \section{How to Collect Data}
 \label{SecHowToCollectData}
 
-There are many options for collecting usage data from IDEs.   Existing tools can provide ready made solutions for commonly used IDEs and some support collecting data from additional sources.   If you want to study data collected in prevous projects you can use the Eclipse archive for UDC data available below.
-
-
-Existing UDC data is available through the Eclipse foundation at this URL:
+There are many options for collecting usage data from IDEs.   Existing tools can provide ready made solutions for commonly used IDEs and some support collecting data from additional sources.   Another way to start is to study data collected in prevous projects such as data available in the Eclipse archive for UDC data.  This archive contains a wealth of data collected by UDC when UDC was integrated with each Eclipse versoin.  The data is available at this URL::
 \url{http://archive.eclipse.org/projects/usagedata/}
-%could provide more analysis, maybe even BigData
 
-
-In this section we discuss details on how to use exisitng data collectors for Eclipse including Usage Data Collector, Mylyn Monitor, and Coding Spectator and provide a sample program to build your own data collector for Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for you.
+You may have more specific questoins than can be answered with the UDC data or need to instrument usage data collection for a specific experiment.  In this section we discuss details on how to use exisitng data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and Coding Spectator.  Then we'll walkthorugh creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for your research.
 
 \begin{itemize}
 
@@ -54,6 +57,8 @@ showstringspaces=false,
 basicstyle=\footnotesize,
 emph={label}}
 
+The remainder of this section will discuss in detail how to implement the top four items from the list above.  
+
 \subsection{Eclipse Usage Data Collector}
 \label{EclipseUsageDataCollector}
 \input{ToolsToCollectData/EclipseUDC}
@@ -68,16 +73,13 @@ emph={label}}
 \label{buildItYourself}
 \input{ToolsToCollectData/BuildItYourselfInVisualStudio}
 
-%TODO Wrapup
-
-
+Thus far we have been focusing on concrete usage data collection frameworks and the specific data collected by these frameworks.  With options to collect data from both Visual Studio and Eclipse, the data collection aspect is covered.  Let's look next at methods and challenges in analyzing usage data.
 
 \section{How to Analyze Usage Data}
 
-Thus far we have been focusing on concrete usage data collection frameworks and the specific data collected by these frameworks. When analyzing this data, or data from other collection frameworks, data analysis follows several predictable patterns, which we discuss in this section. However, we first discuss the nature of the collected data, especially whether it is anonymous, which dramatically effects how it is analyzed.
+When analyzing this data, or data from other collection frameworks, data analysis follows several predictable patterns, which we discuss in this section. However, we first discuss the nature of the collected data, especially whether it is anonymous, which dramatically effects how it is analyzed.
 
 \subsection{Types of Data}
-
 \input{AnalyzingUsageData/typesOfData}
 
 \subsection{Usage Data Format}
@@ -92,13 +94,14 @@ Thus far we have been focusing on concrete usage data collection frameworks and 
 \subsection{Sequence Analysis}
 \input{AnalyzingUsageData/sequence}
 
-
 \subsection{State Model Analysis}
 \input{AnalyzingUsageData/states}
 
 \subsection{Research combining usage data with other sources}
 \input{AnalyzingUsageData/Reasearch_combining_usage_data}
 
+
+Analyzing usage data and the ideas you bring to that process provide the real opportunities for innovating usage data based research.  Next we will discuss limitations observed in conducting research with usage data.
 
 \section{Limits of What You Can Learn from Usage Data}\label{sec:limitations}
 

@@ -1,0 +1,24 @@
+
+	Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While a general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can improve the result.  A process for defining the desired data can follow structures such as Goal-Question-Metric \cite{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, to study the navigation practices of developers, we perfrom the GQM process as follows:
+    \begin{itemize}
+\item
+	Goal
+\subitem
+	To assess and compare the use of structured navigation by developers in our study
+\item
+	Possible Question(s)
+\subitem
+	What is the frequency  of navigation commands developers use when modifying source code?
+\subitem
+	What portion of navigation commands developers use are structured navigation rather than unstructured navigation?
+\item
+	Metric
+\subitem
+	Navigation Ratio is the proportion of the number of structured navigation commands used to the number of unstructured navigation commands used by a developer in a given time period (e.g. a day)
+
+	    \end{itemize}
+
+The specific way to measure navigatoin ration from usage data needsfurther refinement to determine how the usage monitor can identify these actions from available events in the IDE. This is discussed in further detail in section \ref{buildItYourself}.
+
+Assessing commands within a time duration (e.g. day) requires that we collect a time-stamp for each command.  Simply using the time as a "by variable" where we stratify data according to time is a straight-forward conversion.  The time-stamp can be converted to a date allowing data to be grouped by the day of the events.  Similarly the time-stamp can be convered to hour to look at events each hour of any given day.
+Calculating duration or elapsed time for a command or set of commands adds new requirements to monitoring.  Specifically, the need to collect events that relate to when the application or IDE is being used and when it is not and the need to collect additional events that occur when the user has moved on from the command of interest.  
