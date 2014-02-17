@@ -1,6 +1,6 @@
 
-We refer to the data about the interactions of users with an IDE as the IDE's
-usage data or simply \emph{usage data}.
+We refer to the data about the interactions of users with an IDE as the
+\emph{IDE usage data} or simply \emph{usage data}.
 
 % Who are the stakeholders in this domain?
 %
@@ -10,15 +10,15 @@ vendors leverage the data to get insight about ways to improve their product
 based on how their users use the IDE in practice. Second, researchers both
 develop usage data collectors and conduct rigorous experiments to (1)~make
 broader contributions to our understanding of programmers' coding practices and
-(2)~improve the state-of-the-art productivity programming tools (\eg, debuggers
-and refactoring tools). Finally, programmers benefit from the analysis conducted
-on the usage data because these analyses lead to more effective IDEs that make
+(2)~improve the state-of-the-art programming tools (\eg, debuggers and
+refactoring tools). Finally, programmers benefit from the analysis conducted on
+the usage data because these analyses lead to more effective IDEs that make
 programmers more productive.
 
 % What are some examples of usage data?
-Abstractly, an IDE can be modeled as a complex state machine. In this model, a
-user performs an action at each step that moves the IDE from one state to
-another.
+At a high level, an IDE can be modeled as a complex state machine. In this
+model, a user performs an action at each step that moves the IDE from one state
+to another.
 %
 % The following is related to the subsection on "Usage Data Never Captures
 % Everything".
@@ -35,19 +35,29 @@ To enable experiments beyond small labs, researchers and IDE vendors have
 developed various usage data collectors (\SecRef{SecHowToCollectData}).
 Depending on the goals of the experiments, the usage data collector captures
 data about a subset of the IDE's state machine.
+
+An exemplar of a usage data collection and analysis project with wide adoption
+in practice is the Mylar project. Mylar started as a research project that later
+became part of Eclipse. The Mylar project exhibits both of the advantages of
+research on analyzing usage data as mentioned above.
+
+The Mylar team analyzed collected and analyzed usage data to provide empirical
+evidence about the usage frequency of various features of
+Eclipse~\cite{V:Murphy2006How}.
 %
 Mylar~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
 implemented as a plug-in for the Eclipse IDE. Mylar captured users' navigation
-histories and their command invocations. For example, Mylar recorded changes to
+histories and their command invocations. For example, it recorded changes to
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactorings.
-
+%
 Later, Eclipse incorporated a system similar to Mylar, called the Eclipse Usage
-Data Collector (UDC)\Fix{Cite the UDC page}, as part of the Eclipse standard
+Data Collector (UDC)~\cite{WebPageUDC}, as part of the Eclipse standard
 distribution package for several years. UDC collected data from hundreds of
 thousands of Eclipse users every month. To the best of our knowledge, the UDC
-data set is the largest set of IDE usage data\Fix{Cite the UDC data set}.
-Several researchers have mined this large data set to analyze to 
+data set is the largest set of IDE usage data that is publicly
+available~\cite{WebPageUDCArchive}. Several researchers have mined this large
+data set to
 %
 (1)~gain insight about programmers'
 practices~\cite{VakilianJohnson2014Alternate, VakilianETAL2013Compositional,
@@ -57,27 +67,48 @@ V:MurphyHill2012How} and
 practices~\cite{MurphyHill2012Improving, VakilianETAL2013Compositional,
 Kersten-Mylar2005}.
 
-Perhaps a success story of the impact that collection and analysis of usage data
-can have on practice is Eclipse Mylyn. Mylyn started as research project that
-was initially called Mylar. Mylyn introduces the concept of a \emph{task
-context} to IDEs.
+In addition to collecting usage data, Mylar provided new features to the Eclipse
+IDE that leveraged the usage data. This part of Mylar later evolved into a
+plug-in called Mylyn that comes with the official distribution of Eclipse. Mylyn
+introduces the concept of a \emph{task context}. It first collects the users'
+actions to infer the set of entities (\eg, files, class, and packages) that are
+related to a task. Mylyn then analyzes the entities associated with the current
+task to surface relevant information with less clutter in various features such
+as outline, navigation, and auto-completion\Fix{Refer to other parts of the
+chapter that discuss Mylar/Mylyn}.
 
+Studies on automated refactorings are another example of projects that have
+collected and analyzed usage data. Researchers have analyzed the Eclipse UDC
+data set~\cite{V:MurphyHill2012How, VakilianETAL2013Compositional}, developed
+custom usage data collectors~\cite{VakilianETAL2012UseDisuseMisuse}, and
+conducted survey and field studies~\cite{V:MurphyHill2012How,
+VakilianJohnson2014Alternate, NegaraETAL2013ManualRefactorings} to gain more
+insight about programmers' use of the existing automated refactorings. Several
+studies have found that programmers do not use the automated refactorings as
+much as refactoring experts expect programmers to~\cite{V:MurphyHill2012How,
+NegaraETAL2013ManualRefactorings}. This finding motivated researchers to study
+the factors that lead to low adoption of automated
+refactorings~\cite{VakilianETAL2012UseDisuseMisuse, V:MurphyHill2012How} and
+propose novel techniques for improving the usability of automated
+refactorings~\cite{V:MurphyHill2012How, MurphyHill2012Improving,
+MurphyHill2008ExtractMethod, LeeETAL2013DragDrop, MurphyHillETAL2011Gestures,
+GeETAL2012BeneFactor, FosterETAL2012WitchDoctor}.
+%	-tool usage
+%	-resource usage (file/method/etc)
+%	-click streams
+%
+%need for analysis
+%	-answers questions about how developers work
+%	-example questions in the past e.g. refactoring
+%	-who uses the data
+%		-researchers
+%		-toolsmiths
+%		-users (?)
+%
+%benefits
+%	-understanding that you don't get from lab experiments. more realistic data
+%	-you can also use it in the lab, but screencast is also inefficent in storage and analysis
+%		- can get people working on their own tasks and own code with more realistic data
+%		- can use in lab to make analysis easier than screencast
+%		- longer period of time
 
-	-tool usage
-	-resource usage (file/method/etc)
-	-click streams
-
-need for analysis
-	-answers questions about how developers work
-	-example questions in the past e.g. refactoring
-	-who uses the data
-		-researchers
-		-toolsmiths
-		-users (?)
-
-benefits
-	-understanding that you don't get from lab experiments. more realistic data
-	-you can also use it in the lab, but screencast is also inefficent in storage and analysis
-		- can get people working on their own tasks and own code with more realistic data
-		- can use in lab to make analysis easier than screencast
-		- longer period of time
