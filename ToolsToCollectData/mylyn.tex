@@ -127,3 +127,4 @@ import org.eclipse.jdt.core.IJavaElement;
 
 The code first checks what type the selection has. If the selection is structured, and the first part of it is a Java Element, it collects the relevant information and then creates an \texttt{InteractionEvent} with the gathered information, such as the interaction kind, the structure kind and the element handle. At the end of the method, the \texttt{MonitorUiPlugin} is notified about the observed interaction event. The \texttt{MonitorUiPlugin} will then go through all registered interaction event listeners and forward the event to them. Since there is an \texttt{InteractionEventLogger} registered as part of the mylyn code, the interaction event object will be forwarded to the logger and then written out into a file. 
 
+%TODO: Please craft a short conclusion paragraph (3 sentences max) to the mylyn monitor section.  Think about what you recommend for folks who want to use it.  Thanks WBS
