@@ -405,8 +405,6 @@ Next we identify the commands related to unstrctured navigation as follows:
 
 These identified commands form the set of actions that usage data needs to collect to calculate the navigation ratio metric.  Notice that the commands are a mixture of defined actions within the tool and actions that result from mouse actions such as selecting a window or a window tab.  Now in the classification file generated from the tool, there is a field to classify each event.  Locating the events in the xml related to these commands and changing their classification to StructuredNav or UnstructuredNav will allow analaysis of the log data with respect to these classifications.
 
-\subsubsection{Wrap Up}
-
 With this demonstration you see how to build a usage monitor for Visual Studio that records most commands the user can issue in the IDE.  What's missing?  Well there are other areas of the DTE to explore such as editor events, unit test events, build and debug session events that provide greater context to the user experience.  For brevity, capturing those events is left to the reader to explore on their own.
 
 %\subsubsection{Unstructured Navigation Events}
