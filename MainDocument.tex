@@ -1,27 +1,30 @@
 
 \section{Usage Data Research Concepts}
 
-In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from and even innovate with it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and other data sources necessary to support your research.  
+In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources necessary to support your research.  
 
 \subsection{What Is Usage Data and Why Analyze It?}
 \input{UsageDataResearchConcepts/WhatIsUsageData}
-
+\vspace{0.1in}
 Now we understand more about what usage data is and how it has been used in research and tool development.  Next we get specific, taking a look at how to refine your approach to collecting usage data based on your research goals.
 
 \subsection{Selecting Relevant Data Based on a Goal}
 \input{UsageDataResearchConcepts/ResearchGoals}
 
+\vspace{0.1in}
 It is great to see how usage data may benefit your research, however, there are some concerns your users will have regarding the data collection around privacy.  
 
 \subsection{Privacy Concerns}
 \input{UsageDataResearchConcepts/PrivacyConcerns}
 
+\vspace{0.1in}
 Handling privacy is important, however, there may be parts of your research where you need the ground truth that confirms what you observe in the usage data.  Thus you may need to know who is contributing data so you can ask them questions that establish the ground truth.  In the next section we discuss what other data sources you should consider when planning your research.
 
 \subsection{Other Data sources}
 \input{UsageDataResearchConcepts/OtherDataSources}
 
-Now that we have discussed formulating your research plan and all the aspects to consider, we are ready to dig deeper into specifics on how to collect data from developer IDEs.  The next section covers several options that will propel your research forward.
+\vspace{0.1in}
+Now that we have discussed aspects to consider when formulating your research plan, we are ready to dig deeper into specifics on how to collect data from developer IDEs.  The next section covers several options that will propel your research forward.
 
 \section{How to Collect Data}
 \label{SecHowToCollectData}
@@ -42,7 +45,7 @@ You may have more specific questions than can be answered with the UDC data or n
 	
 	\item For Visual Studio, section \ref{buildItYourself} describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
 	
-	\item Hackystat provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, hoever you can consult papers and the code website for it to collect more information. \cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
+	\item Hackystat provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, however, you can consult papers and the code website for it to collect more information. \cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
 	
 	\item CodeAlike is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency.  Currently CodeAlike is a proprietary tool whose developers seek to collaborate on usage data studies.
 
@@ -67,6 +70,7 @@ The remainder of this section will discuss in detail how to implement the top fo
 \label{EclipseUsageDataCollector}
 \input{ToolsToCollectData/EclipseUDC}
 
+\vspace{0.1in}
 While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component.
 
 \subsection{Mylyn and the Eclipse Mylyn Monitor} 
@@ -83,7 +87,7 @@ While there is some coding involved, setting up the UDC for Eclipse can provide 
 \label{buildItYourself}
 \input{ToolsToCollectData/BuildItYourselfInVisualStudio}
 
-
+\vspace{0.1in}
 Thus far we have been focusing on concrete usage data collection frameworks and the specific data collected by these frameworks.  With options to collect data from both Visual Studio and Eclipse, we hopefully provided a good resource to get you started towards your research goals.  Next, let's look next at methods and challenges in analyzing usage data.
 
 \section{How to Analyze Usage Data}
@@ -114,7 +118,8 @@ When analyzing this data, or data from other collection frameworks, data analysi
 \subsection{Research combining usage data with other sources}
 \input{AnalyzingUsageData/Reasearch_combining_usage_data}
 
-
+\vspace{0.1in}
+Using this overview of analysis techniques should give you a good start towards analyzing usage data for your research.
 The ideas you bring to your usage data analysis process provide the real opportunities for innovating usage data based research.  Next we will discuss limitations we have observed in conducting research with usage data.
 
 \section{Limits of What You Can Learn from Usage Data}
