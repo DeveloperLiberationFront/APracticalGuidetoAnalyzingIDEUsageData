@@ -39,12 +39,13 @@ executed&command&org.eclipse.ui&3.7.0.v20110928-1505&org.eclipse.ui.edit.paste&1
 
 \vspace{4mm}
 \noindent
-The first column tells us what kind of thing happened -- in this case, something was executed.
-The second column tells us what was executed -- in this case, a command.
-The third column tells us what bundle this event belonged to -- in this case, Eclipse's user interface bundle.
+The first column tells us what kind of thing happened---in this case, something was executed.
+The second column tells us what was executed---in this case, a command.
+The third column tells us what bundle this event belonged to---in this case, Eclipse's user interface bundle.
 The fourth column gives us the version of the bundle.
-The fifth tells us the name of the command that was executed -- in this case, paste.
-The final column tells us when the command was executed, in Greenwich Mean Time -- in this case, January 7th, 2014 at 16:24:03 GMT.
+The fifth tells us the name of the command that was executed---in this case, paste.
+The final column tells us when the command was executed, in Greenwich Mean
+Time---in this case, January 7th, 2014 at 16:24:03 GMT.
 
 
 \subsubsection{Limitations}
@@ -101,7 +102,7 @@ of your current workspace (Figure~\ref{fig:filesystem}):
 In that folder, depending on how many UDC events have been gathered,
 a number of comma separated value (CSV) files will appear, where \texttt{upload0.csv} is the oldest
 and \texttt{usagedata.csv} is the newest.
-Open up \texttt{usagedata.csv} -- you should notice a large number and a variety of events.
+Open up \texttt{usagedata.csv}---you should notice a large number and a variety of events.
 Be sure to look specifically for events that you executed and views that you opened earlier.
 
 \begin{figure}
@@ -120,8 +121,10 @@ Unfortunately, there is no easy way to tell the UDC client to permanently store
 usage data.
 An easy workaround is to increase the upload period to 90 days (Figure~\ref{fig:upload}),
 which should be enough time to complete the experiment.
-The long-term fix for this issue is to modify the source code, as we will explain
-how to do shortly, to never upload data.
+The long-term fix for this issue is to either use some other tool, such as
+\CodingSpectator{} (\SecRef{CodingSpectator}), to periodically submit the UDC
+data to your servers or modify the source code of UDC, as we will explain how to
+do shortly, to never upload data.
 
 \begin{figure}
   \centering
@@ -396,7 +399,7 @@ public class BasicUDCServer {
 
 \noindent
 When this server is run and it receives a UDC upload,
-it will print a UserId, WorkspaceId, and time the upload was sent.
+it will print a UserId, WorkspaceId, and the time of the upload.
 UserIds are randomly generated on the client side and stored in a file in
 the user's home directory.
 As long as that file remains intact, future uploads from that user will
