@@ -18,39 +18,58 @@ programmers more productive.
 At a high level, an IDE can be modeled as a complex state machine. In this
 model, a user performs an action at each step that moves the IDE from one state
 to another.
-%
-% The following is related to the subsection on "Usage Data Never Captures
-% Everything".
-Perhaps a video recording of the IDE accompanied by the keyboard strokes and
-mouse clicks of the user would provide a complete set of usage data.
-%
-While this usage data in multimedia format may be suitable for small lab
-studies, it suffers from two major limitations. First, it is difficult to
-automatically analyze the usage data in this format. Second, the storage and
-collection of usage data in this format is inefficient.
-
-% Give examples of usage data and their uses.
-To enable experiments beyond small labs, researchers and IDE vendors have
+%%
+%% The following is related to the subsection on "Usage Data Never Captures
+%% Everything".
+%Perhaps a video recording of the IDE accompanied by the keyboard strokes and
+%mouse clicks of the user would provide a complete set of usage data.
+%%
+%While this usage data in multimedia format may be suitable for small lab
+%studies, it suffers from two major limitations. First, it is difficult to
+%automatically analyze the usage data in this format. Second, the storage and
+%collection of usage data in this format is inefficient.
+To capture usage data, researchers and IDE vendors have
 developed various usage data collectors (\SecRef{SecHowToCollectData}).
 Depending on the goals of the experiments, the usage data collector captures
-data about a subset of the IDE's state machine.
+data about a subset of the IDE's state machine. While a combination of video recordings of the IDE with the keyboard strokes and mouse clicks of a user would provide a fairly complete set of usage data, it is difficult to automatically analyze video data and therefore mostly limited to small lab studies and not part of the developed usage data collectors.
+
+
+%% Give examples of usage data and their uses.
+%To enable experiments beyond small labs, researchers and IDE vendors have
+%developed various usage data collectors (\SecRef{SecHowToCollectData}).
+%Depending on the goals of the experiments, the usage data collector captures
+%data about a subset of the IDE's state machine.
 
 An example of a usage data collection and analysis project with wide adoption
-in practice is the Mylar project. Mylar started as a research project that later
-became part of Eclipse. The Mylar project exhibits both of the advantages of
-research on analyzing usage data as mentioned above.
+in practice is the Mylyn project (previously known as Mylar). Mylyn started as a research project that later became part of Eclipse and that exhibits both of the advantages of understanding programmer's practices and improving tool support.
 
-The Mylar team analyzed collected and analyzed usage data to provide empirical
-evidence about the usage frequency of various features of
-Eclipse~\cite{V:Murphy2006How}.
-%
-Mylar~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
-implemented as a plug-in for the Eclipse IDE. Mylar captured users' navigation
-histories and their command invocations. For example, it recorded changes to
+Mylyn~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
+implemented as a plug-in for the Eclipse IDE and captured users' navigation
+histories and their command invocations. For example, it records changes in
 selections, views, perspectives as well as invocations of commands such as
-delete, copy, and automated refactoring.
+delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
+
+Researchers used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse~\cite{V:Murphy2006How}. In addition to collecting usage data, Mylyn introduces new features to the Eclipse
+IDE that leverages the usage data to provide a task-focused UI and increase a developer's productivity~\cite{Kersten-Mylin}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a user's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, class, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion\Fix{Refer to other parts of the chapter that discuss Mylar/Mylyn}.
+
+%The Mylyn team analyzed collected and analyzed usage data to provide empirical
+%evidence about the usage frequency of various features of
+%Eclipse~\cite{V:Murphy2006How}.
 %
-Later, Eclipse incorporated a system similar to Mylar, called the Eclipse Usage
+
+%In addition to collecting usage data, Mylyn provided new features to the Eclipse
+%IDE that leveraged the usage data. This part of Mylar later evolved into a
+%plug-in called Mylyn that comes with the official distribution of Eclipse. Mylyn
+%introduces the concept of a \emph{task context}. It first collects the users'
+%actions to infer the set of entities (\eg, files, class, and packages) that are
+%related to a task. Mylyn then analyzes the entities associated with the current
+%task to surface relevant information with less clutter in various features such
+%as outline, navigation, and auto-completion\Fix{Refer to other parts of the
+%chapter that discuss Mylar/Mylyn}.
+
+
+%
+Later, Eclipse incorporated a system similar to Mylyn, called the Eclipse Usage
 Data Collector (UDC)~\cite{WebPageUDC}, as part of the Eclipse standard
 distribution package for several years. UDC collected data from hundreds of
 thousands of Eclipse users every month. To the best of our knowledge, the UDC
@@ -63,18 +82,8 @@ practices~\cite{VakilianJohnson2014Alternate, VakilianETAL2013Compositional,
 V:MurphyHill2012How} and
 %
 (2)~develop new tools that better fit programmers'
-practices~\cite{MurphyHill2012Improving, VakilianETAL2013Compositional,
-Kersten-Mylar2005}.
+practices~\cite{MurphyHill2012Improving, VakilianETAL2013Compositional}%,Kersten-Mylar2005}.
 
-In addition to collecting usage data, Mylar provided new features to the Eclipse
-IDE that leveraged the usage data. This part of Mylar later evolved into a
-plug-in called Mylyn that comes with the official distribution of Eclipse. Mylyn
-introduces the concept of a \emph{task context}. It first collects the users'
-actions to infer the set of entities (\eg, files, class, and packages) that are
-related to a task. Mylyn then analyzes the entities associated with the current
-task to surface relevant information with less clutter in various features such
-as outline, navigation, and auto-completion\Fix{Refer to other parts of the
-chapter that discuss Mylar/Mylyn}.
 
 Studies on automated refactorings are another example of projects that have
 collected and analyzed usage data. Researchers have analyzed the Eclipse UDC
