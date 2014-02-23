@@ -32,7 +32,7 @@ Now that we have discussed aspects to consider when formulating your research pl
 There are many options for collecting usage data from IDEs.   Existing tools can provide ready made solutions for commonly used IDEs and some support collecting data from additional sources.   Another way to start is to study data collected in previous projects such as data available in the Eclipse archive for UDC data.  This archive contains a wealth of data collected by UDC when UDC was integrated with each Eclipse version in 2009 and 2010.  The data is currently available at this URL:
 \url{http://archive.eclipse.org/projects/usagedata/}
 
-You may have more specific questions than can be answered with the UDC data or need to collect usage data for a specific experiment.  In this section we discuss details on how to use existing data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and Coding Spectator.  Then we'll walk through creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for your research.
+You may have more specific questions than can be answered with the UDC data or need to collect usage data for a specific experiment.  In this section we discuss details on how to use existing data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and \CodingSpectator{} (\SecRef{CodingSpectator}).  Then we'll walk through creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for your research.
 
 \begin{itemize}
 
@@ -40,12 +40,16 @@ You may have more specific questions than can be answered with the UDC data or n
 	
 	\item Eclipse: Mylyn Monitor described in section \ref{MylynMonitor} collects task oriented events and can be configured for saving data
 	
-	\item CodingSpectator %https://github.com/vazexqi/CodingSpectator
+        \item \CodingSpectator %https://github.com/vazexqi/CodingSpectator
 , discussed in section \ref{CodingSpectator} focuses on refactoring actions and the context in which they are taken.
+
+        \item \CodingTracker~\cite{NegaraETAL2012Dangerous} is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
 	
 	\item For Visual Studio, section \ref{buildItYourself} describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
 	
 	\item Hackystat provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, however, you can consult papers and the code website for it to collect more information. \cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
+
+        \item \Fluorite~\cite{YoonMyers2011Flourite} is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies~\cite{YoonMyers2012Backtracking} and visualizing code histories~\cite{YoonETAL2013VisualizeChange}.
 	
 	\item CodeAlike is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency.  Currently CodeAlike is a proprietary tool whose developers seek to collaborate on usage data studies.
 
@@ -232,3 +236,6 @@ In this chapter, we have explained how to collect and
 analyze usage data, which we hope will help you ``stand
 on the shoulders of giants'' and increase the ease
 with which you can collect and analyze your own usage data.
+
+% LocalWords: IDE IDEs UDC refactoring refactorings
+
