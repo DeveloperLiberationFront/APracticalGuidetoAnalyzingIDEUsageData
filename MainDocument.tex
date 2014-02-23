@@ -1,18 +1,18 @@
 
 \section{Usage Data Research Concepts}
 
-In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources necessary to support your research.  
+In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources necessary to support your research.
 
 \subsection{What Is Usage Data and Why Analyze It?}
 \input{UsageDataResearchConcepts/WhatIsUsageData}
 \vspace{0.1in}
-Now we understand more about what usage data is and how it has been used in research and tool development.  Next we get specific, taking a look at how to refine your approach to collecting usage data based on your research goals.
+Now you should understand more about what usage data is and how it is and has been used in research and tool development.  Next we take a look at how you can refine your approach to collect usage data based on your research goals.
 
 \subsection{Selecting Relevant Data Based on a Goal}
 \input{UsageDataResearchConcepts/ResearchGoals}
 
 \vspace{0.1in}
-It is great to see how usage data may benefit your research, however, there are some concerns your users will have regarding the data collection around privacy.  
+%It is great to see how usage data may benefit your research, however, there are some concerns your users will have regarding the data collection around privacy.
 
 \subsection{Privacy Concerns}
 \input{UsageDataResearchConcepts/PrivacyConcerns}
@@ -68,7 +68,7 @@ showstringspaces=false,
 basicstyle=\footnotesize,
 emph={label}}
 
-The remainder of this section will discuss in detail how to implement the top four tools from the list above.  
+The remainder of this section will discuss in detail how to implement the top four tools from the list above.
 
 \subsection{Eclipse Usage Data Collector}
 \label{EclipseUsageDataCollector}
@@ -77,7 +77,7 @@ The remainder of this section will discuss in detail how to implement the top fo
 \vspace{0.1in}
 While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component.
 
-\subsection{Mylyn and the Eclipse Mylyn Monitor} 
+\subsection{Mylyn and the Eclipse Mylyn Monitor}
 \label{MylynMonitor}
 \input{ToolsToCollectData/mylyn}
 
@@ -87,7 +87,7 @@ While there is some coding involved, setting up the UDC for Eclipse can provide 
 
 %pretty good wrap up on Coding Spectator - may be ok
 
-\subsection{Build it Yourself for Visual Studio} 
+\subsection{Build it Yourself for Visual Studio}
 \label{buildItYourself}
 \input{ToolsToCollectData/BuildItYourselfInVisualStudio}
 
@@ -133,7 +133,7 @@ Collecting usage data is potentially a boon to research, and as we have
 pointed out, has many interesting and impactful applications.
 Nonetheless, there are limits to what you can learn as a researcher
 from usage data.
-In fact, our experience is that researchers (and practitioners) have 
+In fact, our experience is that researchers (and practitioners) have
 high expectations about what they can learn from usage data, and those
 expectations often come crashing down after significant effort implementing
 and deploying a data collection system.
@@ -143,32 +143,32 @@ the following two limitations of usage data.
 \textbf{Rationale is Hard to Capture.}
 Usage data tells you what a software developer did, but not
 why she did it.
-For example, if your usage data tells you that a developer used 
+For example, if your usage data tells you that a developer used
 new refactoring tool for the first time, from a trace alone you cannot determine whether
 (a) she learned about the tool for the first time, (b) she had used the tool before,
-but before you started collecting data, or (c) her finger slipped and 
+but before you started collecting data, or (c) her finger slipped and
 she pressed a hotkey by accident.
 A researcher may be able to distinguish between these by collecting additional information,
 like asking the developer just after she used the tool why she used it,
-but it is impossible to definitively separate these based on the 
+but it is impossible to definitively separate these based on the
 usage data alone.
 
 \textbf{Usage Data Never Captures Everything.}
-Researchers often want to capture ``everything,'' or at least 
+Researchers often want to capture ``everything,'' or at least
 everything that a developer does.
-This is fundamentally impossible, and the reason we introduced the 
+This is fundamentally impossible, and the reason we introduced the
 goal-question metric.
-If you have a system that captures all key presses, you are still 
+If you have a system that captures all key presses, you are still
 lacking information about mouse movements.
 If you have a system that also captures mouse movements, you're still
 missing the files that the developer is working with.
-If your system captures also the files, you still lacking the 
+If your system captures also the files, you still lacking the
 histories of those files.
 And so on.
 Ultimately, usage data is all about fitness for purpose -- is the data
 you are analyzing fit for the purpose of your research questions.
 
-To avoid these limitations, we recommend not thinking about 
+To avoid these limitations, we recommend not thinking about
 usage data collection abstractly, but thinking about it concretely before
 you begin.
 Invent an ideal usage data trace, and ask yourself:
@@ -192,17 +192,17 @@ the limitations of collecting and analyzing usage data.
 %	\item
 %	Identifying developer viewpoints of the data
 %	\item
-%	Designing a data visualization for developers. 
+%	Designing a data visualization for developers.
 %	\item
 %	Issues of privacy or sensitivity of data for developers
 %\end{itemize}
 %\item Tailoring usage data to provide value to toolsmiths
 %\begin{itemize}
-%	\item 
+%	\item
 %	Tool usage data
-%	\item 
-%	Analyzing contextual data relevant to tool use such as prior actions or follow-on actions, 
-%	\item 
+%	\item
+%	Analyzing contextual data relevant to tool use such as prior actions or follow-on actions,
+%	\item
 %	Determining whether tool use was successful.
 %\end{itemize}
 %\item Research perspectives and opportunities
@@ -218,21 +218,21 @@ the limitations of collecting and analyzing usage data.
 \section{A Look Ahead}
 
 If the last two decades could be labeled the era
-of big data collection, 
-the next two decades will surely be labeled as the 
+of big data collection,
+the next two decades will surely be labeled as the
 era of smarter big data analysis.
 Many questions still remain:
 How do we balance data privacy and data richness?
 What are the long term effects of developer monitoring?
 How can we maximize the value of data collection
-for as many researchers as possible, and reduce the 
+for as many researchers as possible, and reduce the
 strain on research participants?
 Answering these questions will help our research
 community advance in usage data collection and analysis.
 
-Usage data, while now widely collected, still remains largely 
+Usage data, while now widely collected, still remains largely
 an untapped resource by practitioners and researchers.
-In this chapter, we have explained how to collect and 
+In this chapter, we have explained how to collect and
 analyze usage data, which we hope will help you ``stand
 on the shoulders of giants'' and increase the ease
 with which you can collect and analyze your own usage data.
