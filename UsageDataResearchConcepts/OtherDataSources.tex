@@ -1,12 +1,14 @@
-While it may seem like usage data tells everything about what a developer is doing, it usually leaves some gaps in the story (see section \ref{sec:limitations}).  Augmenting usage data with additional data sources fills in the details necessary to understand what the user was doing.  
-    \begin{itemize}
-\item
-	Usage data in user study smaller setting is augmented by user explicit feedback to establish ground truth.  If you want to know a user's opinion of a tool, or purpose for using an IDE feature, it is best to ask them about it.  A post-analysis informal question and answer can shed light on your observations that confirms your analysis or takes a different conclusion.
-\item
-	Smaller studies can ask questions about user activities that add rationale to the usage data that tells why user is doing what they are doing.   Questions like how well do you know the code you work in can influece a users navigation patterns and use of code search \cite{wbsnipesthesis}.  Other questions such as whether they are working on new features or bug fixes can influcence other data attributes such as the amount of editing vs. testing.
-\item
-	Consider project sources such as agile user stories, project tasks, and check-in records to augment usage data.   Reviewing the completed user stories for a project can provide insight into the objectives developers are trying to accomplish.  
-\item
-	Small studies can generate a metric you can use with larger data source that does not have augmented data.  For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\cite{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.  
-    \end{itemize}
-    
+While it may seem like usage data tells everything about what a developer is doing, it usually leaves gaps in the story (see section \ref{sec:limitations}).  Augmenting usage data with additional data sources can fill in the details necessary to understand what the user was doing.
+
+\begin{itemize}
+    \item Usage data collection can be augmented by explicit user feedback to establish a ground truth. For instance, if you want to understand a user's opinion of a tool or his or her purpose for using an IDE feature, it is best to ask about it. A post-analysis interview can shed light on your observations and confirm your analysis or point out different aspects.
+        %Usage data in user study smaller setting is augmented by user explicit feedback to establish ground truth.  If you want to know a user's opinion of a tool, or purpose for using an IDE feature, it is best to ask them about it.  A post-analysis informal question and answer can shed light on your observations that confirms your analysis or takes a different conclusion.
+    \item Information on a user's activities can provide an additional rational to the usage data and explain the user's actions. Asking questions on how well the user knows the code he or she is working on can explain a user's navigation patterns and usage of code search~\cite{wbsnipesthesis}, while questions on the task, e.g. implementing a new feature versus fixing a bug, can explain other characteristics, such as the amount of editing versus testing.
+%    Smaller studies can ask questions about user activities that add rationale to the usage data that tells why user is doing what they are doing.   Questions like how well do you know the code you work in can influece a users navigation patterns and use of code search \cite{wbsnipesthesis}.  Other questions such as whether they are working on new features or bug fixes can influcence other data attributes such as the amount of editing vs. testing.
+    \item Other project information such as agile user stories, tasks and check-in records can further augment usage data. For instance, reviewing the completed user stories for a project can provide insights into the developer's objectives.
+%Consider project sources such as agile user stories, project tasks, and check-in records to augment usage data.   Reviewing the completed user stories for a project can provide insight into the objectives developers are trying to accomplish.
+    \item Small studies that examine a variety of data can generate metrics that you can apply to data collected in bigger studies where the additional information might not be available. 
+%    with larger data source that does not have augmented data.  
+        For instance, Robillard et al. defined a metric on structured navigation in their observational study on how developers discover relevant code elements during maintenance~\cite{wbsnipes:Robillard2004How}. This metric can now be used in a larger industrial study setting in which structured navigation command usage is collected as usage data, even without the additional information Robillard et al. gathered for their study.
+%    For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\cite{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.
+\end{itemize}

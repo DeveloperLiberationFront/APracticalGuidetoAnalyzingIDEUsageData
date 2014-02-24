@@ -1,28 +1,20 @@
 
 Other data sources, such as task descriptions, change histories, and
-news feeds provide context for usage data collection and enable a new
-set of applications. In this section, we outline the related work that
-combines usage data with other software engineering data sources.
+news feeds can provide context for usage data and yield new opportunities for supporting developers. In this section, we briefly outline some related work in this area.
+% that combines usage data with other data sources to a new set of applications. In this section, we outline the related work that combines usage data with other software engineering data sources.
 
 \subsubsection{Tasks}
 
 %Mylin
-Mylin is a popular extension to the Eclipse IDE that performs task
+As mentioned above, Mylin is a popular extension to the Eclipse IDE that supports task
 management, reducing the effort for a developer to switch between
-tasks and to maintain relevant information for each
+tasks and maintaining relevant information for each
 task~\cite{Kersten-Mylin}. In the context of a specific task, Mylin
 collects usage data in order to compute a degree-of-interest (DOI)
 value for each program element, which represents the interest the
-developer has in a particular program element for a specific
-task. Program elements that are frequently interacted with have a
-higher DOI value, and are displayed to the programmer as part of his
-or her task context.  In this way, Mylin filters unnecessary
-information from the IDE, displaying only program elements relevant to
-the specific developer task.
-
+developer has in the program element for the task at hand. Program elements that a developer interacted with frequently and recently have a higher DOI value. Using these calculated DOI values, Mylyn highlights the elements relevant for the current task and filters unnecessary information from common views in the IDE. 
 
 \subsubsection{Change History}
-
 
 %FastDash
 The FastDash tool enables real-time awareness of other developers'
@@ -31,6 +23,6 @@ data in concert with the source files and
 directories~\cite{FastDash}. FastDash's purpose is to reduce faults
 caused by lack of communication and lack of awareness of activities
 that other developers are performing on the same code base. The tool
-highlights other developer's activity as it is occuring using a
-sophisticated dashboard on the developer's screen.
+highlights other developer's activity as it is occurring using a
+sophisticated dashboard on the developer's screen or on a team's dashboard.
 
