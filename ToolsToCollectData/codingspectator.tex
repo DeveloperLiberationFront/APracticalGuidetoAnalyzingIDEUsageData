@@ -2,15 +2,17 @@
 \label{CodingSpectator}
 
 \CodingSpectator~\cite{CodingSpectatorWebPage, VakilianETAL2011Richer,
-VakilianETAL2012UseDisuseMisuse, VakilianETAL2013Compositional} is an extensible
-framework for collecting Eclipse usage data. Although researchers at the
-University of Illinois at Urbana-Champaign developed \CodingSpectator{}
-primarily for collecting detailed data about the use of Eclipse refactoring
-tool, it also provides a reusable infrastructure for \emph{submitting usage
-data} from users to a central repository.
-\CodingTracker~\cite{NegaraETAL2012Dangerous, NegaraETAL2013ManualRefactorings,
-CodingTrackerWebPage} is another data collector developed at Illinois, which
-reuses the data submission infrastructure provided by \CodingSpectator.
+  VakilianETAL2012UseDisuseMisuse, VakilianETAL2013Compositional} is
+an extensible framework for collecting Eclipse usage data. Although
+researchers at the University of Illinois at Urbana-Champaign
+developed \CodingSpectator{} primarily for collecting detailed data
+about the use of the Eclipse refactoring tool, it also provides a
+reusable infrastructure for \emph{submitting usage data} from users to
+a central repository.  \CodingTracker~\cite{NegaraETAL2012Dangerous,
+  NegaraETAL2013ManualRefactorings, CodingTrackerWebPage} is another
+data collector developed at Illinois, which collects finer-grained IDE
+actions while reusing the data submission infrastructure provided by
+\CodingSpectator.
 
 \subsubsection{What Data Is Collected}
 
@@ -20,8 +22,8 @@ automated refactorings. It collects three kinds of refactoring events:
 refactoring but quits it before it finishes, \CodingSpectator{} records a
 \Canceled{} refactoring event. If a programmer applies an automated refactoring,
 \CodingSpectator{} records a \Performed{} refactoring event. Finally, if
-programmer invokes an automated refactoring but the IDE refuses to start the
-automated refactoring saying that the refactoring is not applicable to the
+a programmer invokes an automated refactoring but the IDE refuses to start the
+automated refactoring indicating that the refactoring is not applicable to the
 selected program element, \CodingSpectator{} records an \Unavailable{}
 refactoring event.
 
@@ -34,31 +36,34 @@ addition, it creates and serializes refactoring descriptors for \Canceled{} and
 \Use{NumberOfEclipseAutomatedRefactorings} automated refactorings that Eclipse
 supports.
 
-We show a concrete example of the data that \CodingSpectator{} collects for an
-invocation of the automated Extract Method refactoring. Eclipse provides an
-automated refactoring called Extract Method for extracting a piece of code into
-a new method. This refactoring moves the selected piece of code into a new
-method and replaces the selected code by an invocation to the new method. To use
-an automated Extract Method refactoring, a programmer has to go through multiple
-steps. First, the programmer selects a piece of code
-(\FigRef{FigCodingSpectatorExtractMethodSelectionExample}). Second, the
-programmer invokes the automated Extract Method and configures it
-(\FigRef{FigCodingSpectatorExtractMethodConfigurationExample}). In this case,
-the programmer sets the name of the new method. The configuration page provides
-a number of other options including method accessibility, the ordering and names
-of method parameters, and the generation of method comments. Third, after
-configuring the refactoring, the programmer hits the ``Preview'' button and the
-automated refactoring reports the problems that the refactoring may introduce
-(\FigRef{FigCodingSpectatorExtractMethodErrorExample}). In this example, the
-automated refactoring complains that the selected name of the new method
-conflicts with the name of an existing method. Finally, the programmer decides
-to cancel the refactoring and \CodingSpectator{} records a refactoring
-descriptor for this \Canceled{} refactoring as shown in
-\FigRef{FigCodingSpectatorDescriptorExample}. The type of a refactoring event
-(\ie, \Unavailable, \Canceled, and \Performed) can be inferred from the
-directory in which the XML file containing the refactoring descriptor resides.
-\CodingSpectator{} captures the following attributes for the canceled automated
-Extract Method refactoring in the above example.
+We show a concrete example of the data that \CodingSpectator{}
+collects for an invocation of the automated Extract Method refactoring
+in Eclipse, which extracts a piece of code into a new method. This
+refactoring moves a selected piece of code into a new method and
+replaces the selected code by an invocation to the new method. To use
+the automated Extract Method refactoring, a programmer has to go
+through multiple steps. First, the programmer selects a piece of code
+(\FigRef{FigCodingSpectatorExtractMethodSelectionExample}). Second,
+the programmer invokes the automated Extract Method and configures it
+(\FigRef{FigCodingSpectatorExtractMethodConfigurationExample}). In
+this case, the programmer sets the name of the new method. The
+configuration page provides a number of other options including method
+accessibility, the ordering and names of method parameters, and the
+generation of method comments. Third, after configuring the
+refactoring, the programmer hits the ``Preview'' button and the
+automated refactoring reports the problems that the refactoring may
+introduce (\FigRef{FigCodingSpectatorExtractMethodErrorExample}). In
+this example, the automated refactoring complains that the selected
+name of the new method conflicts with the name of an existing
+method. Finally, the programmer decides to cancel the refactoring and
+\CodingSpectator{} records a refactoring descriptor for this
+\Canceled{} refactoring, as shown in
+\FigRef{FigCodingSpectatorDescriptorExample}. The type of a
+refactoring event (\ie, \Unavailable, \Canceled, and \Performed) can
+be inferred from the directory in which the XML file containing the
+refactoring descriptor resides.  \CodingSpectator{} captures the
+following attributes for the canceled automated Extract Method
+refactoring in the above example.
 
 \begin{enumerate}
 
@@ -160,7 +165,7 @@ Deploying \CodingSpectator{} consists of two main steps:
 \CodingSpectator{} regularly submits users' data to a central Subversion
 repository. To collect \CodingSpectator's data automatically, you need to set up
 a Subversion repository and create accounts for your users. To allow the users
-submit their data to the Subversion repository, you should grant them
+to submit their data to the Subversion repository, you should grant them
 appropriate write accesses to the repository.
 
 Using a Version Control System such as Subversion as the data repository has
@@ -194,8 +199,7 @@ of the file system to an earlier version. To handle merge conflicts,
 resolution. When \CodingSpectator{} detects a merge conflict, it removes the
 user's data from the central repository and then submits the new data. Despite
 removing the data from the central repository, the researchers can still locate
-the merge conflicts and restore the data that was collected before the merge
-conflicts.
+the merge conflicts and restore the data that was collected before the conflicts occured.
 
 \CodingSpectator{} prompts the users for their Subversion usernames and
 passwords when \CodingSpectator{} is about to submit their data.
@@ -249,7 +253,7 @@ process. \CodingSpectator{} checks out the Subversion repository into a folder,
 which we refer to as the \emph{watched folder}. Then, it executes the Subversion
 commands (\eg, add and commit) on the watched folder. A plug-in that extends the
 \Code{submitter} extension point and implements the \Code{SubmitterListener}
-interface can do actions before or after two of the Subversion commands that
+interface can perform actions before or after two of the Subversion commands that
 \CodingSpectator{} executes: add and commit.
 %
 For example, \CodingSpectator{} overrides the method \Code{preSubmit} to copy
