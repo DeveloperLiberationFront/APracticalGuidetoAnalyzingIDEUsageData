@@ -11,19 +11,19 @@ We illustrate sequence analysis given the research question  ``Are developers su
 \begin{verbatim}
 Collector Started
 2014-02-02 13:46:52 - User submitted query to Find-in-Files
-2014-02-02 13:46:56 - Find-in-Files retreived 121 results
+2014-02-02 13:46:56 - Find-in-Files retrieved 121 results
 2014-02-02 13:52:21 - User clicked on result 2
 2014-02-02 13:58:01 - User clicked on result 8
 2014-02-02 13:59:57 - Open caller/callee command 
 ...
 2014-02-02 14:46:52 - User submitted query to Find-in-Files
-2014-02-02 14:46:56 - Find-in-Files retreived 19 results
+2014-02-02 14:46:56 - Find-in-Files retrieved 19 results
 2014-02-02 15:01:08 - User clicked on result 11
-2014-02-02 17:30:12 - User editted code
+2014-02-02 17:30:12 - User edited code
 ...
 \end{verbatim}
 
-To answer the research question, sequence analysis can extract two separate sequences in the above log by using sentinels indicative of start/end of a code search activity, among other possible sequence identification approaches. Both of the extracted search sequences can be deemed as successful since for each of the queries to the {\tt Find-in-Files} code search tool the user clicks on a retreived result, followed by a structured navigation event (open caller/callee) or editing event (user edited code). Therefore it would seem that the developer is successful at finding initial points in the code for his or her software maintenance task. However, on closer inspection of the second sequence, we observe that there is a large time gap between clicking on a result and editing code. The reason for this time gap is open to interpretation, as the developer may have returned to the previous results, continuing the search session, or have started on a completely new development activity. Certain types of sequence analysis, such as Coman's algorithm, take time into account when identifying sequences, while others, like the sentinel approach used above, do not. Neither of these approaches, however, helps to resolve the origin of ambiguous events, which are left to the researcher to characterize.
+To answer the research question, sequence analysis can extract two separate sequences in the above log by using sentinels indicative of start/end of a code search activity, among other possible sequence identification approaches. Both of the extracted search sequences can be deemed as successful since for each of the queries to the {\tt Find-in-Files} code search tool the user clicks on a retrieved result, followed by a structured navigation event (open caller/callee) or editing event (user edited code). Therefore it would seem that the developer is successful at finding initial points in the code for his or her software maintenance task. However, on closer inspection of the second sequence, we observe that there is a large time gap between clicking on a result and editing code. The reason for this time gap is open to interpretation, as the developer may have returned to the previous results, continuing the search session, or have started on a completely new development activity. Certain types of sequence analysis, such as Coman's algorithm, take time into account when identifying sequences, while others, like the sentinel approach used above, do not. Neither of these approaches, however, helps to resolve the origin of ambiguous events, which are left to the researcher to characterize.
 
 %\begin{figure*}[t]
 %\centering
