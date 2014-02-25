@@ -1,17 +1,19 @@
-This section shows how to implement a usage data collection tool for Visual Studio that generates the Navigation Ratio metric (See \ref{BuildingDataCollection}) daily, giving the developer insight into his own navigation patterns. Readers attempting the tutorial should be familiar with C\# and .NET commands as well as have a working knowledge of Visual Studio.  
+This section shows how to implement a usage data collection tool for Visual Studio that generates the Navigation Ratio metric (See \ref{BuildingDataCollection}) daily, giving the developer insight into his own navigation patterns. Readers attempting the tutorial should be familiar with C\# as well as have a working knowledge of Visual Studio.  
 
-The lifecycle and threading behavior of this extension is straightforward for the sake of this tutorial. It starts when Visual Studio starts and continuously collects events as the user works, saving all data to a local file.  This example extension does not perform any background processing, thus the user may notice a delay during Visual Studio startup.  
+%This extension utilizes the Visual Studio Automation Object Model API, which is available to Visual Studio Extensions. Using this model we can access the Command object, which allows us to observe user commands that occur in Visual Studio by registering an event handler for each command. Thus, we can log commands relevant to the Navigation Ratio. 
 
-This extension utilizes the Visual Studio Automation Object Model API, which is available to Visual Studio Extensions. Using this model we can access the Command object, which allows us to observe user commands that occur in Visual Studio by registering an event handler for each command. Thus, we can log commands relevant to the Navigation Ratio. 
+Because this extension is illustrative some simplifications have been made that would need to be addressed in a widely deployed extension. For instance, this example extension does not perform any background processing, thus the user may notice a delay during Visual Studio startup.  
 
-Many extensions require configuration, as does this extension. The first time this extension runs, it creates a configuration file specifiying which events to record and how to classify those events (e.g., as structured or unstructured navigation).  The extension will create a new time-stamped log file each time it starts and record the events for that execution of Visual Studio in the log file. 
+%Many extensions require configuration, as does this extension. The first time this extension runs, it creates a configuration file specifiying which events to record and how to classify those events (e.g., as structured or unstructured navigation).  The extension will create a new time-stamped log file each time it starts and record the events for that execution of Visual Studio in the log file. 
 
 \subsubsection{Creating a Visual Studio Extension}
+
+To add functionality to Visual Studio we must utilize the extensibility platform, creating a Visual Studio Extension. Once the extension is created we can add our specific functionality.
 
 \begin{enumerate}
 \item {\bf Install the Visual Studio SDK} - To create Visual Studio Extensions specialized libraries (e.g., the automation library) are needed, and thus the Visual Studio SDK must be installed.
 
-\item {\bf Create a Visual Studio Solution and Project} - Using the 'New Project' wizard create a new project and solution in C\# by selecting Extensibility and Visual Studio Packageas shown in Figure \ref{fig:ProjectCreation}.  
+\item {\bf Create a Visual Studio Solution and Project} - Using the ``New Project'' wizard create a new project and solution in C\# by selecting Extensibility and Visual Studio Packageas shown in Figure \ref{fig:ProjectCreation}.  
 \begin{figure}
 	\centering
 	\includegraphics[width=4in]{CreateVSIXExtension.png}
@@ -19,7 +21,7 @@ Many extensions require configuration, as does this extension. The first time th
 	\label{fig:ProjectCreation}
 \end{figure}
 
-Use "Collector" as the project name and "VisualStudioMonitor" as the solution name, then follow the default options for the first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, select the option to generate a menu command.  Next, give the menu command a name of "Stop Monitoring" and a command ID of "StopMonitoring".  This menu option will allow the user to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
+Use ``Collector'' as the project name and ``VisualStudioMonitor'' as the solution name, then follow the default options for the first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, select the option to generate a menu command.  Next, give the menu command a name of "Stop Monitoring" and a command ID of ``StopMonitoring''.  This menu option will allow the user to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
 
 
 After creating the project and solution, the solution explorer should look like figure \ref{fig:SolutionExplorer} showing the project files necessary for the extension to work.
@@ -44,7 +46,7 @@ After creating the project and solution, the solution explorer should look like 
 
 \subsubsection{Create Monitor Project}
 
-In order to separate the Visual Studio Extension setup from the core functionality of the extension a second project should be created. We call this second project, part of the same solution, the Monitor project.
+To separate the Visual Studio Extension setup code from the core functionality of the extension a second project should be created within the same solution. We call this second project  the Monitor project.
 
 \begin{enumerate}
 \item {\bf Create the Monitor project} - Add a class library type project to  the "VisualStudioMonitor" solution. Because the class library must be signed, go to the Properties for the Monitor project and select Signing from the list at the right.  In the Signing tab, check the "sign the assembly" checkbox then under "Choose a strong name key file", select Browse and browse over to the Key.snk file in the collector project (the file was created with the solution).
@@ -148,7 +150,9 @@ namespace Monitor
 
 \subsubsection{Create the Data Model}
 
-The next step creates a data model for storing and managing event monitoring for Visual Studio.  Because there are several different types of events, it makes sense to build an abstract class to manage the core data and use the Simple Factory pattern to generate each type of event monitoring.  With this pattern an abstract base class, called AbstractMonitoredEvent, provides common definitions for class fields that will be used for monitoring different Visual Studio events, conversion of those fields to and from the storage format, and (eventually) calling the WriteLog method in the recorder when the event fires.  This concrete class implements methods specific to Visual Studio commands that manages the fields available from the DTE.Command class.  The client in the Simple Factory pattern is a class that maintains the collection of events that either gets read from the file or queried from Visual Studio.   In this step we focus on the elements needed to store event information, and manage the configuration file data in XML format.
+The next step creates a data model for storing and managing event monitoring for Visual Studio. This includes designing the main event types and implementing a factory to create these events. 
+
+%Because there are several different types of events, it makes sense to build an abstract class to manage the core data and use the Simple Factory pattern to generate each type of event monitoring.  With this pattern an abstract base class, called AbstractMonitoredEvent, provides common definitions for class fields that will be used for monitoring different Visual Studio events, conversion of those fields to and from the storage format, and (eventually) calling the WriteLog method in the recorder when the event fires.  This concrete class implements methods specific to Visual Studio commands that manages the fields available from the DTE.Command class.  The client in the Simple Factory pattern is a class that maintains the collection of events that either gets read from the file or queried from Visual Studio.   In this step we focus on the elements needed to store event information, and manage the configuration file data in XML format.
 
 \begin{enumerate}
 \item {\bf Implement the base class} - 
@@ -171,17 +175,18 @@ Create the AbstractMonitoredEvent class in the Monitor project in Visual Studio.
    }
 \end{lstlisting}
 
+\item {\bf Enable serialization in base class} - 
 So that we can store events in a configuration file then manipulate that configuration file later, we provision this abstract class for XML serialization of itself and its derived classes.  Dot NET attributes support the XML serialization in this structure.  The first attribute tells XML serialization that the MonitoredCommandEvent class is a derived class of AbstractMonitoredEvent that we will create next.  This provides the abiltiy to serialize and deserialize the public objects of the derived class by referencing the type of AbstractMonitoredEvent when creating a serializer.  The second attribute creates an XML namespace that all derived classes will share with the AbstractMonitoredEvent class.
 
 \item {\bf Create the concrete subclass} - 
-The next step is to create a derived class called MonitoredCommandEvent that inherits from AbstractMonitoredEvent.  MonitoredCommandEvent implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE and a constructor that builds from an XElement.  An output method ToXElement translates the object to XML for saving.
-
-After you create the class, add using statements for System.Xml.Serilization, and EnvDTE and their corresponding references in the project References configuration. 
+The next step is to create a derived class called MonitoredCommandEvent that inherits from AbstractMonitoredEvent.  MonitoredCommandEvent implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE.
 
 The EnvDTE.Command object contains fields for Guid (a GUID string), ID and integer sub-id, and Name a readable name for the command.  To register an event handler for a EnvDTE.Command, you need get an object reference for the command using the Guid and ID to identify the command.  The GUID is  a Globally Unique IDentifier for command events in Visual Studio, however, some command events share a GUID and distinguish themselves with different EventIDs. Thus both elements are necessary to link a Command event from the DTE to an event hander in this extension.  The Name is useful information to understand what the command is.    There are several versions of the DTE object corresponding to versions of Visual Studio.  Depending on the commands of interest, each version may need to be queried for its commands.  
 
  The constructor that takes a Command as input, simply extracts the necessary and relevant fields from the DTE's Command object and transferrs the matching information into the corresponding fields from this class and the AbstractMonitoredEvent class.  
 
+\item {\bf Enable serialization in concrete subclass} -
+Ensure the class also includes a constructor that builds from an XElement and an output method ToXElement translates the object to XML for saving. Add using statements for System.Xml.Serilization, and EnvDTE and their corresponding references in the project References configuration. 
 
 \begin{lstlisting}
     [XmlRoot(ElementName = "MonitoredEvent", Namespace = "http://Monitor")]
@@ -213,13 +218,18 @@ The EnvDTE.Command object contains fields for Guid (a GUID string), ID and integ
 To complete the Simple Factory pattern, a static factory class provides static factory methods that creates an object of type  MonitoredCommandEvent from a DTE Command object and returns it as an AbstractMonitoredEvent.  For now the only class to consider is the MonitoredCommandEvent derived class, however, a future step will add more derived classes.  
 \end{enumerate}
 
-\subsubsection{Query Save and Retrieve Visual Studio Command Event Info}
+\subsubsection{Storing Visual Studio Command Event Info}
 
-#insert intro about this section
+As the user works our extension is now wired to listen for events. However, events also need to be saved for later analysis. In this step we discuss how the data is collected and persisted.
 
 \begin{enumerate}
 \item {\bf Create the collection manager class} -
-In this step, build the MonitoredEventCollection class that manages a List object of AbstractMonitoredEvent type.  The List object gets populated from an XML file that stores the configuration data.  The MonitoredEventCollection class provides a method to query the DTE for all commands and initialize the list.  Another method called after the DTE query stores the List contents in the same XML format file.  These two methods should be called in sequence the first time the extension launches. After that, it  reads the XML file on startup to initialize the List.  Call the method(s) to query, store and load the event list from the Start() method of the DataRecorder class in the previous step so that the Monitor will load the commands on startup.
+In this step, build the MonitoredEventCollection class that manages a List object of AbstractMonitoredEvent type.  
+
+\item {\bf Create and populate the configuration} -
+Configuration data is stored in the List object.
+The List object gets populated from an XML file that stores the configuration data.  The MonitoredEventCollection class provides a method to query the DTE for all commands and initialize the list.  
+Another method called after the DTE query stores the List contents in the same XML format file.  These two methods should be called in sequence the first time the extension launches. After that, it  reads the XML file on startup to initialize the List.  Call the method(s) to query, store and load the event list from the Start() method of the DataRecorder class in the previous step so that the Monitor will load the commands on startup.
 
 Fortunately the DTE object has a query method that lists all the commands it manages.   The DTE Commands object returns an IEnumerable collection of EnvDTE.Command objects. The listing below provides a method to try to get an instance of the DTE.  It depends on references to EnvDTE, Microsoft.VisualStudio.Shell.12.0, and Microsoft.VisualStudio.OLE.Interop so be sure to add those to the project's References list.
 
