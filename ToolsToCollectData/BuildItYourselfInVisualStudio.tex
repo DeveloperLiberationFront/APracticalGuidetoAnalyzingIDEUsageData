@@ -295,7 +295,7 @@ Now that the framework is complete and a configuration file for all command even
 \item {\bf Define the registration interface } - 
 The AbstractMonitoredEvent class should get a virtual RegisterEventForMonitoring method that takes an object parameter we will use to pass a DTE reference in.  The method returns a bool based on successful regisration.  The class also gets a non virtual Dispose() method  and a virtual Dispose(bool disposing) method with the former calling the latter and the latter setting a field isDisposed to true. This is the typical dispose structure.  Finally, the abstract class holds the non-virtual method to write the event log information (the abstract class's fields and a timestamp) to the log via the DataRecorder class.  This unifys logs for all derived classes into a common format.
 
-\item {\bf Register individual commands} - 
+\item {\bf Implement the registration routine} - 
 The MonitoredCommandEvent class overrides the virtual RegisterEventForMonitoring method to implement registering an event handler for Command events.  Registering first must find the event in the DTE and assign it to the field, then attach a new event hander to the event.  Looking at the method listing below, the Guid and EventID are used as parameters to query the DTE Events object for the specific command event in this instance.  The result is assigned to a field, eventTypeObject.  Wiith this reference to the event, the next block adds an event handler that runs after the command is executed.  After all that if the eventTypeObject is not null, the method returns true for success.
 \begin{lstlisting}
         public override bool RegisterEventForMonitoring(object dte)
@@ -384,7 +384,8 @@ The DataRecorder class is shown in listing \ref{code:DataRecorder_4}.
 
 
 \subsection{Classification of Events}
-Now that the data collector is working, let's look at the classification of commands in Visual Studio according to the goal of understanding structured vs. unstructured navigation commands.  If you look at the generated XML file from MonitoredEventCollection, there are literally four thousand commands to choose from.  The sample program generates a base classification from the command family (usually a menu association), however, that does not distingush between navigation types.    The navigation events of interest relate to the prior stated metric Navigation Ratio.  For this metric,  we identify the  commands related to structured navigation (in Visual Studio) as follows:
+Now that the data collector is working we can begin to investigate our original question, what is the ratio betwee structured and unstructured navigation commands.  Unfortunately, if you look at the generated XML file from MonitoredEventCollection, there are four thousand commands to choose from. To calculate a ratio we first need to classify relevant commands as structured or unstructured navigations. 
+For our metric,  we identify the  commands related to structured navigation (in Visual Studio) as follows:
 \begin{itemize}
 \item
  Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string
