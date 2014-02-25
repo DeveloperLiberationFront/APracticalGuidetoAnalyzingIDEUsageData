@@ -218,7 +218,7 @@ To complete the Simple Factory pattern, a static factory class provides static f
 #insert intro about this section
 
 \begin{enumerate}
-\item
+\item {\bf Create the collection manager class} -
 In this step, build the MonitoredEventCollection class that manages a List object of AbstractMonitoredEvent type.  The List object gets populated from an XML file that stores the configuration data.  The MonitoredEventCollection class provides a method to query the DTE for all commands and initialize the list.  Another method called after the DTE query stores the List contents in the same XML format file.  These two methods should be called in sequence the first time the extension launches. After that, it  reads the XML file on startup to initialize the List.  Call the method(s) to query, store and load the event list from the Start() method of the DataRecorder class in the previous step so that the Monitor will load the commands on startup.
 
 Fortunately the DTE object has a query method that lists all the commands it manages.   The DTE Commands object returns an IEnumerable collection of EnvDTE.Command objects. The listing below provides a method to try to get an instance of the DTE.  It depends on references to EnvDTE, Microsoft.VisualStudio.Shell.12.0, and Microsoft.VisualStudio.OLE.Interop so be sure to add those to the project's References list.
@@ -268,7 +268,7 @@ Once you have a reference to the DTE object from the tryGetDTEObject method, use
                 }
 \end{lstlisting}
 
-\item
+\item {\bf Enable persistence of the configuration} -
 A persistent configuration file helps independently manage the events that get monitored for a study, and makes the configuration of all possible events easier to manage.    Using the framework's ToXelement methods, build methods in MonitoredEventCollection to save the List of AbstractMonitoredEvents to the configuration file and load them from the configuration file.  Below is the core code for the save to XML method that creates a serializer for the List object then writes that to the file stream.  Code for reading the XML file is left to the reader.
 
 \begin{lstlisting}
@@ -292,10 +292,10 @@ A persistent configuration file helps independently manage the events that get m
 Now that the framework is complete and a configuration file for all command events to be monitored is ready, the methods to hook Visual Studio into event handlers that log each command can be created.  This step will add methods and member objects to AbstractMonitoredEvent and MonitoredCommandEvent classes to register event handlers with the DTE and dispose of them appropriately when necessary.  The MonitoredEventCollection class gets a new method to perform the registration from the objects in the list and another method to deregister them.
 
 \begin{enumerate}
-\item
+\item {\bf Define the registration interface } - 
 The AbstractMonitoredEvent class should get a virtual RegisterEventForMonitoring method that takes an object parameter we will use to pass a DTE reference in.  The method returns a bool based on successful regisration.  The class also gets a non virtual Dispose() method  and a virtual Dispose(bool disposing) method with the former calling the latter and the latter setting a field isDisposed to true. This is the typical dispose structure.  Finally, the abstract class holds the non-virtual method to write the event log information (the abstract class's fields and a timestamp) to the log via the DataRecorder class.  This unifys logs for all derived classes into a common format.
 
-\item
+\item {\bf Register individual commands} - 
 The MonitoredCommandEvent class overrides the virtual RegisterEventForMonitoring method to implement registering an event handler for Command events.  Registering first must find the event in the DTE and assign it to the field, then attach a new event hander to the event.  Looking at the method listing below, the Guid and EventID are used as parameters to query the DTE Events object for the specific command event in this instance.  The result is assigned to a field, eventTypeObject.  Wiith this reference to the event, the next block adds an event handler that runs after the command is executed.  After all that if the eventTypeObject is not null, the method returns true for success.
 \begin{lstlisting}
         public override bool RegisterEventForMonitoring(object dte)
@@ -329,7 +329,7 @@ The last step with MonitoredCommandEvent is to create the Dispose method that wi
 Use the Visual Studio "Generate" command to generate a method stub for OnAfterExecute and the
 code will compile.  In the OnAfterExecute method, call ToLog so the event data is captured in the log.
 
-\item
+\item {\bf Register all commands} -  
 MonitoredEventCollection now needs methods to perform registration and deregistration on all the events in the list.  As the following listing shows, RegisterEventInventoryForEventMonitoring() must get the DTE object then walk through the IDEEventListenerRegistry list calling the abstract method RegisterEventForMonitoring with the DTE.  If one of them succeeds then this method considers it successful.
 
 \begin{lstlisting}
@@ -353,10 +353,10 @@ MonitoredEventCollection now needs methods to perform registration and deregistr
 
 The method in MonitoredEventCollection to de-register events in the List via Dispose() is left as an exercise for the reader to complete.
 
-\item
+\item {\bf Connect to the package lifecycle} - 
 Refactor the MonitoredEventCollection object in DataRecorder to a static class field.  Then add a call to RegisterEventInventoryForEventMonitoring() in the Start() method of DataRecorder.  Add a call to the de-register method of MonitoredEventCollection in the Stop() method of DataRecorder.  
 
-\item
+\item {\bf Execute the extension} - 
 Run the solution and use a few commands in Visual Studio, then give the Stop Collector command and check the log file.  You should see output like the following:
 \begin{verbatim}
 Collector Started
