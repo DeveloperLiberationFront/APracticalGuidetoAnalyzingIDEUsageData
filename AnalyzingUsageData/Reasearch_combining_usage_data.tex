@@ -1,11 +1,14 @@
 
-Other data sources, such as task descriptions, change histories, and
-news feeds can provide context for usage data and yield new opportunities for supporting developers. In this section, we briefly outline some related work in this area.
-% that combines usage data with other data sources to a new set of applications. In this section, we outline the related work that combines usage data with other software engineering data sources.
+Other data sources, such as user feedback, task descriptions, change histories can provide context for usage data and yield new opportunities for supporting developers. In this section, we briefly outline some related work in this area.
+
+\subsubsection{User Feedback}
+
+Usage data collection can be augmented by explicit user feedback to establish a ground truth. For instance, if you want to understand a user's opinion of a tool or his or her purpose for using an IDE feature, it is best to ask about it. A post-analysis interview can shed light on your observations and confirm your analysis or point out different aspects.
+
+Information on a user's activities can provide an additional rational to the usage data and explain the user's actions. Asking questions on how well the user knows the code he or she is working on can explain a user's navigation patterns and usage of code search~\cite{SnipesExperiencesGamifyingSoftwareDevelopment}, while questions on the task, e.g. implementing a new feature versus fixing a bug, can explain other characteristics, such as the amount of editing versus testing.
 
 \subsubsection{Tasks}
 
-%Mylin
 As mentioned above, Mylin is a popular extension to the Eclipse IDE that supports task
 management, reducing the effort for a developer to switch between
 tasks and maintaining relevant information for each
@@ -16,7 +19,6 @@ developer has in the program element for the task at hand. Program elements that
 
 \subsubsection{Change History}
 
-%FastDash
 The FastDash tool enables real-time awareness of other developers'
 actions (e.g. focus or edits to a specific file) by utilizing usage
 data in concert with the source files and
