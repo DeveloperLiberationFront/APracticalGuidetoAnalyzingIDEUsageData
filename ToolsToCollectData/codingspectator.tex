@@ -7,7 +7,7 @@ an extensible framework for collecting Eclipse usage data. Although
 researchers at the University of Illinois at Urbana-Champaign
 developed \CodingSpectator{} primarily for collecting detailed data
 about the use of the Eclipse refactoring tool, it also provides a
-reusable infrastructure for \emph{submitting usage data} from users to
+reusable infrastructure for \emph{submitting usage data} from developers to
 a central repository.  \CodingTracker~\cite{NegaraETAL2012Dangerous,
   NegaraETAL2013ManualRefactorings, CodingTrackerWebPage} is another
 data collector developed at Illinois, which collects finer-grained IDE
@@ -162,9 +162,9 @@ Deploying \CodingSpectator{} consists of two main steps:
 
 \paragraph{Setting Up a Subversion Repository}
 
-\CodingSpectator{} regularly submits users' data to a central Subversion
+\CodingSpectator{} regularly submits developers' data to a central Subversion
 repository. To collect \CodingSpectator's data automatically, you need to set up
-a Subversion repository and create accounts for your users. To allow the users
+a Subversion repository and create accounts for your developers. To allow the developers
 to submit their data to the Subversion repository, you should grant them
 appropriate write accesses to the repository.
 
@@ -182,7 +182,7 @@ several advantages:
 %
 \item There are libraries such as SVNKit\footnote{http://svnkit.com/} that
   provide an API for Subversion operations such as add, update, remove, and
-  commit. \CodingSpectator{} uses SVNKit for submitting users' data to the
+  commit. \CodingSpectator{} uses SVNKit for submitting developers' data to the
   central repository.
 %
 \item Setting up a Subversion server is a well-documented process. This avoids
@@ -191,21 +191,21 @@ several advantages:
 \end{enumerate}
 
 On the other hand, a disadvantage of using Subversion as the data repository is
-that it requires the users to maintain a copy of their data on their file
-systems. The Subversion working copy on the users' systems takes \emph{space}
-and can also cause \emph{merge conflicts}, \eg, if a user restores the contents
+that it requires the developers to maintain a copy of their data on their file
+systems. The Subversion working copy on the developers' systems takes \emph{space}
+and can also cause \emph{merge conflicts}, \eg, if a developer restores the contents
 of the file system to an earlier version. To handle merge conflicts,
 \CodingSpectator{} has built-in support for automatic conflict detection and
 resolution. When \CodingSpectator{} detects a merge conflict, it removes the
-user's data from the central repository and then submits the new data. Despite
+developer's data from the central repository and then submits the new data. Despite
 removing the data from the central repository, the researchers can still locate
 the merge conflicts and restore the data that was collected before the conflicts occurred.
 
-\CodingSpectator{} prompts the users for their Subversion user names and
+\CodingSpectator{} prompts the developers for their Subversion user names and
 passwords when \CodingSpectator{} is about to submit their data.
-\CodingSpectator{} gives the users the option to save their passwords in Eclipse
+\CodingSpectator{} gives the developers the option to save their passwords in Eclipse
 securely. See \url{http://codingspectator.cs.illinois.edu/documentation} for
-more information about the features of \CodingSpectator{} for users.
+more information about the features of \CodingSpectator{} for developers.
 
 \paragraph{Setting Up an Eclipse Update Site}
 
@@ -215,9 +215,9 @@ Eclipse update site is an online repository of the JAR and configuration files
 that Eclipse requires for installing a plug-in.
 
 You will have to customize \CodingSpectator{} at least by specifying the URL of
-the Subversion repository to which \CodingSpectator{} should submit users' data.
+the Subversion repository to which \CodingSpectator{} should submit developers' data.
 You may also want to customize the message that \CodingSpectator{} shows to the
-users when it prompts them for their Subversion credentials. You can customize
+developers when it prompts them for their Subversion credentials. You can customize
 these aspects of \CodingSpectator{} by changing the configuration files that are
 packed in the existing JAR files hosted at the Eclipse update site of
 \CodingSpectator. If you need to customize \CodingSpectator{} in more complex

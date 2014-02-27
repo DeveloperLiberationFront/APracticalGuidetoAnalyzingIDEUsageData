@@ -1,10 +1,6 @@
 This section shows how to implement a usage data collection tool for Visual Studio that generates the Navigation Ratio metric (see section \ref{SelectingData}) daily, giving the developer insight into his own navigation patterns. Readers attempting the tutorial should be familiar with C\# as well as have a working knowledge of Visual Studio.  
 
-%This extension utilizes the Visual Studio Automation Object Model API, which is available to Visual Studio Extensions. Using this model we can access the Command object, which allows us to observe user commands that occur in Visual Studio by registering an event handler for each command. Thus, we can log commands relevant to the Navigation Ratio. 
-
-Because this extension is illustrative some simplifications have been made that would need to be addressed in a widely deployed extension. For instance, this example extension does not perform any background processing, thus the user may notice a delay during Visual Studio startup.  
-
-%Many extensions require configuration, as does this extension. The first time this extension runs, it creates a configuration file specifiying which events to record and how to classify those events (e.g., as structured or unstructured navigation).  The extension will create a new time-stamped log file each time it starts and record the events for that execution of Visual Studio in the log file. 
+Because this extension is illustrative some simplifications have been made that would need to be addressed in a widely deployed extension. For instance, this example extension does not perform any background processing, thus the developer may notice a delay during Visual Studio startup.  
 
 \subsubsection{Creating a Visual Studio Extension}
 
@@ -21,7 +17,7 @@ To add functionality to Visual Studio we must utilize the extensibility platform
 	\label{fig:ProjectCreation}
 \end{figure}
 
-Use ``Collector'' as the project name and ``VisualStudioMonitor'' as the solution name, then follow the default options for the first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, select the option to generate a menu command.  Next, give the menu command a name of "Stop Monitoring" and a command ID of ``StopMonitoring''.  This menu option will allow the user to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
+Use ``Collector'' as the project name and ``VisualStudioMonitor'' as the solution name, then follow the default options for the first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, select the option to generate a menu command.  Next, give the menu command a name of "Stop Monitoring" and a command ID of ``StopMonitoring''.  This menu option will allow the developer to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
 
 
 After creating the project and solution, the solution explorer should look like figure \ref{fig:SolutionExplorer} showing the project files necessary for the extension to work.
@@ -220,7 +216,7 @@ To complete the Simple Factory pattern, a static factory class provides static f
 
 \subsubsection{Storing Visual Studio Command Event Info}
 
-As the user works our extension is now wired to listen for events. However, events also need to be saved for later analysis. In this step we discuss how the data is collected and persisted.
+Our extension is now wired to listen for events, however, events also need to be saved for later analysis. In this step we discuss how the data is collected and persisted.
 
 \begin{enumerate}
 \item {\bf Create the collection manager class} -
@@ -422,7 +418,7 @@ Next we identify the commands related to unstrctured navigation as follows:
 
 These identified commands form the set of actions that usage data needs to collect to calculate the navigation ratio metric.  Notice that the commands are a mixture of defined actions within the tool and actions that result from mouse actions such as selecting a window or a window tab.  Now in the classification file generated from the tool, there is a field to classify each event.  Locating the events in the xml related to these commands and changing their classification to StructuredNav or UnstructuredNav will allow analaysis of the log data with respect to these classifications.
 
-With this demonstration you see how to build a usage monitor for Visual Studio that records most commands the user can issue in the IDE.  What's missing?  Well there are other areas of the DTE to explore such as editor events, unit test events, build and debug session events that provide greater context to the user experience.  For brevity, capturing those events is left to the reader to explore on their own.
+With this demonstration you see how to build a usage monitor for Visual Studio that records most commands the developer can issue in the IDE.  What's missing?  Well there are other areas of the DTE to explore such as editor events, unit test events, build and debug session events that provide greater context to the developer experience.  For brevity, capturing those events is left to the reader to explore on their own.
 
 %\subsubsection{Unstructured Navigation Events}
 %For this step, an important set of code is added to Monitor so users unstructured navigation actions can be captured.  Since unsturcutured navigation includes actions like scrolling through a soruce file or opening a source file from a project browser, the event collection requires a different part of the Visual Studio DTE api.  

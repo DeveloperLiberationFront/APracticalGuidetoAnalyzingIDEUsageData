@@ -1,22 +1,22 @@
-We refer to the data about the interactions of users with an IDE as the
-\emph{IDE usage data} or simply \emph{usage data}.
+We refer to the data about the interactions of software developers with an IDE as the
+\emph{IDE usage data} or simply \emph{usage data}.  The interactions include commands invoked, files viewed, mouse clicks, and add-on tools used.
 
 % Who are the stakeholders in this domain?
 %
 % How do the stakeholders benefit from usage data?
 Several stakeholders benefit from capturing and analyzing usage data. First, IDE
 vendors leverage the data to get insight into ways to improve their product
-based on how their users use the IDE in practice. Second, researchers both
+based on how developers use the IDE in practice. Second, researchers both
 develop usage data collectors and conduct rigorous experiments to (1)~make
-broader contributions to our understanding of programmers' coding practices and
+broader contributions to our understanding of developers' coding practices and
 (2)~improve the state-of-the-art programming tools (\eg, debuggers and
-refactoring tools). Finally, programmers benefit from the analysis conducted on
+refactoring tools). Finally, developers benefit from the analysis conducted on
 the usage data because these analyses lead to more effective IDEs that make
-programmers more productive.
+developers more productive.
 
 % What are some examples of usage data?
 At a high level, an IDE can be modeled as a complex state machine. In this
-model, a user performs an action at each step that moves the IDE from one state
+model, a developer performs an action at each step that moves the IDE from one state
 to another.
 %%
 %% The following is related to the subsection on "Usage Data Never Captures
@@ -31,7 +31,7 @@ to another.
 To capture usage data, researchers and IDE vendors have
 developed various usage data collectors (\SecRef{SecHowToCollectData}).
 Depending on the goals of the experiments, the usage data collector captures
-data about a subset of the IDE's state machine. While a combination of video recordings of the IDE with the keyboard strokes and mouse clicks of a user would provide a fairly complete set of usage data, it is difficult to automatically analyze video data and therefore mostly limited to small lab studies and not part of the developed usage data collectors.
+data about a subset of the IDE's state machine. While a combination of video recordings of the IDE with the keyboard strokes and mouse clicks of a developer would provide a fairly complete set of usage data, it is difficult to automatically analyze video data and therefore mostly limited to small lab studies and not part of the developed usage data collectors.
 
 
 %% Give examples of usage data and their uses.
@@ -44,13 +44,13 @@ An example of a usage data collection and analysis project with wide adoption
 in practice is the Mylyn project (previously known as Mylar). Mylyn started as a research project that later became part of Eclipse and that exhibits both of the advantages of understanding programmer's practices and improving tool support.
 
 Mylyn~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
-implemented as a plug-in for the Eclipse IDE and captured users' navigation
+implemented as a plug-in for the Eclipse IDE and captured developers' navigation
 histories and their command invocations. For example, it records changes in
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
 
 Researchers used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse~\cite{V:Murphy2006How}. In addition to collecting usage data, Mylyn introduces new features to the Eclipse
-IDE that leverages the usage data to provide a task-focused UI and increase a developer's productivity~\cite{Kersten-Mylin}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a user's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, class, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in section \ref{MylynMonitor}.
+IDE that leverages the usage data to provide a task-focused UI and increase a developer's productivity~\cite{Kersten-Mylin}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, class, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in section \ref{MylynMonitor}.
 
 %The Mylyn team analyzed collected and analyzed usage data to provide empirical
 %evidence about the usage frequency of various features of
