@@ -5,6 +5,7 @@
 *.aux
 *.bbl
 *.blg
+*.tps
 *.zip
 /Analyzing IDE Usage Data.pdf
 /asd.pdf
