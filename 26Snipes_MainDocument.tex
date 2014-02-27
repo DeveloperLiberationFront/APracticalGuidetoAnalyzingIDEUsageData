@@ -1,0 +1,154 @@
+\documentclass{book}
+
+\input{macros}
+\usepackage{alltt}
+\usepackage{pdfpages}
+\usepackage{enumitem}
+%\usepackage{hyperref}
+\begin{document}
+
+\title{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
+
+\chapter{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
+\author{
+Will Snipes, Emerson Murphy-Hill,
+Thomas Fritz, Mohsen Vakilian \\
+Kostadin Damevski,
+Anil R. Nair, David Shepherd
+}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\begin{center}
+\section*{Abstract}
+\end{center}
+Integrated Development Environments (IDEs) such as Eclipse
+and Visual Studio provide tools and capabilities to perform tasks such as navigating among classes and methods, continuous compilation, code refactoring, automated testing, and integrated debugging all designed to increase productivity. 
+Instrumenting the IDE to collect usage data gives researchers a greater level of detail on developers' work than previously possible.  Usage data supports analysis of how developers spend their time, what activities might benefit from greater tool support, where developers have difficulty comprehending code, and whether they are following specific practices such as test-driven development.
+With usage data, we expect to uncover more nuggets of how developers create mental models, how they investigate code, how they perform mini trial-and-error experiments, and what might drive productivity improvements for everyone.
+
+\section{Introduction}
+As software development evolved, Integrated Development Environments (IDEs) sprang up to aid  developers in managing the complexity of software programs.  To increase productivity, modern IDEs such as Eclipse and Visual Studio include tools and capabilities to perform tasks such as navigating among classes and methods, continuous compilation, code refactoring, automated testing, and integrated debugging.  The breadth of development activities supported by the IDE makes collecting editor, command, and tool usage data valuable for analyzing developers' work patterns.  
+
+Prior work on collecting and processing data for recommendation systems describes tools, analysis methods, and important findings from developer usage data analysis~\cite{fritzBookChapter}.  This work is also an excellent introduction to prior research applying usage data to solve issues that challenge developers.  This chapter provides a practical how-to description for collecting and analyzing usage data from IDEs with practical guidance with examples.  
+
+Instrumenting the IDE to collect usage data gives researchers a greater level of detail on developers' work than previously possible. Instrumenting the IDE involves extending the IDE within a provided API framework.  Eclipse and Visual Studio support a rich API framework allowing logging of many commands and actions  as they occur.  Tools used for research that instrument the Visual Studio IDE include Hackystat~\cite{V:johnson2003beyond}, Blaze, and Codealike.  Tools that instrument the Eclipse IDE include Mylyn Monitor, CodingSpectator~\cite{VakilianETAL2012UseDisuseMisuse}, Hackystat~\cite{V:johnson2003beyond}, and Zorro~\cite{Kou2010Operational}.
+
+Usage data supports analysis of how developers spend their time~\cite{V:johnson2003beyond}, developer actions that might benefit from greater tool support~\cite{V:MurphyHill2012How}, where developers have difficulty comprehending code~\cite{Carter2010Are}, even whether they are following specific practices such as test-driven development~\cite{Kou2010Operational}.  Combining usage data with additional data dimensions such as tasks or code change history, researchers can understand larger influences of low-level developer practices.  With these data, we can answer questions such as the level of expertise developers have for an area of source code~\cite{Fritz2010Degreeofknowledge}.
+
+There are limits, however, to what IDE usage data can tell us.  The missing elements include things like  the developer's mental model of the code, or how they intend to alter the code to suit new requirements.  The developers' experience, design ideas, and constraints they keep in mind during an implementation activity are factors that we must obtain separately.  
+
+Looking forward, usage data from development environments provides a platform for greater understanding of low-level developer practices.  We expect to uncover more nuggets of how developers create mental models, how they investigate code, how they perform mini trial and error experiments, and what might release further productivity improvements for all developers.
+
+
+\pagebreak
+
+
+\input{26Snipes_UsageDataResearchConcepts}
+
+
+\vspace{0.1in}
+Now that we have discussed aspects to consider when formulating your research plan, we are ready to dig deeper into specifics on how to collect data from developer IDEs.  The next section covers several options that will propel your research forward.
+
+
+\input{26Snipes_HowToCollectData}
+
+
+\vspace{0.1in}
+Thus far we have been focusing on concrete usage data collection frameworks and the specific data collected by these frameworks.  With options to collect data from both Visual Studio and Eclipse, we hopefully provided a good resource to get you started towards your research goals.  Next, let's look next at methods and challenges in analyzing usage data.
+
+\newpage
+
+\input{26Snipes_HowToAnalyzeUsageData}
+
+\vspace{0.1in}
+Using this overview of analysis techniques should give you a good start towards analyzing usage data for your research.
+The ideas you bring to your usage data analysis process provide the real opportunities for innovating usage data based research.  Next we will discuss limitations we have observed in conducting research with usage data.
+
+\section{Limits of What You Can Learn from Usage Data}
+\label{sec:limitations}
+
+Collecting usage data is potentially a boon to research, and as we have
+pointed out, has many interesting and impactful applications.
+Nonetheless, there are limits to what you can learn as a researcher
+from usage data.
+In fact, our experience is that researchers (and practitioners) have
+high expectations about what they can learn from usage data, and those
+expectations often come crashing down after significant effort implementing
+and deploying a data collection system.
+So before you begin your usage data collection and analysis, consider
+the following two limitations of usage data.
+
+\textbf{Rationale is Hard to Capture.}
+Usage data tells you what a software developer did, but not
+why she did it.
+For example, if your usage data tells you that a developer used
+new refactoring tool for the first time, from a trace alone you cannot determine whether
+(a) she learned about the tool for the first time, (b) she had used the tool earlier, but before you started collecting data, or (c) her finger slipped and she pressed a hotkey by accident. We do not know whether she is satisfied with the the tool and will use it again in future.
+A researcher may be able to distinguish between these by collecting additional information,
+like asking the developer just after she used the tool why she used it,
+but it is impossible to definitively separate these based on the
+usage data alone.
+
+\textbf{Usage Data Never Captures Everything.}
+Researchers often want to capture ``everything,'' or at least
+everything that a developer does.
+This is fundamentally impossible, and the reason we introduced the
+goal-question metric.
+If you have a system that captures all key presses, you are still
+lacking information about mouse movements.
+If you have a system that also captures mouse movements, you're still
+missing the files that the developer is working with.
+If your system captures also the files, you still lacking the
+histories of those files.
+And so on.
+Ultimately, usage data is all about fitness for purpose -- is the data
+you are analyzing fit for the purpose of your research questions.
+
+To avoid these limitations, we recommend thinking systemically about how the data will be used while planning rather than thinking about usage data collection abstractly.
+Invent an ideal usage data trace, and ask yourself:
+
+\begin{itemize}[noitemsep]
+  \item Does the data support my hypothesis?
+  \item Are there alternative hypotheses that the data would support?
+  \item Do I need additional data sources?
+  \item Can the data be feasibly generated?
+\end{itemize}
+
+\noindent
+Answering these questions will help you determine whether you can sidestep
+the limitations of collecting and analyzing usage data.
+
+\section{A Look Ahead}
+
+If the last two decades could be labeled the era
+of big data collection,
+the next two decades will surely be labeled as the
+era of smarter big data analysis.
+Many questions still remain:
+How do we balance data privacy and data richness?
+What are the long term effects of developer monitoring?
+How can we maximize the value of data collection
+for as many researchers as possible, and reduce the
+strain on research participants? How can we provide right data to right person at right time with the least effort?
+Answering these questions will help our research
+community advance in usage data collection and analysis.
+
+Usage data, while now widely collected, still remains largely
+an untapped resource by practitioners and researchers.
+In this chapter, we have explained how to collect and
+analyze usage data, which we hope will help you ``stand
+on the shoulders of giants'' and increase the ease
+with which you can collect and analyze your own usage data.
+
+% LocalWords: IDE IDEs UDC refactoring refactorings
+
+\section{Code Listings}
+\input{26Snipes_CodeListings}
+
+\bibliographystyle{abbrv}
+\bibliography{26Snipes_Bibliography} 
+
+
+\end{document}
