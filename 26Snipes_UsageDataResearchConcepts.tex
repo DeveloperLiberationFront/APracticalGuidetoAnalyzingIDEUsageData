@@ -1,0 +1,166 @@
+\section{Usage Data Research Concepts}
+
+In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources necessary to support your research.
+
+\subsection{What Is Usage Data and Why Analyze It?}
+
+We refer to the data about the interactions of software developers with an IDE as the
+\emph{IDE usage data} or simply \emph{usage data}.  The interactions include commands invoked, files viewed, mouse clicks, and add-on tools used.
+
+% Who are the stakeholders in this domain?
+%
+% How do the stakeholders benefit from usage data?
+Several stakeholders benefit from capturing and analyzing usage data. First, IDE
+vendors leverage the data to get insight into ways to improve their product
+based on how developers use the IDE in practice. Second, researchers both
+develop usage data collectors and conduct rigorous experiments to (1)~make
+broader contributions to our understanding of developers' coding practices and
+(2)~improve the state-of-the-art programming tools (\eg, debuggers and
+refactoring tools). Finally, developers benefit from the analysis conducted on
+the usage data because these analyses lead to more effective IDEs that make
+developers more productive.
+
+% What are some examples of usage data?
+At a high level, an IDE can be modeled as a complex state machine. In this
+model, a developer performs an action at each step that moves the IDE from one state
+to another.
+%%
+%% The following is related to the subsection on "Usage Data Never Captures
+%% Everything".
+%Perhaps a video recording of the IDE accompanied by the keyboard strokes and
+%mouse clicks of the user would provide a complete set of usage data.
+%%
+%While this usage data in multimedia format may be suitable for small lab
+%studies, it suffers from two major limitations. First, it is difficult to
+%automatically analyze the usage data in this format. Second, the storage and
+%collection of usage data in this format is inefficient.
+To capture usage data, researchers and IDE vendors have
+developed various usage data collectors (\SecRef{SecHowToCollectData}).
+Depending on the goals of the experiments, the usage data collector captures
+data about a subset of the IDE's state machine. While a combination of video recordings of the IDE with the keyboard strokes and mouse clicks of a developer would provide a fairly complete set of usage data, it is difficult to automatically analyze video data and therefore mostly limited to small lab studies and not part of the developed usage data collectors.
+
+
+%% Give examples of usage data and their uses.
+%To enable experiments beyond small labs, researchers and IDE vendors have
+%developed various usage data collectors (\SecRef{SecHowToCollectData}).
+%Depending on the goals of the experiments, the usage data collector captures
+%data about a subset of the IDE's state machine.
+
+An example of a usage data collection and analysis project with wide adoption
+in practice is the Mylyn project (previously known as Mylar). Mylyn started as a research project that later became part of Eclipse and that exhibits both of the advantages of understanding programmer's practices and improving tool support.
+
+Mylyn~\cite{V:Murphy2006How} was one of the first usage data collectors. It was
+implemented as a plug-in for the Eclipse IDE and captured developers' navigation
+histories and their command invocations. For example, it records changes in
+selections, views, perspectives as well as invocations of commands such as
+delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
+
+Researchers used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse~\cite{V:Murphy2006How}. In addition to collecting usage data, Mylyn introduces new features to the Eclipse
+IDE that leverages the usage data to provide a task-focused UI and increase a developer's productivity~\cite{Kersten-Mylin}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, class, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in section \ref{MylynMonitor}.
+
+%The Mylyn team analyzed collected and analyzed usage data to provide empirical
+%evidence about the usage frequency of various features of
+%Eclipse~\cite{V:Murphy2006How}.
+%
+
+%In addition to collecting usage data, Mylyn provided new features to the Eclipse
+%IDE that leveraged the usage data. This part of Mylar later evolved into a
+%plug-in called Mylyn that comes with the official distribution of Eclipse. Mylyn
+%introduces the concept of a \emph{task context}. It first collects the users'
+%actions to infer the set of entities (\eg, files, class, and packages) that are
+%related to a task. Mylyn then analyzes the entities associated with the current
+%task to surface relevant information with less clutter in various features such
+%as outline, navigation, and auto-completion\Fix{Refer to other parts of the
+%chapter that discuss Mylar/Mylyn}.
+
+
+%
+Later, Eclipse incorporated a system similar to Mylyn, called the Eclipse Usage
+Data Collector (UDC)~\cite{WebPageUDC}, as part of the Eclipse standard
+distribution package for several years. UDC collected data from hundreds of
+thousands of Eclipse users every month. To the best of our knowledge, the UDC
+data set is the largest set of IDE usage data that is publicly
+available~\cite{WebPageUDCArchive}. Several researchers have mined this large
+data set to
+%
+(1)~gain insight about programmers'
+practices~\cite{VakilianJohnson2014Alternate, VakilianETAL2013Compositional,
+V:MurphyHill2012How} and
+%
+(2)~develop new tools that better fit programmers'
+practices~\cite{MurphyHill2012Improving, VakilianETAL2013Compositional}.
+See section \ref {EclipseUsageDataCollector} for more information on using UDC to collect usage data from Eclipse.
+
+Studies on automated refactorings are another example of projects that have
+collected and analyzed usage data. Researchers have analyzed the Eclipse UDC
+data set~\cite{V:MurphyHill2012How, VakilianETAL2013Compositional}, developed
+custom usage data collectors~\cite{VakilianETAL2012UseDisuseMisuse}, and
+conducted survey and field studies~\cite{V:MurphyHill2012How,
+VakilianJohnson2014Alternate, NegaraETAL2013ManualRefactorings} to gain more
+insight about programmers' use of the existing automated refactorings. Several
+studies have found that programmers do not use the automated refactorings as
+much as refactoring experts expect programmers to~\cite{V:MurphyHill2012How,
+NegaraETAL2013ManualRefactorings}. This finding motivated researchers to study
+the factors that lead to low adoption of automated
+refactorings~\cite{VakilianETAL2012UseDisuseMisuse, V:MurphyHill2012How} and
+propose novel techniques for improving the usability of automated
+refactorings~\cite{V:MurphyHill2012How, MurphyHill2012Improving,
+MurphyHill2008ExtractMethod, LeeETAL2013DragDrop, MurphyHillETAL2011Gestures,
+GeETAL2012BeneFactor, FosterETAL2012WitchDoctor}.
+
+\vspace{0.1in}
+
+With this background on usage data collection and research based on usage data, we look next at how to define usage data collection requirements based on your research goals.
+
+\subsection{Selecting Relevant Data Based on a Goal}
+\label{SelectingData}
+Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While the general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can improve the result.  A process for defining the desired data can follow structures such as Goal-Question-Metric \cite{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, to study the navigation practices of developers, we can define GQM as follows:
+    \begin{itemize}
+\item
+	Goal
+\subitem
+	Assess and compare the use of structured navigation by developers in our study.
+\item
+	Possible Question(s)
+\subitem
+	What is the frequency of navigation commands developers use when modifying source code?
+\subitem
+	What portion of navigation commands developers use are structured navigation rather than unstructured navigation?
+\item
+	Metric
+\subitem
+	Navigation Ratio is the proportion of the number of structured navigation commands to the number of unstructured navigation commands used by a developer in a given time period (e.g. a day).
+
+	    \end{itemize}
+
+The specific way to measure navigation ratio from usage data needs further refinement to determine how the usage monitor can identify these actions from available events in the IDE. This is discussed in further detail in section \ref{buildItYourself}.
+
+Assessing commands within a time duration (e.g. day) requires, for instance, that we collect a time-stamp for each command.  Simply using the time-stamp to stratify the data according to time is then a straight-forward conversion from the time-stamp to a data and grouping the events by day.
+% as a "by variable" where we stratify data according to time is a straight-forward conversion.
+%The time-stamp can be converted to a date allowing data to be grouped by the day of the events.
+Similarly the time-stamp can be converted to the hour to look at events grouped by hour of any given day. Calculating duration or elapsed time for a command or set of commands adds new requirements to monitoring.  Specifically, the need to collect events that relate to when the application or IDE is being used and when it is not and the need to collect additional events that occur when the developer has moved on from the command of interest.
+
+\subsection{Privacy Concerns}
+
+It is great to see how usage data may benefit your research. However, there are some privacy concerns your developers might and often have regarding the data collection and who the data is shared with. These privacy concerns arise mainly since the collected data may expose individual developers or it may expose parts of the source code companies are working on.  How you handle information privacy in data collection affects what you can learn from the data during analysis (see section \ref{sec:dataAnonymity}).
+
+To minimize privacy concerns about the collected data, steps such as encrypting sensitive pieces of information , for instance, by using a one-way hash-function can be taken. Hashing sensitive names, such as developer names, window titles, filenames or source code identifiers, provides a way to obfuscate the data and reduce the risk of information that allows identification of the developer or the projects and code they are working on. While this obfuscation makes it more difficult to analyze the exact practices, using a one-way hash-function will still allow differentiation between distinct developers, even if anonymous.
+
+Maintaining developer privacy is important but, there may be parts of your research where you need the ground truth that confirms what you observe in the usage data.  Thus you may need to know who is contributing data so you can ask them questions that establish the ground truth. A policy statement helps participants and developers be more confident sharing information with you when they know they can be identified with the information.  The policy statement should specifically state ho will have access to the data and what they will do with it. Limiting statements such as not reporting data at the individual level helps to reduce a developer's privacy concerns.
+
+\subsection{Study Scope}
+
+
+
+Small studies that examine a variety of data can generate metrics that you can apply to data collected in bigger studies where the additional information might not be available. 
+%    with larger data source that does not have augmented data.  
+        For instance, Robillard et al. defined a metric on structured navigation in their observational study on how developers discover relevant code elements during maintenance~\cite{wbsnipes:Robillard2004How}. This metric can now be used in a larger industrial study setting in which structured navigation command usage is collected as usage data, even without the additional information Robillard et al. gathered for their study.
+%    For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\cite{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.
+
+Finally and most importantly, usage data may not be enough to definitively answer your research questions. While usage data tells what a developer is doing in the IDE, it usually leaves gaps in the story (see section \ref{sec:limitations}).  Augmenting usage data with additional data sources such as developer feedback, task descriptions, and change histories (see section \ref{sec:IncludingOtherSources}) can fill in the details necessary to understanding user behavior.
+
+\vspace{0.1in}
+
+Now that we have discussed aspects to consider when formulating your research plan, we are ready to dig deeper into specifics on how to collect data from developer IDEs.  The next section covers several options that will propel your research forward.
+
+

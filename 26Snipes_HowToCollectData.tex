@@ -1,0 +1,1303 @@
+\section{How to Collect Data}
+\label{SecHowToCollectData}
+
+There are many options for collecting usage data from IDEs.   Existing tools can provide ready made solutions for commonly used IDEs and some support collecting data from additional sources.   Another way to start is to study data collected in previous projects such as data available in the Eclipse archive for UDC data.  This archive contains a wealth of data collected by UDC when UDC was integrated with each Eclipse version in 2009 and 2010.  The data is currently available at this URL:
+\url{http://archive.eclipse.org/projects/usagedata/}
+
+You may have more specific questions than can be answered with the UDC data or need to collect usage data for a specific experiment.  In this section we discuss details on how to use existing data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and \CodingSpectator{} (\SecRef{CodingSpectator}).  Then we'll walk through creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for your research.
+
+\begin{itemize}
+
+	\item Eclipse: Usage Data Collector (UDC) discussed in section \ref{EclipseUsageDataCollector} collects commands executed in the environment and editors and views that are invoked.
+	
+	\item Eclipse: Mylyn Monitor described in section \ref{MylynMonitor} collects task oriented events and can be configured for saving data
+	
+        \item \CodingSpectator %https://github.com/vazexqi/CodingSpectator
+, discussed in section \ref{CodingSpectator} focuses on refactoring actions and the context in which they are taken.
+
+        \item \CodingTracker~\cite{NegaraETAL2012Dangerous} is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
+	
+	\item For Visual Studio, section \ref{buildItYourself} describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
+	
+	\item Hackystat provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, however, you can consult papers and the code website for it to collect more information. \cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
+
+        \item \Fluorite~\cite{YoonMyers2011Flourite} is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies~\cite{YoonMyers2012Backtracking} and visualizing code histories~\cite{YoonETAL2013VisualizeChange}.
+	
+	\item CodeAlike is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency.  Currently CodeAlike is a proprietary tool whose developers seek to collaborate on usage data studies.
+
+\end{itemize}
+
+%lstlisting settings for section 2
+\lstset{language=Java,
+captionpos=b,
+tabsize=3,
+frame=lines,
+numbers=left,
+numberstyle=\tiny,
+numbersep=5pt,
+breaklines=true,
+showstringspaces=false,
+basicstyle=\footnotesize,
+emph={label}}
+
+The remainder of this section will discuss in detail how to implement the top four tools from the list above.
+
+\subsection{Eclipse Usage Data Collector}
+\label{EclipseUsageDataCollector}
+This section outlines how to collect IDE usage data using Eclipse's Usage Data
+Collector (UDC).\footnote{\url{http://www.eclipse.org/epp/usagedata/}}
+The UDC framework was originally build by the Eclipse Foundation, as a way to measure how the
+community was using the Eclipse IDE.
+While UDC was included in official Eclipse releases and data was collected from
+hundreds of thousands of Eclipse users between 2008 and 2011, the project was eventually shut down,
+and UDC was removed from official Eclipse releases.
+However, the source code for UDC remains available and researchers can still use and deploy it.
+
+\subsubsection{Collected Data}
+
+The Eclipse Data Collector records the following types of Eclipse information:
+
+\begin{itemize}
+
+\item The runtime environment, such as the operating system and Java Virtual Machine.
+
+\item Environment data, such as which bundles are loaded and when Eclipse
+starts up and shuts down
+
+\item Actions and commands that are executed, via menus, buttons, toolbars, and hotkeys.
+
+\item Views, editors, and perspectives that are invoked.
+
+\end{itemize}
+
+\noindent
+Let's look at an example of an event that UDC produces on a developer's machine:
+\vspace{4mm}
+
+\noindent
+\begin{small}
+\begin{tabular}{llllll}
+\textbf{what}&\textbf{kind}&\textbf{bundleId}&\textbf{bundleVersion}&\textbf{description}&\textbf{time}\\
+\hline
+executed&command&org.eclipse.ui&3.7.0.v20110928-1505&org.eclipse.ui.edit.paste&1389111843130\\
+\end{tabular}
+\end{small}
+
+\vspace{4mm}
+\noindent
+The first column tells us what kind of thing happened---in this case, something was executed.
+The second column tells us what was executed---in this case, a command.
+The third column tells us what bundle this event belonged to---in this case, Eclipse's user interface bundle.
+The fourth column gives us the version of the bundle.
+The fifth tells us the name of the command that was executed---in this case, paste.
+The final column tells us when the command was executed, in Greenwich Mean
+Time---in this case, January 7th, 2014 at 16:24:03 GMT.
+
+
+\subsubsection{Limitations}
+
+Apart from general limitations of collecting usage data (Section~\ref{sec:limitations}),
+one significant limitation of UDC that we have found is that sometimes it has
+unexpectedly incomplete data.
+For example, in planning for a study involving when people ran their JUnit tests,
+we found that UDC recorded an event when the ``Run \textgreater~Run As \textgreater~Run as JUnit Test'' menu item was selected,
+but not when the ``Run As'' button was pressed on the toolbar.
+We suspect that the reason has to do with how different user interface accordances
+invoke the same functionality.
+In general, when you are planning on running a study with UDC, be sure to know what
+types of events you are looking for, and test them to make sure UDC captures those events.
+
+\subsubsection{How to Use It}
+
+\label{SecUDCHowToUseIt}
+
+Collecting data for your own research is fairly straightforward with Eclipse UDC,
+and we describe how to do so here.
+We also include an accompanying screencast that shows the
+basics.\footnote{\url{https://docs.google.com/file/d/0B7DV-T4_2mpKRWgwRnJnTWpvN0E/edit}}
+%TODO move this screencast to youtube, once you're happy
+
+\paragraph{Gathering Data Using the UDC Client.}
+
+Let's talk about how data is collected on a developer's machine.
+Since UDC was last included in the Eclipse Indigo SR2
+release,\footnote{(\url{http://www.eclipse.org/downloads/packages/release/indigo/sr2}}
+if you have the option of which Eclipse to use, we recommend downloading
+that version.
+By default, UDC starts collecting data when Eclipse is start up.
+You can verify this by going to ``Windows \textgreater~Preferences'', then
+select the ``Usage Data Collector'' item (Figure~\ref{fig:prefPage1}).
+The \textit{Enable capture} option should be checked.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=.58]{26Snipes_prefPage1}
+  \caption{Eclipse Usage Data Collector preference page.}\label{fig:prefPage1}
+\end{figure}
+
+Before looking at the data, execute a few commands and open a few views
+in Eclipse.
+Then, on your file system, open the following path as a subdirectory
+of your current workspace (Figure~\ref{fig:filesystem}):
+
+\vspace{4mm}
+\texttt{.metadata/.plugins/org.eclipse.epp.usagedata.recording}
+\vspace{4mm}
+
+\noindent
+In that folder, depending on how many UDC events have been gathered,
+a number of comma separated value (CSV) files will appear, where \texttt{upload0.csv} is the oldest
+and \texttt{usagedata.csv} is the newest.
+Open up \texttt{usagedata.csv}---you should notice a large number and a variety of events.
+Be sure to look specifically for events that you executed and views that you opened earlier.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=.58]{26Snipes_filesystem}
+  \caption{UDC data files.}\label{fig:filesystem}
+\end{figure}
+
+Before doing a study, be aware that Eclipse will ask and periodically attempt to upload
+data to the Eclipse foundation server.
+You should \emph{not} allow it to do this, because each time data is uploaded, the underlying
+CSV files are deleted.
+Furthermore, because the UDC project is no longer officially supported, the official Eclipse
+UDC server no longer accepts the data, so your usage data is, in effect, lost permanently.
+Unfortunately, there is no easy way to tell the UDC client to permanently store
+usage data.
+An easy workaround is to increase the upload period to 90 days (Figure~\ref{fig:upload}),
+which should be enough time to complete the experiment.
+The long-term fix for this issue is to either use some other tool, such as
+\CodingSpectator{} (\SecRef{CodingSpectator}), to periodically submit the UDC
+data to your servers or modify the source code of UDC, as we will explain how to
+do shortly, to never upload data.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=.58]{26Snipes_upload}
+  \caption{Changing the UDC upload frequency.}\label{fig:upload}
+\end{figure}
+
+If you're doing a lab experiment, collecting data should be simply a matter of
+copying and deleting the CSV files after each participant has done the experiment.
+You can append the files together or put them in a database for analysis.
+
+\paragraph{Modifying the UDC Client.}
+
+You may wish to modify the UDC client yourself, perhaps to add a custom filter for events
+or to disable data uploading.
+Whatever the reason, making modifications to the client is fairly easy.
+
+The first step is to check out the UDC source code into your Eclipse
+workspace using git.\footnote{\url{http://git-scm.com/}}
+Here we will again use Eclipse Indigo SR2, but we will specifically be using the
+``Eclipse for RCP and RAP Developers'' download package because we will
+modify Eclipse plugins.
+Before importing the necessary plugins, we recommend switching to
+the Indigo SR2 tag, to assure compatibility with
+Eclipse.
+To do so, clone the git repository\footnote{\url{http://git.eclipse.org/c/epp/org.eclipse.epp.usagedata.git/}}
+locally, open up ``Tags'', right click on ``Indigo SR 2'',
+then choose ``Checkout''.
+
+To import the projects into Eclipse, right click on the repository, then click
+``Import Projects,'' then ``Import Existing Projects.''
+The three core projects to import are:
+
+\begin{itemize}
+\item org.eclipse.epp.usagedata.internal.gathering
+\item org.eclipse.epp.usagedata.internal.recording
+\item org.eclipse.epp.usagedata.internal.ui
+\end{itemize}
+
+Next, we recommend a quick smoke test to determine whether you
+can actually make changes to the UDC client.
+Open \texttt{UsageDataRecordingSettings.java}, then modify the value of \texttt{UPLOAD\_URL\_DEFAULT}
+to \texttt{"my\_changed\_server"}.
+Then, create a new debug configuration that is an Eclipse Application, and press
+``Debug'' (Figure~\ref{fig:debugconfig}).
+Finally, you can verify that your change worked by going to UDC's Uploading
+preference page, noticing that the Upload URL is now ``my\_changed\_server''.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=.58]{26Snipes_debugconfig}
+  \caption{Debugging the UDC client.}\label{fig:debugconfig}
+\end{figure}
+
+From here, you can make any changes to the UDC client that you wish.
+One thing you may want to do is upgrade UDC to work with more recent versions
+of Eclipse.
+The code is likely currently out of date
+because it has not been maintained since the UDC project was shut down.
+Another thing you may wish to do is deploy your new version of UDC via
+an Eclipse update site to the developers you want to study.
+There are many resources on the web for plugin deployment instructions,
+such as Lars Vogel's tutorial on creating
+plugins.\footnote{\url{http://www.vogella.com/tutorials/EclipsePlugIn/article.html#deployplugin_tutorial}}
+
+\paragraph{Transmitting Data over the Internet.}
+
+If you do not plan on doing a lab study where you can manually collect UDC usage
+files, you will want to have the UDC client send the data to you directly.
+As we mentioned, the best way to do this is probably by changing the default
+server URL in the client source code.
+An easy way to change the server when debugging is by adding the following Java
+virtual machine arguments:
+
+\vspace{4mm}
+\texttt{-Dorg.eclipse.epp.usagedata.recording.upload-url=http://localhost:8080}
+\vspace{4mm}
+
+\noindent
+However, simply changing the client to point at a new URL is insufficient,
+because there actually has to be a working server at that URL, ready to
+receive UDC data.
+%%WBS: It is a bit confusing to talk about the PHP code as not working then talk about the server based on apache.  Why both?
+While the source code of official Eclipse server was not officially made
+available, Wayne Beaton from the Eclipse Foundation unofficially released
+some of the PHP code from the Eclipse Foundation's server.
+If you would like to download that code, you will find it in our git repository.
+%TODO need to put this code into git
+However, our PHP skills are very basic and we were not immediately able
+to get the server working as expected, but we expect that anyone familiar with
+debugging PHP should.
+
+\newpage
+
+Creating your own server that receives UDC data is fairly straightforward.
+Let's create a simple one using Apache's HttpComponents library,
+the same library that UDC uses to upload data.
+Specifically, we can create a server by simply extending Apache's tutorial
+web server.\footnote{\url{http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache/http/examples/ElementalHttpServer.java}}
+First, we'll need a generic request handler to wait for HTTP connections:
+
+\begin{lstlisting}
+import java.io.IOException;
+import org.apache.http.ConnectionClosedException;
+import org.apache.http.HttpException;
+import org.apache.http.HttpServerConnection;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpService;
+
+/**
+ * Based on
+ * http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache
+ * /http/examples/ElementalHttpServer.java
+ */
+class WorkerThread extends Thread {
+
+	private final HttpService httpservice;
+	private final HttpServerConnection conn;
+
+	public WorkerThread(final HttpService httpservice, final HttpServerConnection conn) {
+		super();
+		this.httpservice = httpservice;
+		this.conn = conn;
+	}
+
+	@Override
+	public void run() {
+		System.out.println("New connection thread");
+		HttpContext context = new BasicHttpContext(null);
+		try {
+			while (!Thread.interrupted() && this.conn.isOpen()) {
+				this.httpservice.handleRequest(this.conn, context);
+			}
+		} catch (ConnectionClosedException ex) {
+			System.err.println("Client closed connection");
+		} catch (IOException ex) {
+			System.err.println("I/O error: " + ex.getMessage());
+		} catch (HttpException ex) {
+			System.err.println("Unrecoverable HTTP protocol violation: " + ex.getMessage());
+		} finally {
+			try {
+				this.conn.shutdown();
+			} catch (IOException ignore) {
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\newpage
+\noindent
+We'll also need a generic request listener:
+
+\begin{lstlisting}
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import org.apache.http.HttpConnectionFactory;
+import org.apache.http.HttpServerConnection;
+import org.apache.http.impl.DefaultBHttpServerConnection;
+import org.apache.http.impl.DefaultBHttpServerConnectionFactory;
+import org.apache.http.protocol.HttpService;
+
+/**
+ * Based on
+ * http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache
+ * /http/examples/ElementalHttpServer.java
+ */
+class RequestListenerThread extends Thread {
+
+	private final HttpConnectionFactory<DefaultBHttpServerConnection> connFactory;
+	private final ServerSocket serversocket;
+	private final HttpService httpService;
+
+	public RequestListenerThread(final int port, final HttpService httpService)
+			throws IOException {
+		this.connFactory = DefaultBHttpServerConnectionFactory.INSTANCE;
+		this.serversocket = new ServerSocket(port);
+		this.httpService = httpService;
+	}
+
+	@Override
+	public void run() {
+		System.out.println("Listening on port " + this.serversocket.getLocalPort());
+		while (!Thread.interrupted()) {
+			try {
+				// Set up HTTP connection
+				Socket socket = this.serversocket.accept();
+				System.out.println("Incoming connection from" + socket.getInetAddress());
+				HttpServerConnection conn = this.connFactory.createConnection(socket);
+
+				// Start worker thread
+				Thread t = new WorkerThread(this.httpService, conn);
+				t.setDaemon(true);
+				t.start();
+			} catch (InterruptedIOException ex) {
+				break;
+			} catch (IOException e) {
+				System.err.println("I/O error initialising connection thread: " + e.getMessage());
+				break;
+			}
+		}
+	}
+}
+\end{lstlisting}
+
+\newpage
+\noindent
+And finally, the guts of our server:
+
+\begin{lstlisting}
+import java.io.IOException;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpProcessor;
+import org.apache.http.protocol.HttpProcessorBuilder;
+import org.apache.http.protocol.HttpRequestHandler;
+import org.apache.http.protocol.HttpService;
+import org.apache.http.protocol.ResponseConnControl;
+import org.apache.http.protocol.ResponseContent;
+import org.apache.http.protocol.ResponseDate;
+import org.apache.http.protocol.ResponseServer;
+import org.apache.http.protocol.UriHttpRequestHandlerMapper;
+import org.apache.http.util.EntityUtils;
+
+/**
+ * Based on
+ * http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache
+ * /http/examples/ElementalHttpServer.java
+ */
+public class BasicUDCServer {
+
+		public static void main(String[] args) throws IOException {
+
+		int port = 8080;
+
+		HttpProcessor httpproc = HttpProcessorBuilder.create()
+				.add(new ResponseDate()).add(new ResponseServer())
+				.add(new ResponseContent()).add(new ResponseConnControl()).build();
+
+		UriHttpRequestHandlerMapper reqistry = new UriHttpRequestHandlerMapper();
+		reqistry.register("*", new HttpRequestHandler() {
+
+			public void handle(HttpRequest request, HttpResponse response,
+					HttpContext context) throws HttpException, IOException {
+
+				HttpEntityEnclosingRequest entityRequest = (HttpEntityEnclosingRequest) request;
+
+				String userID = request.getHeaders("USERID")[0].getValue();
+				String workspaceID = request.getHeaders("WORKSPACEID")[0].getValue();
+				long time = Long.parseLong(request.getHeaders("TIME")[0].getValue());
+
+				System.out.println(userID + "," + workspaceID + "," + time);
+				System.out.println(EntityUtils.toString(entityRequest.getEntity()));
+			}
+		});
+
+		HttpService httpService = new HttpService(httpproc, reqistry);
+
+		Thread t = new RequestListenerThread(port, httpService);
+		t.setDaemon(false);
+		t.start();
+	}
+}
+\end{lstlisting}
+
+\noindent
+When this server is run and it receives a UDC upload,
+it will print a UserId, WorkspaceId, and the time of the upload.
+UserIds are randomly generated on the client side and stored in a file in
+the developer's home directory.
+As long as that file remains intact, future uploads from that developer will
+contain that UserId.
+WorkspaceIds are identifiers contained in each workspace, and can be
+used to uniquely (but anonymously) identify which
+workspace a set of data is uploaded from.
+Thus, there is normally only one UserId per computer, but there can
+be multiple WorkspaceIds per computer.
+
+This code can be modified to fit your needs.
+We have provided a github repository where you can checkout
+and change this code as you see fit.
+%TODO provide code on server
+
+\vspace{0.1in}
+While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component.
+
+\subsection{Mylyn and the Eclipse Mylyn Monitor}
+\label{MylynMonitor}
+
+%\usepackage{color}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{maroon}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+
+%Mylyn~\cite{mylyn-web,Kersten-Mylar2005,Kersten-Mylin,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
+
+Mylyn~\cite{Kersten-Mylar2005,Kersten-Mylin,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
+
+%The first versions of Mylyn, originally called Mylar, were developed as part of the PhD research of Mik Kersten and contained an explicit Mylyn Monitor component to collect and upload a developer's activity within the Eclipse IDE~\cite{mylyn-monitor}. While the source code of the Mylyn Monitor can still be found on-line, it is not an active part of the Mylyn project anymore.
+The first versions of Mylyn, originally called Mylar, were developed as part of the PhD research of Mik Kersten and contained an explicit Mylyn Monitor component to collect and upload a developer's activity within the Eclipse IDE. While the source code of the Mylyn Monitor can still be found on-line, it is not an active part of the Mylyn project anymore.
+
+\subsubsection{Collected Data}
+Mylyn captures three types of developer interactions with the Eclipse development environment:
+\begin{itemize}
+    \item the \textit{selection} of elements,
+    \item the \textit{editing} of elements, and
+    \item \textit{commands} in the IDE, such as saving or refactoring commands.
+\end{itemize}
+
+These interaction events are monitored and then stored in XML format in a log file. An interaction event log example of a developer selecting a Java class \texttt{TaskEditorBloatMonitor.java} in the package explorer of the Eclipse IDE is:
+
+\lstdefinelanguage{XML}
+{
+  basicstyle=\ttfamily,
+  morestring=[s]{"}{"},
+  morecomment=[s]{?}{?},
+  morecomment=[s]{!--}{--},
+  commentstyle=\color{darkgreen},
+  moredelim=[s][\color{darkblue}]{>}{<},
+  moredelim=[s][\color{red}]{\ }{=},
+  stringstyle=\color{blue},
+  identifierstyle=\color{maroon},
+  morekeywords={StructureKind}
+}
+
+
+\lstset{
+  language=XML,
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray}\upshape
+}
+
+
+\begin{lstlisting}
+<InteractionEvent 
+    StructureKind="java"
+    StructureHandle="=org.eclipse.mylyn.tasks.ui/src&lt;org.eclipse.mylyn.
+        internal.tasks.ui{TaskEditorBloatMonitor.java" 
+    StartDate="2012-04-10 02:05:53.451 CEST"
+    OriginId="org.eclipse.jdt.ui.PackageExplorer" 
+    Navigation="null" 
+    Kind="selection" 
+    Interest="1.0" 
+    EndDate="2012-04-10 02:05:53.451 CEST" 
+    Delta="null"
+/>
+\end{lstlisting}
+
+The log entry contains among other information the interaction event kind, in this case a selection, the full identifier of the element the developer interacted with, a Java type called TaskEditorBloatMonitor, the time when the interaction event occurred, in this case October 4th, 2012, at 02:05:52 CEST, and the place where the interaction event occurred, in this case the package explorer view of Eclipse. 
+
+You may notice that the log also contains an interest value, in this case 1.0. This value is used by Mylyn to calculate the interest a developer shows in a code element, the so-called degree-of-interest. The degree-of-interest of a code element, such as a class, method or field, is based on the recency and frequency of interactions while working on a task. The more frequent and recent a developer selected and/or edited a code element, the higher the degree-of-interest. This degree-of-interest value is then used to highlight and/or filter elements in views of the IDE (see~\cite{kersten2007focusing,Kersten-Mylin}).
+
+The Mylyn Usage Monitor developed for the original research project and study, writes the interaction events sequentially into the interaction log file, while the developer is interacting with the IDE. The monitor that is used in later versions of Mylyn, including the current one, compresses the log for performance reasons and aggregates interaction events where possible. The compression looses the information on the time sequence and it is not possible to fully reconstruct the order and exact time in which each interaction event occurred. Since the task context in Mylyn is mainly used for calculating the degree-of-interest of an element, the exact time order is not necessary.
+
+
+\subsubsection{Logging Interactions with the Mylyn Monitor}
+While the code for the Mylyn Monitor is not part of the active Mylyn project anymore, the code for the monitor and example code for using it can be found in the incubator project online\footnote{http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/} (see also \cite{mylyn-monitor}). In the following, we will present relevant parts of the code from these examples to log the interactions.
+
+To be able to use the Mylyn Monitor code and log the events of interest there are two important classes you have to implement. First, you will need a plug-in class that extends the \texttt{org.eclipse.ui.plugin.AbstractUIPlugin} and add a listener for the events that you are interested in to the \texttt{org.eclipse.mylyn.internal.monitor.ui.MonitorUiPlugin}. Second, you will need to write the listener that creates the interaction event objects when an interaction event occurs. Let's assume you want to write a listener for selections of Java elements in the IDE. In this case you can extend the class \texttt{org.eclipse.mylyn.monitor.ui.AbstractUserInteractionMonitor} and simply override the \texttt{selectionChanged} method. By extending the \texttt{AbstractUserInteractionMonitor}, your listener will automatically be added as a post selection listener to all windows in the current workbench so that all selection events in the windows are forwarded to your listener. The relevant code for the \texttt{selectionChanged} method is:
+
+
+% Revert list settings
+\lstset{language=Java,
+captionpos=b,
+tabsize=3,
+frame=lines,
+numbers=left,
+numberstyle=\tiny,
+numbersep=5pt,
+breaklines=true,
+showstringspaces=false,
+basicstyle=\footnotesize,
+emph={label}}
+
+\begin{lstlisting}
+/** 
+ * Based on
+ * http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/
+ * org.eclipse.mylyn.examples.monitor.study/src/org/eclipse/mylyn/examples/
+ * monitor/study/SelectionMonitor.java
+ */
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.mylyn.monitor.core.InteractionEvent;
+import org.eclipse.jdt.core.IJavaElement;
+
+...
+
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		InteractionEvent.Kind interactionKind = InteractionEvent.Kind.SELECTION;
+		if (selection instanceof StructuredSelection) {
+			StructuredSelection structuredSelection = (StructuredSelection) selection;
+			Object selectedObject = structuredSelection.getFirstElement();
+			if (selectedObject == null) {
+				return;
+			}
+
+			if (selectedObject instanceof IJavaElement) {
+				IJavaElement javaElement = (IJavaElement) selectedObject;
+				structureKind = STRUCTURE_KIND_JAVA;
+				elementHandle = javaElement.getHandleIdentifier();
+			}
+		}
+
+		...
+
+		InteractionEvent event = new InteractionEvent(interactionKind, structureKind,
+                                elementHandle, ...);
+		MonitorUiPlugin.getDefault().notifyInteractionObserved(event);
+	}
+
+...
+\end{lstlisting}
+
+The code first checks what type the selection has. If the selection is structured, and the first part of it is a Java Element, it collects the relevant information and then creates an \texttt{InteractionEvent} with the gathered information, such as the interaction kind, the structure kind and the element handle. At the end of the method, the \texttt{MonitorUiPlugin} is notified about the observed interaction event. The \texttt{MonitorUiPlugin} will then go through all registered interaction event listeners and forward the event to them. Since there is an \texttt{InteractionEventLogger} registered as part of the mylyn code, the interaction event object will be forwarded to the logger and then written out into a file. 
+
+%TODO: wrap up the Mylyn section
+
+\subsection{\CodingSpectator}
+\label{CodingSpectator}
+
+\CodingSpectator~\cite{CodingSpectatorWebPage, VakilianETAL2011Richer,
+  VakilianETAL2012UseDisuseMisuse, VakilianETAL2013Compositional} is
+an extensible framework for collecting Eclipse usage data. Although
+researchers at the University of Illinois at Urbana-Champaign
+developed \CodingSpectator{} primarily for collecting detailed data
+about the use of the Eclipse refactoring tool, it also provides a
+reusable infrastructure for \emph{submitting usage data} from developers to
+a central repository.  \CodingTracker~\cite{NegaraETAL2012Dangerous,
+  NegaraETAL2013ManualRefactorings, CodingTrackerWebPage} is another
+data collector developed at Illinois, which collects finer-grained IDE
+actions while reusing the data submission infrastructure provided by
+\CodingSpectator.
+
+\subsubsection{Collected Data}
+
+\CodingSpectator{} was designed for capturing detailed data about the use of
+automated refactorings. It collects three kinds of refactoring events:
+\Canceled, \Performed, and \Unavailable. If a programmer starts an automated
+refactoring but quits it before it finishes, \CodingSpectator{} records a
+\Canceled{} refactoring event. If a programmer applies an automated refactoring,
+\CodingSpectator{} records a \Performed{} refactoring event. Finally, if
+a programmer invokes an automated refactoring but the IDE refuses to start the
+automated refactoring indicating that the refactoring is not applicable to the
+selected program element, \CodingSpectator{} records an \Unavailable{}
+refactoring event.
+
+Eclipse creates a \emph{refactoring descriptor} object for each \Performed{}
+refactoring events and serializes it in an XML file. \CodingSpectator{} saves
+more data in Eclipse refactoring descriptors of \Performed{} refactorings. In
+addition, it creates and serializes refactoring descriptors for \Canceled{} and
+\Unavailable{} refactoring events. \CodingSpectator{} supports
+\Use{NumberOfCodingSpectatorSupportedRefactorings} of the
+\Use{NumberOfEclipseAutomatedRefactorings} automated refactorings that Eclipse
+supports.
+
+We show a concrete example of the data that \CodingSpectator{}
+collects for an invocation of the automated Extract Method refactoring
+in Eclipse, which extracts a piece of code into a new method. This
+refactoring moves a selected piece of code into a new method and
+replaces the selected code by an invocation to the new method. To use
+the automated Extract Method refactoring, a programmer has to go
+through multiple steps. First, the programmer selects a piece of code
+(\FigRef{FigCodingSpectatorExtractMethodSelectionExample}). Second,
+the programmer invokes the automated Extract Method and configures it
+(\FigRef{FigCodingSpectatorExtractMethodConfigurationExample}). In
+this case, the programmer sets the name of the new method. The
+configuration page provides a number of other options including method
+accessibility, the ordering and names of method parameters, and the
+generation of method comments. Third, after configuring the
+refactoring, the programmer hits the ``Preview'' button and the
+automated refactoring reports the problems that the refactoring may
+introduce (\FigRef{FigCodingSpectatorExtractMethodErrorExample}). In
+this example, the automated refactoring complains that the selected
+name of the new method conflicts with the name of an existing
+method. Finally, the programmer decides to cancel the refactoring and
+\CodingSpectator{} records a refactoring descriptor for this
+\Canceled{} refactoring, as shown in
+\FigRef{FigCodingSpectatorDescriptorExample}. The type of a
+refactoring event (\ie, \Unavailable, \Canceled, and \Performed) can
+be inferred from the directory in which the XML file containing the
+refactoring descriptor resides.  \CodingSpectator{} captures the
+following attributes for the canceled automated Extract Method
+refactoring in the above example.
+
+\begin{enumerate}
+
+\item \texttt{captured-by-codingspectator}: indicates that \CodingSpectator{}
+  created the refactoring descriptor.
+
+\item \texttt{stamp}: a time-stamp recording when the refactoring event occurred
+
+\item \texttt{code-snippet}, \texttt{selection},
+  \texttt{selection-in-code-snippet}, \texttt{selection-text}: the location and
+  contents of the selection that the programmer made before invoking the
+  automated refactoring
+
+\item \texttt{id}: the automated refactoring's identifier
+
+\item \texttt{comment}, \texttt{description}, \texttt{comments},
+  \texttt{destination}, \texttt{exceptions}, \texttt{flags}, \texttt{input},
+  \texttt{name}, \texttt{visibility}: configuration options, \eg{} input
+  elements, project, and settings that programmers can set to control the effect
+  of the refactoring
+
+\item \texttt{status}: any problems reported by the automated refactoring to the
+  programmer
+
+\item \texttt{navigation-history}: when the programmer pressed a button to
+  navigate from one page of the refactoring wizard to another
+
+\item \texttt{invoked-through-structured-selection},
+  \texttt{invoked-by-quick-assist}: selection method (\eg{} structured or
+  textual selection and whether the automated refactoring was invoked using
+  Quick Assist
+
+\end{enumerate}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=\textwidth]{26Snipes_codingspectator-extract-method-selection.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodSelectionExample}A programmer
+selects a piece of code to extract into a new method. The selected code is part
+of class \texttt{SingleCustomOperationRequestBuilder} from commit
+\texttt{bdb1992} of the open-source Elasticsearch project
+(\texttt{https://github.com/elasticsearch/elasticsearch}).}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=0.5\textwidth]{26Snipes_codingspectator-extract-method-configuration.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodConfigurationExample}A programmer
+configures an automated Extract Method refactoring by entering the desired name
+of the new method.}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=0.6\textwidth]{26Snipes_codingspectator-extract-method-error.png}
+%
+\caption{\label{FigCodingSpectatorExtractMethodErrorExample}The Extract Method
+refactoring reports a name conflict problem to the programmer. The programmer
+can either ignore the problem and continue the refactoring, go back to the
+configuration page to provide a different name, or cancel the refactoring.}
+%
+\end{figure}
+
+\begin{figure}
+%
+\centering
+%
+\includegraphics[width=\textwidth]{26Snipes_codingspectator-refactoring-xml.png}
+%
+\caption{\label{FigCodingSpectatorDescriptorExample}An example refactoring
+descriptor recorded by \CodingSpectator.}
+%
+\end{figure}
+
+\subsubsection{Deploying \CodingSpectator}
+
+Deploying \CodingSpectator{} consists of two main steps:
+%
+\begin{inparaenum}[(1)]
+%
+\item setting up a Subversion repository and
+%
+\item setting up an Eclipse update site.
+%
+\end{inparaenum}
+
+\paragraph{Setting Up a Subversion Repository}
+
+\CodingSpectator{} regularly submits developers' data to a central Subversion
+repository. To collect \CodingSpectator's data automatically, you need to set up
+a Subversion repository and create accounts for your developers. To allow the developers
+to submit their data to the Subversion repository, you should grant them
+appropriate write accesses to the repository.
+
+Using a Version Control System such as Subversion as the data repository has
+several advantages:
+
+\begin{enumerate}
+%
+\item Subversion makes all revisions of each file easily accessible. This makes
+  troubleshooting easier for researchers.
+%
+\item For textual files, Subversion submits only the \emph{changes} made to the
+  files as opposed to the entire new file. This differential data submission
+  leads to faster submissions.
+%
+\item There are libraries such as SVNKit\footnote{http://svnkit.com/} that
+  provide an API for Subversion operations such as add, update, remove, and
+  commit. \CodingSpectator{} uses SVNKit for submitting developers' data to the
+  central repository.
+%
+\item Setting up a Subversion server is a well-documented process. This avoids
+  the burden of setting up a specialized server.
+%
+\end{enumerate}
+
+On the other hand, a disadvantage of using Subversion as the data repository is
+that it requires the developers to maintain a copy of their data on their file
+systems. The Subversion working copy on the developers' systems takes \emph{space}
+and can also cause \emph{merge conflicts}, \eg, if a developer restores the contents
+of the file system to an earlier version. To handle merge conflicts,
+\CodingSpectator{} has built-in support for automatic conflict detection and
+resolution. When \CodingSpectator{} detects a merge conflict, it removes the
+developer's data from the central repository and then submits the new data. Despite
+removing the data from the central repository, the researchers can still locate
+the merge conflicts and restore the data that was collected before the conflicts occurred.
+
+\CodingSpectator{} prompts the developers for their Subversion user names and
+passwords when \CodingSpectator{} is about to submit their data.
+\CodingSpectator{} gives the developers the option to save their passwords in Eclipse
+securely. See \url{http://codingspectator.cs.illinois.edu/documentation} for
+more information about the features of \CodingSpectator{} for developers.
+
+\paragraph{Setting Up an Eclipse Update Site}
+
+Users of \CodingSpectator{} install it from an Eclipse update
+site\footnote{\url{http://codingspectator.cs.illinois.edu/installation}}. An
+Eclipse update site is an online repository of the JAR and configuration files
+that Eclipse requires for installing a plug-in.
+
+You will have to customize \CodingSpectator{} at least by specifying the URL of
+the Subversion repository to which \CodingSpectator{} should submit developers' data.
+You may also want to customize the message that \CodingSpectator{} shows to the
+developers when it prompts them for their Subversion credentials. You can customize
+these aspects of \CodingSpectator{} by changing the configuration files that are
+packed in the existing JAR files hosted at the Eclipse update site of
+\CodingSpectator. If you need to customize \CodingSpectator{} in more complex
+ways that involve changes to its source code, you should follow the instructions
+for building \CodingSpectator's update site from source code.
+
+\subsubsection{Extending \CodingSpectator}
+
+In addition to collecting detailed refactoring data, \CodingSpectator{} provides
+a reusable infrastructure for collecting Eclipse usage data. Extending
+\CodingSpectator{} frees researchers from having to develop many features from
+scratch, \eg, Subversion communications, automatic merge conflict detection and
+resolution, secure storage of Subversion credentials, and periodic update
+reminders.
+
+\CodingSpectator{} provides an Eclipse extension point (id =
+\texttt{edu.\-illinois.\-codingspectator.\-monitor.\-core.\-submitter}) and the
+following interface:
+
+\begin{lstlisting}
+public interface SubmitterListener {
+  // hook before svn add
+  void preSubmit();
+  // hook after svn add and before svn commit
+  void preCommit();
+  // hook after svn commit
+  void postSubmit(boolean succeeded);
+}
+\end{lstlisting}
+
+The above interface provides three hooks to \CodingSpectator's submission
+process. \CodingSpectator{} checks out the Subversion repository into a folder,
+which we refer to as the \emph{watched folder}. Then, it executes the Subversion
+commands (\eg, add and commit) on the watched folder. A plug-in that extends the
+\Code{submitter} extension point and implements the \Code{SubmitterListener}
+interface can perform actions before or after two of the Subversion commands that
+\CodingSpectator{} executes: add and commit.
+%
+For example, \CodingSpectator{} overrides the method \Code{preSubmit} to copy
+the recorded refactoring descriptors to the watched folder. As another example,
+the developers of \CodingSpectator{} made the Eclipse UDC plug-in use the
+\Code{submitter} extension point and copy the UDC data to the watched folder. As
+a result, \CodingSpectator{} submits the UDC data to the Subversion repository.
+Effectively, this is an alternative method to the one presented in
+\SecRef{SecUDCHowToUseIt} for collecting UDC data in a central repository.
+
+% LocalWords: CodingSpectator Urbana Champaign IDE timestamp
+%
+% LocalWords: CodingTracker refactoring refactorings refactoring's
+%
+% LocalWords: SVNKit URL usernames online API
+
+
+\subsection{Build it Yourself for Visual Studio}
+\label{buildItYourself}
+
+This section shows how to implement a usage data collection tool for Visual Studio that generates the Navigation Ratio metric (see section \ref{SelectingData}) daily, giving the developer insight into his own navigation patterns. Readers attempting the tutorial should be familiar with C\# as well as have a working knowledge of Visual Studio.  
+
+Because this extension is illustrative some simplifications have been made that would need to be addressed in a widely deployed extension. For instance, this example extension does not perform any background processing, thus the developer may notice a delay during Visual Studio startup.  
+
+\subsubsection{Creating a Visual Studio Extension}
+
+To add functionality to Visual Studio we must utilize the extensibility platform, creating a Visual Studio Extension. Once the extension is created we can add our specific functionality.
+
+\begin{enumerate}
+\item {\bf Install the Visual Studio SDK} - To create Visual Studio Extensions specialized libraries (e.g., the automation library) are needed, and thus the Visual Studio SDK must be installed.
+
+\item {\bf Create a Visual Studio Solution and Project} - Using the ``New Project'' wizard create a new project and solution in C\# by selecting Extensibility and Visual Studio Packageas shown in Figure \ref{fig:ProjectCreation}.  
+\begin{figure}
+	\centering
+	\includegraphics[width=4in]{26Snipes_CreateVSIXExtension.png}
+	\caption{Create a Visual Studio Extension}
+	\label{fig:ProjectCreation}
+\end{figure}
+
+Use ``Collector'' as the project name and ``VisualStudioMonitor'' as the solution name, then follow the default options for the first 2 steps of the wizard.  In the third step, when asked to specify what type of extension, select the option to generate a menu command.  Next, give the menu command a name of "Stop Monitoring" and a command ID of ``StopMonitoring''.  This menu option will allow the developer to halt collection of data if they wish without quitting Visual Studio.  Click next on the next step and then Finish to setup your extension solution project.
+
+
+After creating the project and solution, the solution explorer should look like figure \ref{fig:SolutionExplorer} showing the project files necessary for the extension to work.
+\begin{figure}
+	\centering
+	\includegraphics[width=2.5in]{26Snipes_SolutionExplorer.png}
+	\caption{Solution Explorer with Visual Studio Extension}
+	\label{fig:SolutionExplorer}
+\end{figure}
+
+
+\item {\bf Ensure the extension loads on startup} - The next step is to instruct the extension package to load when Visual Studio starts, by setting the attribute ProvideAutoLoad on the package class (CollectorPackage.cs). The GUID value in the below listing will load the package when Visual Studio starts.
+
+\begin{lstlisting}
+    // This attribute starts the package when Visual Studio starts 
+    [ProvideAutoLoad("{ADFC4E64-0397-11D1-9F4E-00A0C911004F}")]
+    [Guid(GuidList.guidCollectorPkgString)]
+    public sealed class CollectorPackage : Package
+\end{lstlisting}
+
+\end{enumerate}
+
+\subsubsection{Create Monitor Project}
+
+To separate the Visual Studio Extension setup code from the core functionality of the extension a second project should be created within the same solution. We call this second project  the Monitor project.
+
+\begin{enumerate}
+\item {\bf Create the Monitor project} - Add a class library type project to  the "VisualStudioMonitor" solution. Because the class library must be signed, go to the Properties for the Monitor project and select Signing from the list at the right.  In the Signing tab, check the "sign the assembly" checkbox then under "Choose a strong name key file", select Browse and browse over to the Key.snk file in the collector project (the file was created with the solution).
+
+\item {\bf Create the monitoring class} - 
+The next step is to create a static class that will manage the log file including starting, stopping recording data, and inserting data into the log file.  Rename the class created by Visual Studio in the Monitor project to "DataRecorder".    Because we don't want more than one recorder running at a time and want to access this class without instantiating it, make the class static.  Create a method to Start the recorder that generates a file name for the log file and sets a flag that the recording has started. A Stop method resets that flag and perhaps clears the file name.  A method to write a log message to the file completes DataRecorder.
+
+\item {\bf Connecting the extension framework with the recorder} -
+Finally, insert a call to DataRecorder.Start() at the end of the Initialize() method in the CollectorPackage class.  This will start the monitoring each time Visual Studio starts.  You will need to add a reference for the "Monitor" project to the Collector project, make sure you sign the Monitor project, then rebuild the solution.
+
+
+The call to DataRecorder.Start() is inserted in the CollectorPackage as shown in Listing \ref{code:StartCall}.
+\begin{lstlisting}[caption=Call to DataRecorder.Start(),label=code:StartCall]
+        /////////////////////////////////////////////////////////////////////////////
+        // Overridden Package Implementation
+        #region Package Members
+
+        /// <summary>
+        /// Initialization of the package; this method is called right after the package is sited, so this is the place
+        /// where you can put all the initialization code that rely on services provided by VisualStudio.
+        /// </summary>
+        protected override void Initialize()
+        {
+            Debug.WriteLine (string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
+            base.Initialize();
+
+            // Add our command handlers for menu (commands must exist in the .vsct file)
+            OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if ( null != mcs )
+            {
+                // Create the command for the menu item.
+                CommandID menuCommandID = new CommandID(GuidList.guidCollectorCmdSet, (int)PkgCmdIDList.StopCollector);
+                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID );
+                mcs.AddCommand( menuItem );
+            }
+            DataRecorder.Start();
+        }
+        #endregion
+\end{lstlisting}
+
+The source code for the DataRecorder.cs file is shown in Listing \ref{code:DataRecorder}
+\begin{lstlisting}[caption=Data Recorder Class,  label=code:DataRecorder]
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Monitor
+{
+    public static class DataRecorder
+    {
+        public static void Start() {
+            logDirectoryPath = System.IO.Path.GetTempPath();
+            logFileName = System.IO.Path.Combine(logDirectoryPath, "collector " + DateTime.Now.ToString("yyyy-MM-dd HH.mm.ss") + ".log");
+            try {
+                using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(
+                    new System.IO.FileStream(logFileName, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite)
+                    ))
+                {
+                    streamWriter.WriteLine("Collector Started");
+                }
+            } 
+            catch (System.IO.IOException ioexception) {
+                Console.WriteLine("Error creating log file "+ioexception);
+            }
+         }
+
+        public static void Stop() {
+
+                WriteLog("Collector Stopped");
+            
+        
+        }
+
+        public static void WriteLog(string logToWrite)
+        {
+            try
+            {
+                using (System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(
+                    new System.IO.FileStream(logFileName, System.IO.FileMode.Append, System.IO.FileAccess.Write, System.IO.FileShare.ReadWrite)
+                    ))
+                {
+                    streamWriter.WriteLine(logToWrite);
+                }
+            }
+            catch (System.IO.IOException ioexception)
+            {
+                Console.WriteLine("Error writing to log file " + ioexception);
+            }
+        
+        }
+
+        private static string logFileName;
+        private static string logDirectoryPath;
+    }
+}
+
+\end{lstlisting}
+\end{enumerate}
+
+\subsubsection{Create the Data Model}
+
+The next step creates a data model for storing and managing event monitoring for Visual Studio. This includes designing the main event types and implementing a factory to create these events. 
+
+%Because there are several different types of events, it makes sense to build an abstract class to manage the core data and use the Simple Factory pattern to generate each type of event monitoring.  With this pattern an abstract base class, called AbstractMonitoredEvent, provides common definitions for class fields that will be used for monitoring different Visual Studio events, conversion of those fields to and from the storage format, and (eventually) calling the WriteLog method in the recorder when the event fires.  This concrete class implements methods specific to Visual Studio commands that manages the fields available from the DTE.Command class.  The client in the Simple Factory pattern is a class that maintains the collection of events that either gets read from the file or queried from Visual Studio.   In this step we focus on the elements needed to store event information, and manage the configuration file data in XML format.
+
+\begin{enumerate}
+\item {\bf Implement the base class} - 
+Create the AbstractMonitoredEvent class in the Monitor project in Visual Studio.  Then add data elements for EventName and Classification as follows.
+
+\begin{lstlisting}
+    [XmlInclude(typeof(MonitoredCommandEvent))]
+    [XmlRoot(ElementName = "MonitoredEvent", Namespace = "http://Monitor")]
+    public abstract class AbstractMonitoredEvent
+    {
+        /// <summary>
+        /// Default constructor to use in serialization
+        /// </summary>
+        protected AbstractMonitoredEvent()
+        {
+        }
+
+        public String EventName { get; set; }
+        public String Classification { get; set; }
+   }
+\end{lstlisting}
+
+\item {\bf Enable serialization in base class} - 
+So that we can store events in a configuration file then manipulate that configuration file later, we provision this abstract class for XML serialization of itself and its derived classes.  Dot NET attributes support the XML serialization in this structure.  The first attribute tells XML serialization that the MonitoredCommandEvent class is a derived class of AbstractMonitoredEvent that we will create next.  This provides the abiltiy to serialize and deserialize the public objects of the derived class by referencing the type of AbstractMonitoredEvent when creating a serializer.  The second attribute creates an XML namespace that all derived classes will share with the AbstractMonitoredEvent class.
+
+\item {\bf Create the concrete subclass} - 
+The next step is to create a derived class called MonitoredCommandEvent that inherits from AbstractMonitoredEvent.  MonitoredCommandEvent implements a constructor that builds a MonitoredCommandEvent object from the Command class of the DTE.
+
+The EnvDTE.Command object contains fields for Guid (a GUID string), ID and integer sub-id, and Name a readable name for the command.  To register an event handler for a EnvDTE.Command, you need get an object reference for the command using the Guid and ID to identify the command.  The GUID is  a Globally Unique IDentifier for command events in Visual Studio, however, some command events share a GUID and distinguish themselves with different EventIDs. Thus both elements are necessary to link a Command event from the DTE to an event hander in this extension.  The Name is useful information to understand what the command is.    There are several versions of the DTE object corresponding to versions of Visual Studio.  Depending on the commands of interest, each version may need to be queried for its commands.  
+
+ The constructor that takes a Command as input, simply extracts the necessary and relevant fields from the DTE's Command object and transferrs the matching information into the corresponding fields from this class and the AbstractMonitoredEvent class.  
+
+\item {\bf Enable serialization in concrete subclass} -
+Ensure the class also includes a constructor that builds from an XElement and an output method ToXElement translates the object to XML for saving. Add using statements for System.Xml.Serilization, and EnvDTE and their corresponding references in the project References configuration. 
+
+\begin{lstlisting}
+    [XmlRoot(ElementName = "MonitoredEvent", Namespace = "http://Monitor")]
+    public class MonitoredCommandEvent : AbstractMonitoredEvent {
+
+         public int EventID { get; set; }
+        public String Guid { get; set; }
+
+        public MonitoredCommandEvent()
+        {
+        }
+
+        public MonitoredCommandEvent(Command DTECommandObj) {
+            if (DTECommandObj != null) {
+                this.EventName = DTECommandObj.Name;
+                this.Classification = EventName.Split('.')[0];  //use the first part of event name
+                this.Guid = DTECommandObj.Guid;
+                this.EventID = DTECommandObj.ID;
+            }
+            else {
+                throw new ArgumentNullException("DTECommandObj");
+            }
+        }
+\end{lstlisting}
+
+ The attribute for XMLRoot is the same attribute assigned to the AbstractMonitoredEvent class which tells XML Serialization that this type is a type beloging to the abstract class.  In this class, create two public fields, EventID as int and GUID as string, that will save important information from the Visual Studio DTE object needed to engage monitoring for each command.  
+
+\item {\bf Create the event factory}
+To complete the Simple Factory pattern, a static factory class provides static factory methods that creates an object of type  MonitoredCommandEvent from a DTE Command object and returns it as an AbstractMonitoredEvent.  For now the only class to consider is the MonitoredCommandEvent derived class, however, a future step will add more derived classes.  
+\end{enumerate}
+
+\subsubsection{Storing Visual Studio Command Event Info}
+
+Our extension is now wired to listen for events, however, events also need to be saved for later analysis. In this step we discuss how the data is collected and persisted.
+
+\begin{enumerate}
+\item {\bf Create the collection manager class} -
+In this step, build the MonitoredEventCollection class that manages a List object of AbstractMonitoredEvent type.  
+
+\item {\bf Create and populate the configuration} -
+Configuration data is stored in the List object.
+The List object gets populated from an XML file that stores the configuration data.  The MonitoredEventCollection class provides a method to query the DTE for all commands and initialize the list.  
+Another method called after the DTE query stores the List contents in the same XML format file.  These two methods should be called in sequence the first time the extension launches. After that, it  reads the XML file on startup to initialize the List.  Call the method(s) to query, store and load the event list from the Start() method of the DataRecorder class in the previous step so that the Monitor will load the commands on startup.
+
+Fortunately the DTE object has a query method that lists all the commands it manages.   The DTE Commands object returns an IEnumerable collection of EnvDTE.Command objects. The listing below provides a method to try to get an instance of the DTE.  It depends on references to EnvDTE, Microsoft.VisualStudio.Shell.12.0, and Microsoft.VisualStudio.OLE.Interop so be sure to add those to the project's References list.
+
+%\begin{lstlisting}[caption=Method to get a DTE Reference,label=code:tryGetDTEObject,float=ht]
+\begin{lstlisting}
+
+		using EnvDTE;
+		using Microsoft.VisualStudio.Shell; //12.0
+		private static DTE tryGetDTEObject()
+		{
+			DTE dteobj=null;
+			try
+			{
+				dteobj = ((EnvDTE.DTE)ServiceProvider.GlobalProvider.GetService(typeof(EnvDTE.DTE).GUID)).DTE;
+
+			}
+			//Important to catch the following exception if the DTE object is unavailable
+			catch (System.Runtime.InteropServices.InvalidComObjectException)
+			{} 
+			//Important to catch the following exception if the DTE object is busy
+			catch (System.Runtime.InteropServices.COMException)
+			{}
+			return dteobj;
+		}
+
+\end{lstlisting}
+
+Once you have a reference to the DTE object from the tryGetDTEObject method, use the DTE to query the Commands  object.  Then process each command into the List managed by MonitoredEventCollection.  Example code to do this is shown below making use of the MonitoredEventFactory to generate each AbstractMonitoredEvent stored in the List.  The try-catch here is necessary because the saved DTE object could get disposed while the loop proceses the Commands.
+
+\begin{lstlisting}
+                try
+                {
+                    foreach (Command DTE_CommandEventObj in dteobj.Commands)
+                    {
+                        AbstractMonitoredEvent NewEvent = MonitoredEventFactory.GetMonitoredEvent(DTE_CommandEventObj);
+                        if (NewEvent != null)
+                        {
+                            EventList.Add(NewEvent);
+                        }
+                    }
+                }
+                //This exception happens during dispose/finalize when VS exits, just return null
+                catch (System.Runtime.InteropServices.InvalidComObjectException)
+                {
+                    return null;
+                }
+\end{lstlisting}
+
+\item {\bf Enable persistence of the configuration} -
+A persistent configuration file helps independently manage the events that get monitored for a study, and makes the configuration of all possible events easier to manage.    Using the framework's ToXelement methods, build methods in MonitoredEventCollection to save the List of AbstractMonitoredEvents to the configuration file and load them from the configuration file.  Below is the core code for the save to XML method that creates a serializer for the List object then writes that to the file stream.  Code for reading the XML file is left to the reader.
+
+\begin{lstlisting}
+                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<AbstractMonitoredEvent>));
+                using (Stream file = new FileStream(filepath, FileMode.Create, FileAccess.Write))
+                {
+                    serializer.Serialize(file, eventList);
+                    file.Flush();
+                }
+\end{lstlisting}
+
+\end{enumerate}
+
+
+\newpage
+
+
+
+\subsubsection{Register Event Handlers}
+
+Now that the framework is complete and a configuration file for all command events to be monitored is ready, the methods to hook Visual Studio into event handlers that log each command can be created.  This step will add methods and member objects to AbstractMonitoredEvent and MonitoredCommandEvent classes to register event handlers with the DTE and dispose of them appropriately when necessary.  The MonitoredEventCollection class gets a new method to perform the registration from the objects in the list and another method to deregister them.
+
+\begin{enumerate}
+\item {\bf Define the registration interface } - 
+The AbstractMonitoredEvent class should get a virtual RegisterEventForMonitoring method that takes an object parameter we will use to pass a DTE reference in.  The method returns a bool based on successful regisration.  The class also gets a non virtual Dispose() method  and a virtual Dispose(bool disposing) method with the former calling the latter and the latter setting a field isDisposed to true. This is the typical dispose structure.  Finally, the abstract class holds the non-virtual method to write the event log information (the abstract class's fields and a timestamp) to the log via the DataRecorder class.  This unifys logs for all derived classes into a common format.
+
+\item {\bf Implement the registration routine} - 
+The MonitoredCommandEvent class overrides the virtual RegisterEventForMonitoring method to implement registering an event handler for Command events.  Registering first must find the event in the DTE and assign it to the field, then attach a new event hander to the event.  Looking at the method listing below, the Guid and EventID are used as parameters to query the DTE Events object for the specific command event in this instance.  The result is assigned to a field, eventTypeObject.  Wiith this reference to the event, the next block adds an event handler that runs after the command is executed.  After all that if the eventTypeObject is not null, the method returns true for success.
+\begin{lstlisting}
+        public override bool RegisterEventForMonitoring(object dte)
+        {
+            if (!isDisposed && eventTypeObject == null && dte != null)
+            {
+                eventTypeObject = (dte as DTE).Events.get_CommandEvents(Guid, EventID) as CommandEvents;
+            }
+            if (eventTypeObject != null)
+            {
+                eventTypeObject.AfterExecute += new 
+			_dispCommandEvents_AfterExecuteEventHandler(OnAfterExecute);
+            }
+            return (eventTypeObject != null);
+        }
+\end{lstlisting}
+
+With the above method in Visual Studio, the missing fields and methods can be auto-generated via the "Generate" context menu command.  
+
+The last step with MonitoredCommandEvent is to create the Dispose method that will deregister the event handler. This looks like the following:
+
+\begin{lstlisting}
+        protected override void Dispose(bool disposing)
+        {
+            if (eventTypeObject != null) 
+		eventTypeObject.AfterExecute -= OnAfterExecute;
+            this.isDisposed = true;
+        }
+\end{lstlisting}
+
+Use the Visual Studio "Generate" command to generate a method stub for OnAfterExecute and the
+code will compile.  In the OnAfterExecute method, call ToLog so the event data is captured in the log.
+
+\item {\bf Register all commands} -  
+MonitoredEventCollection now needs methods to perform registration and deregistration on all the events in the list.  As the following listing shows, RegisterEventInventoryForEventMonitoring() must get the DTE object then walk through the IDEEventListenerRegistry list calling the abstract method RegisterEventForMonitoring with the DTE.  If one of them succeeds then this method considers it successful.
+
+\begin{lstlisting}
+        public bool RegisterEventInventoryForEventMonitoring()
+        {
+            DTE dteobj = tryGetDTEObject();
+            bool somethingRegistered = false;
+            if (dteobj != null && IDEEventListenerRegistry != null && IDEEventListenerRegistry.Count > 0)
+            {
+                foreach (AbstractMonitoredEvent command in IDEEventListenerRegistry)
+                {
+                    if (command.RegisterEventForMonitoring(dteobj))
+                    {
+                        somethingRegistered = true;
+                    }
+                }
+            }
+            return somethingRegistered;
+        }
+\end{lstlisting}
+
+The method in MonitoredEventCollection to de-register events in the List via Dispose() is left as an exercise for the reader to complete.
+
+\item {\bf Connect to the package lifecycle} - 
+Refactor the MonitoredEventCollection object in DataRecorder to a static class field.  Then add a call to RegisterEventInventoryForEventMonitoring() in the Start() method of DataRecorder.  Add a call to the de-register method of MonitoredEventCollection in the Stop() method of DataRecorder.  
+
+\item {\bf Execute the extension} - 
+Run the solution and use a few commands in Visual Studio, then give the Stop Collector command and check the log file.  You should see output like the following:
+\begin{verbatim}
+Collector Started
+2014-02-02 13:46:52Z,Tools.AddinManager,Tools
+2014-02-02 13:46:56Z,Tools.ExtensionsandUpdates,Tools
+Collector Stopped
+\end{verbatim}
+
+
+\end{enumerate}
+
+
+Below are descriptions of the code listings for the example code we discussed in this section.  Code listings are located at the end of the chapter and on GitHub \footnote{\url{https://github.com/wbsnipes/Teufelsberg}}
+\begin{itemize}
+\item
+The Listings for AbstractMonitoredEvent.cs in Code Listing \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
+\item
+The listing for CommandMonitoredEvent.cs in Code Listing \ref{code:MonitoredCommandEvent_4} shows methods implemented for registration and disposal.
+\item
+The listing for MonitoredEventCollection.cs in Code Listing \ref{code:MonitoredEventCollection_4} shows list processing in calls to respective registration and de-registration methods for the List object.
+\item
+The DataRecorder class is shown in listing \ref{code:DataRecorder_4}.
+\end{itemize}
+
+
+
+\subsection{Classification of Events}
+Now that the data collector is working we can begin to investigate our original question, what is the ratio betwee structured and unstructured navigation commands.  Unfortunately, if you look at the generated XML file from MonitoredEventCollection, there are four thousand commands to choose from. To calculate a ratio we first need to classify relevant commands as structured or unstructured navigations. 
+For our metric,  we identify the  commands related to structured navigation (in Visual Studio) as follows:
+\begin{itemize}
+\item
+ Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string
+\item Go To Definition (F12) brings up the code that defines the selected identifier
+\item View Call Hierarchy (Ctrl+K Ctrl+T) provides a two way analysis of an identifier's dependencies and uses
+\item Class View (Ctrl+W, C) provides a browser and search function for classes and class hierarchy
+\item Find All References (Ctrl+K,R) provides a list of lines that reference an identifier
+\item Navigate to Event Handler in the XAML editor shows the event handler for an object
+\item View Class Diagram generates a class diagram
+\item View Object Browser is a search tool and browser
+\end{itemize}
+
+Next we identify the commands related to unstrctured navigation as follows:
+\begin{itemize}
+\item selecting a file in an explorer window
+\item selecting the tab for a file
+\item using arrow and page up/down keys to go up/down through a file
+\item scrolling,
+\item clicking on a file element
+\item using GoTo Line command
+\item using Find In Files command
+\item using Quick Find command
+\end{itemize}
+
+These identified commands form the set of actions that usage data needs to collect to calculate the navigation ratio metric.  Notice that the commands are a mixture of defined actions within the tool and actions that result from mouse actions such as selecting a window or a window tab.  Now in the classification file generated from the tool, there is a field to classify each event.  Locating the events in the xml related to these commands and changing their classification to StructuredNav or UnstructuredNav will allow analaysis of the log data with respect to these classifications.
+
+With this demonstration you see how to build a usage monitor for Visual Studio that records most commands the developer can issue in the IDE.  What's missing?  Well there are other areas of the DTE to explore such as editor events, unit test events, build and debug session events that provide greater context to the developer experience.  For brevity, capturing those events is left to the reader to explore on their own.
+
+
+
+
