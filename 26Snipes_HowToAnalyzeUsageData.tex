@@ -6,7 +6,7 @@ Collecting usage data gets you halfway to answering your questions.  In this sec
 \subsection{Data Anonymity}
 
 \noindent
-{\bf Non-anonymous data}, where sensitive information including source code snippets, change-sets, and even access to the source code base is provided has obvious advantages. Researchers can replay developers' activity stream, affording them a deep understanding of the developer's actions~\cite{VakilianETAL2012UseDisuseMisuse}. There are few limits on how this data can be analyzed, and {\em non-anonymous data is well-suited for exploratory studies}. Unfortunately, there are some key disadvantages. First, only developers working on open source systems are likely to participate in such studies; typical enterprise developers may face termination if they were to leak even parts of their source code base. Second, while playback and other deep analyses are possible, these analyses can be costly in terms of time and resources. 
+{\bf Non-anonymous data}, where sensitive information including source code snippets, change-sets, and even access to the source code base is provided has obvious advantages. Researchers can replay developers' activity stream, affording them a deep understanding of the developer's actions~\citeaffixed{VakilianETAL2012UseDisuseMisuse}{e.g.}. There are few limits on how this data can be analyzed, and {\em non-anonymous data is well-suited for exploratory studies}. Unfortunately, there are some key disadvantages. First, only developers working on open source systems are likely to participate in such studies; typical enterprise developers may face termination if they were to leak even parts of their source code base. Second, while playback and other deep analyses are possible, these analyses can be costly in terms of time and resources. 
 
 \vspace{0.1in}
 
@@ -50,10 +50,9 @@ A major advantage of anonymous usage data is the fact that it captures developer
 However, researchers must be wary of a few common issues with magnitude analysis. First, in any sufficiently large set of user logs there is a small set of developers that will use the feature/tool under analysis orders of magnitude more often than the general population, potentially skewing the data. 
 Second, attempts to attribute time to individual activities are fraught with difficulties. For instance, there is a temptation to report the percentage of time spent doing activity X. Yet, because the data is based on a stream of activities any time calculation requires making unsound assumptions on what happens in between these events.
 
-%example
+%Looked for an appropriate citing with Murphy as lead but did not find one. Not sure
+%how else to cite a body of work from one person's perspective
 Murphy et al's work on understanding Eclipse IDE usage provides several examples of magnitude analysis being used effectively. By simply counting instances of events in developers' activity streams they were able to present how often developers accessed certain views, the top 10 commands executed by developers, and the percentage of developers that used each specific refactoring command. In spite of the simplicity of this analysis its ideal for identifying heavily used features for improvements and unused features for removal, as well as for getting a sense of how developers are currently working. 
-
-
 
 \subsection{Categorization Analysis}
 
@@ -101,10 +100,10 @@ log events related to usage of code search tools, and report various statistics 
 
 %intro to sequence analysis
 Magnitude analysis and categorization are both appropriate for answering research questions that are simply manifested in the IDE usage log. However, a more powerful way of analyzing activity logs is through sequence analysis, which first breaks the IDE data stream into a number of sequences, according to some criteria, and then reports upon characteristics of each sequence. A sequence in the IDE usage data corresponds to a software engineering task or sub-task accomplished by the developer (e.g. refactoring, looking for a starting point for a maintenance task, etc.), consisting of all of IDE events in a given time span. For instance, answering the research question of ``Are developers successful at finding initial points in the code for a software maintenance task?'' requires that the sequence of IDE events corresponding to each maintenance task be identified, before we can perform further analysis using either magnitude or categorization analysis. The granularity of a sequence is determined by the guiding research question. For certain research questions, we may be interested in a smaller sequences (e.g. searching the code base), while for others we may need to consider a longer time span (e.g. implementing a new feature, fixing a bug). 
-Generally, the larger and more complex the task or sub-task to extract, the harder it is for sequence analysis to determine its starting and stopping point in the activity log~\cite{Zou-ComanIndustry}.
+According to ~\citeasnoun{Zou-ComanIndustry}, the larger and more complex the task or sub-task to extract, the harder it is for sequence analysis to determine its starting and stopping point in the activity log.
 
 %how difficult or easy is it to determine sequences
-In many cases, extracting activity sequences can be challenging as it impossible to know exactly when a developer begins or ends a particular task or sub-task, without understanding the developer's underlying thought process. There are several possibilities in how sequence extraction can be performed, based on the specific research question. One possibility is to use sentinels, which are specific actions that indicate the beginning and end of a sequence. For instance, in the context of the code search research question mentioned above, submitting a query to the code search tool begins a sequence, while performing an edit or structural navigation (e.g. following the call graph) ends the sequence. Another possibility is to use the passage of time to extract sequences, where time without any activity is used as a signal of task start or finish. Yet another possibility is to use locations in the code base to identify a sequence in the activity log. This is the key insight used in Coman et al.'s \cite{Coman-TaskIdent} algorithm, which uses periods of activity on the same program elements to represent the core of a task, and time distance between such events to extract sequences corresponding to developer tasks. In lab validation studies of this algorithm have shown very high accuracy (80\%) when compared to the ground truth reported by developers. However, this accuracy may not hold up in an industrial setting\cite{Zou-ComanIndustry}, where tasks are longer, code bases are more complex, and developer interruptions are common. Also, the algorithm requires that information regarding program elements is kept in the activity log, which may conflict with many developer's privacy and anonymity requirements.
+In many cases, extracting activity sequences can be challenging as it impossible to know exactly when a developer begins or ends a particular task or sub-task, without understanding the developer's underlying thought process. There are several possibilities in how sequence extraction can be performed, based on the specific research question. One possibility is to use sentinels, which are specific actions that indicate the beginning and end of a sequence. For instance, in the context of the code search research question mentioned above, submitting a query to the code search tool begins a sequence, while performing an edit or structural navigation (e.g. following the call graph) ends the sequence. Another possibility is to use the passage of time to extract sequences, where time without any activity is used as a signal of task start or finish. Yet another possibility is to use locations in the code base to identify a sequence in the activity log. This is the key insight used in  ~\citename{Coman-TaskIdent}'s algorithm ~\citeyear{Coman-TaskIdent}, which uses periods of activity on the same program elements to represent the core of a task, and time distance between such events to extract sequences corresponding to developer tasks. In lab validation studies of this algorithm have shown very high accuracy (80\%) when compared to the ground truth reported by developers. ~\citeasnoun{Zou-ComanIndustry} find that this accuracy may not hold up in an industrial setting, where tasks are longer, code bases are more complex, and developer interruptions are common. Also, the algorithm requires that information regarding program elements is kept in the activity log, which may conflict with many developer's privacy and anonymity requirements.
 
 
 
@@ -254,15 +253,15 @@ CIT was developed and published in its current form by Flanagan in
 introduced even earlier by Galton (circa 1930). Variations of CIT have been
 widely used in Human Factors~\cite{ShattuckWoods1994CIT}.
 
-In 1986, del Galdo \etal applied CIT to Human-Computer Interaction (HCI) as part
-of evaluating the documentation of a conferencing system~\cite{DelGaldo1986CIT}.
+~\citeasnoun{DelGaldo1986CIT} applied CIT to Human-Computer Interaction (HCI) as part
+of evaluating the documentation of a conferencing system.
 They asked the study participants to perform a task and report any incident that
 they ran into. The researchers observed the participants during the study,
 analyzed the reported incidents, and proposed improvements to the documentation
 accordingly.
 
-In the context of IDEs, Vakilian and Johnson adapted CIT to automated
-refactorings~\cite{VakilianJohnson2014Alternate}. The goal of this study was to
+In the context of IDEs, ~\citeasnoun{VakilianJohnson2014Alternate} adapted CIT to automated
+refactorings. The goal of this study was to
 identify the usability problems of automated refactorings by analyzing
 refactoring usage data. The researchers found that certain events such as
 cancellations, reported messages, and repeated invocations are likely indicators
@@ -303,24 +302,24 @@ Other data sources, such as developer feedback, task descriptions, change histor
 
 Usage data collection can be augmented by explicit developer feedback to establish a ground truth. For instance, if you want to understand a developer's opinion of a tool or his or her purpose for using an IDE feature, it is best to ask about it. A post-analysis interview can shed light on your observations and confirm your analysis or point out different aspects.
 
-Information on a developer's activities can provide an additional rational to the usage data and explain the developer's actions. Asking questions on how well the developer knows the code he or she is working on can explain a developer's navigation patterns and usage of code search~\cite{SnipesExperiencesGamifyingSoftwareDevelopment}, while questions on the task, e.g. implementing a new feature versus fixing a bug, can explain other characteristics, such as the amount of editing versus testing.
+Information on a developer's activities can provide an additional rational to the usage data and explain the developer's actions. Asking questions on how well the developer knows the code he or she is working on can explain a developer's navigation patterns and usage of code search~\citeaffixed{SnipesExperiencesGamifyingSoftwareDevelopment}{e.g.}, while questions on the task, e.g. implementing a new feature versus fixing a bug, can explain other characteristics, such as the amount of editing versus testing.
 
 \subsubsection{Tasks}
 
 As mentioned above, Mylin is a popular extension to the Eclipse IDE that supports task
 management, reducing the effort for a developer to switch between
 tasks and maintaining relevant information for each
-task~\cite{Kersten-Mylin}. In the context of a specific task, Mylin
+task~\cite{Kersten-Mylyn}. In the context of a specific task, Mylin
 collects usage data in order to compute a degree-of-interest (DOI)
 value for each program element, which represents the interest the
 developer has in the program element for the task at hand. Program elements that a developer interacted with frequently and recently have a higher DOI value. Using these calculated DOI values, Mylyn highlights the elements relevant for the current task and filters unnecessary information from common views in the IDE. 
 
 \subsubsection{Change History}
 
-The FastDash tool enables real-time awareness of other developers'
+The FastDash tool by ~\citeasnoun{FastDash} enables real-time awareness of other developers'
 actions (e.g. focus or edits to a specific file) by utilizing usage
 data in concert with the source files and
-directories~\cite{FastDash}. FastDash's purpose is to reduce faults
+directories. FastDash's purpose is to reduce faults
 caused by lack of communication and lack of awareness of activities
 that other developers are performing on the same code base. The tool
 highlights other developer's activity as it is occurring using a

@@ -15,13 +15,13 @@ You may have more specific questions than can be answered with the UDC data or n
         \item \CodingSpectator %https://github.com/vazexqi/CodingSpectator
 , discussed in section \ref{CodingSpectator} focuses on refactoring actions and the context in which they are taken.
 
-        \item \CodingTracker~\cite{NegaraETAL2012Dangerous} is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
+        \item \CodingTracker, by ~\citeasnoun{NegaraETAL2012Dangerous}, is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
 	
 	\item For Visual Studio, section \ref{buildItYourself} describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
 	
-	\item Hackystat provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, however, you can consult papers and the code website for it to collect more information. \cite{V:johnson2003beyond}, %https://code.google.com/p/hackystat/
+	\item Hackystat by \citeasnoun{V:johnson2003beyond}, provides a framework to collect usage data from many sources.  We do not discuss Hackystat here, however, you can consult papers and the code website for it to collect more information.  %https://code.google.com/p/hackystat/
 
-        \item \Fluorite~\cite{YoonMyers2011Flourite} is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies~\cite{YoonMyers2012Backtracking} and visualizing code histories~\cite{YoonETAL2013VisualizeChange}.
+        \item \Fluorite, by ~\citeasnoun{YoonMyers2011Flourite}, is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies in ~\cite{YoonMyers2012Backtracking} and visualizing code histories in ~\cite{YoonETAL2013VisualizeChange}.
 	
 	\item CodeAlike is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency.  Currently CodeAlike is a proprietary tool whose developers seek to collaborate on usage data studies.
 
@@ -474,9 +474,9 @@ While there is some coding involved, setting up the UDC for Eclipse can provide 
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 
 
-%Mylyn~\cite{mylyn-web,Kersten-Mylar2005,Kersten-Mylin,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
+%Mylyn~\cite{mylyn-web,Kersten-Mylar2005,Kersten-Mylyn,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
 
-Mylyn~\cite{Kersten-Mylar2005,Kersten-Mylin,kersten2007focusing} is a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
+\citeasnoun{Kersten-Mylyn} created Mylyn, a task focused user interface, a top-level project of the Eclipse IDE that is part of many of the Eclipse IDE configurations. To better support developers in managing and working on multiple tasks, Mylyn makes tasks a first class entity, monitors a developer's interaction with the IDE for each task and logs it in a so-called \textit{task context}.
 
 %The first versions of Mylyn, originally called Mylar, were developed as part of the PhD research of Mik Kersten and contained an explicit Mylyn Monitor component to collect and upload a developer's activity within the Eclipse IDE~\cite{mylyn-monitor}. While the source code of the Mylyn Monitor can still be found on-line, it is not an active part of the Mylyn project anymore.
 The first versions of Mylyn, originally called Mylar, were developed as part of the PhD research of Mik Kersten and contained an explicit Mylyn Monitor component to collect and upload a developer's activity within the Eclipse IDE. While the source code of the Mylyn Monitor can still be found on-line, it is not an active part of the Mylyn project anymore.
@@ -531,13 +531,13 @@ These interaction events are monitored and then stored in XML format in a log fi
 
 The log entry contains among other information the interaction event kind, in this case a selection, the full identifier of the element the developer interacted with, a Java type called TaskEditorBloatMonitor, the time when the interaction event occurred, in this case October 4th, 2012, at 02:05:52 CEST, and the place where the interaction event occurred, in this case the package explorer view of Eclipse. 
 
-You may notice that the log also contains an interest value, in this case 1.0. This value is used by Mylyn to calculate the interest a developer shows in a code element, the so-called degree-of-interest. The degree-of-interest of a code element, such as a class, method or field, is based on the recency and frequency of interactions while working on a task. The more frequent and recent a developer selected and/or edited a code element, the higher the degree-of-interest. This degree-of-interest value is then used to highlight and/or filter elements in views of the IDE (see~\cite{kersten2007focusing,Kersten-Mylin}).
+You may notice that the log also contains an interest value, in this case 1.0. This value is used by Mylyn to calculate the interest a developer shows in a code element, the so-called degree-of-interest. The degree-of-interest of a code element, such as a class, method or field, is based on the recency and frequency of interactions while working on a task. The more frequent and recent a developer selected and/or edited a code element, the higher the degree-of-interest. This degree-of-interest value is then used to highlight and/or filter elements in views of the IDE ~\citeaffixed{kersten2007focusing,Kersten-Mylyn}{see}.
 
 The Mylyn Usage Monitor developed for the original research project and study, writes the interaction events sequentially into the interaction log file, while the developer is interacting with the IDE. The monitor that is used in later versions of Mylyn, including the current one, compresses the log for performance reasons and aggregates interaction events where possible. The compression looses the information on the time sequence and it is not possible to fully reconstruct the order and exact time in which each interaction event occurred. Since the task context in Mylyn is mainly used for calculating the degree-of-interest of an element, the exact time order is not necessary.
 
 
 \subsubsection{Logging Interactions with the Mylyn Monitor}
-While the code for the Mylyn Monitor is not part of the active Mylyn project anymore, the code for the monitor and example code for using it can be found in the incubator project online\footnote{http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/} (see also \cite{mylyn-monitor}). In the following, we will present relevant parts of the code from these examples to log the interactions.
+	While the code for the Mylyn Monitor is not part of the active Mylyn project anymore, the code for the monitor and example code for using it can be found in the incubator project online\footnote{\url{http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/}} \footnote{\url{http://wiki.eclipse.org/Mylyn_Integrator_Reference\#Monitor_API}}. In the following, we will present relevant parts of the code from these examples to log the interactions.
 
 To be able to use the Mylyn Monitor code and log the events of interest there are two important classes you have to implement. First, you will need a plug-in class that extends the \texttt{org.eclipse.ui.plugin.AbstractUIPlugin} and add a listener for the events that you are interested in to the \texttt{org.eclipse.mylyn.internal.monitor.ui.MonitorUiPlugin}. Second, you will need to write the listener that creates the interaction event objects when an interaction event occurs. Let's assume you want to write a listener for selections of Java elements in the IDE. In this case you can extend the class \texttt{org.eclipse.mylyn.monitor.ui.AbstractUserInteractionMonitor} and simply override the \texttt{selectionChanged} method. By extending the \texttt{AbstractUserInteractionMonitor}, your listener will automatically be added as a post selection listener to all windows in the current workbench so that all selection events in the windows are forwarded to your listener. The relevant code for the \texttt{selectionChanged} method is:
 
@@ -603,15 +603,15 @@ The code first checks what type the selection has. If the selection is structure
 \subsection{\CodingSpectator}
 \label{CodingSpectator}
 
-\CodingSpectator~\cite{CodingSpectatorWebPage, VakilianETAL2011Richer,
-  VakilianETAL2012UseDisuseMisuse, VakilianETAL2013Compositional} is
+\CodingSpectator \footnote{\url{http://codingspectator.cs.illinois.edu/}} described by  ~\cite{VakilianETAL2011Richer,VakilianETAL2012UseDisuseMisuse,VakilianETAL2013Compositional}
+ is
 an extensible framework for collecting Eclipse usage data. Although
 researchers at the University of Illinois at Urbana-Champaign
 developed \CodingSpectator{} primarily for collecting detailed data
 about the use of the Eclipse refactoring tool, it also provides a
 reusable infrastructure for \emph{submitting usage data} from developers to
-a central repository.  \CodingTracker~\cite{NegaraETAL2012Dangerous,
-  NegaraETAL2013ManualRefactorings, CodingTrackerWebPage} is another
+a central repository.  
+\CodingTracker \footnote{\url{http://codingtracker.web.engr.illinois.edu/}} described by  ~\cite{NegaraETAL2012Dangerous,NegaraETAL2013ManualRefactorings} is another
 data collector developed at Illinois, which collects finer-grained IDE
 actions while reusing the data submission infrastructure provided by
 \CodingSpectator.
