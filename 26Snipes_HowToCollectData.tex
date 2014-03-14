@@ -456,12 +456,6 @@ workspace a set of data is uploaded from.
 Thus, there is normally only one UserId per computer, but there can
 be multiple WorkspaceIds per computer.
 
-This code can be modified to fit your needs.
-We have provided a github repository where you can checkout
-and change this code as you see fit.
-%TODO provide code on server
-
-\vspace{0.1in}
 While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component.
 
 \subsection{Mylyn and the Eclipse Mylyn Monitor}
@@ -762,8 +756,9 @@ Deploying \CodingSpectator{} consists of two main steps:
 %
 \end{inparaenum}
 
-\paragraph{Setting Up a Subversion Repository}
-
+\begin{enumerate}
+\item
+\textbf{Setting Up a Subversion Repository -}
 \CodingSpectator{} regularly submits developers' data to a central Subversion
 repository. To collect \CodingSpectator's data automatically, you need to set up
 a Subversion repository and create accounts for your developers. To allow the developers
@@ -809,8 +804,8 @@ passwords when \CodingSpectator{} is about to submit their data.
 securely. See \url{http://codingspectator.cs.illinois.edu/documentation} for
 more information about the features of \CodingSpectator{} for developers.
 
-\paragraph{Setting Up an Eclipse Update Site}
-
+\item
+\textbf{Setting Up an Eclipse Update Site -}
 Users of \CodingSpectator{} install it from an Eclipse update
 site\footnote{\url{http://codingspectator.cs.illinois.edu/installation}}. An
 Eclipse update site is an online repository of the JAR and configuration files
@@ -825,6 +820,7 @@ packed in the existing JAR files hosted at the Eclipse update site of
 \CodingSpectator. If you need to customize \CodingSpectator{} in more complex
 ways that involve changes to its source code, you should follow the instructions
 for building \CodingSpectator's update site from source code.
+\end{enumerate}
 
 \subsubsection{Extending \CodingSpectator}
 
