@@ -40,7 +40,7 @@ showstringspaces=false,
 basicstyle=\footnotesize,
 emph={label}}
 
-The remainder of this section will discuss in detail how to implement the top four tools from the list above.
+The remainder of this section will discuss in detail how to implement the top four tools from the list above.  Where the section describes code, listings are provided based on the open source code available on GitHub (TBD). 
 
 \subsection{Eclipse Usage Data Collector}
 \label{EclipseUsageDataCollector}
@@ -1253,7 +1253,7 @@ Collector Stopped
 \end{enumerate}
 
 
-Below are descriptions of the code listings for the example code we discussed in this section.  Code listings are located at the end of the chapter and on GitHub \footnote{\url{https://github.com/wbsnipes/Teufelsberg}}
+Below are descriptions of the code listings for the example code we discussed in this section.  Code listings are located at the end of the chapter.
 \begin{itemize}
 \item
 The Listings for AbstractMonitoredEvent.cs in Code Listing \ref{code:AbstractMonitoredEvent_4}  show the additions to that class.  
@@ -1271,8 +1271,6 @@ The DataRecorder class is shown in listing \ref{code:DataRecorder_4}.
 Now that the data collector is working we can begin to investigate our original question, what is the ratio betwee structured and unstructured navigation commands.  Unfortunately, if you look at the generated XML file from MonitoredEventCollection, there are four thousand commands to choose from. To calculate a ratio we first need to classify relevant commands as structured or unstructured navigations. 
 For our metric,  we identify the  commands related to structured navigation (in Visual Studio) as follows:
 \begin{itemize}
-\item
- Navigate To (Ctrl+,) is a fuzzy search interface that lists identifiers matching the selected string
 \item Go To Definition (F12) brings up the code that defines the selected identifier
 \item View Call Hierarchy (Ctrl+K Ctrl+T) provides a two way analysis of an identifier's dependencies and uses
 \item Class View (Ctrl+W, C) provides a browser and search function for classes and class hierarchy
