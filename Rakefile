@@ -1,5 +1,5 @@
-$input = "asd"
-$target = "asd"
+$input = "26Snipes_MainDocument"
+$target = "26Snipes_MainDocument"
 $target_pdf = "#{$target}.pdf"
 $bib = "bibtex"
 $tex = "pdflatex"
