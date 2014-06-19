@@ -108,7 +108,7 @@ The second column tells us what was executed---in this case, a command.
 The third column tells us what bundle this event belonged to---in this case, Eclipse's user interface bundle.
 The fourth column gives us the version of the bundle.
 The fifth tells us the name of the command that was executed---in this case, paste.
-The final column tells us when the command was executed, in Greenwich Mean
+The final column, a unix timstamp that tells us when the command was executed, in Greenwich Mean
 Time---in this case, January 7th, 2014 at 16:24:03 GMT.
 
 
@@ -196,7 +196,7 @@ do shortly, to never upload data.
   \caption{Changing the UDC upload frequency.}\label{fig:upload}
 \end{figure}
 
-If you're doing a lab experiment, collecting data should be simply a matter of
+If you're doing a labratory experiment, collecting data should be simply a matter of
 copying and deleting the CSV files after each participant has done the experiment.
 You can append the files together or put them in a database for analysis.
 
@@ -274,20 +274,17 @@ receive UDC data.
 %%WBS: It is a bit confusing to talk about the PHP code as not working then talk about the server based on apache.  Why both?
 While the source code of official Eclipse server was not officially made
 available, Wayne Beaton from the Eclipse Foundation unofficially released
-some of the PHP code from the Eclipse Foundation's server.
-If you would like to download that code, you will find it in our git repository.
-%TODO need to put this code into git
-However, our PHP skills are very basic and we were not immediately able
-to get the server working as expected, but we expect that anyone familiar with
-debugging PHP should.
-
-\newpage
+some of the PHP code from the Eclipse Foundation's server.\footnote{\url{https://bugs.eclipse.org/bugs/show_bug.cgi?id=221104}}
+Since our PHP skills are rusty, next we'll discuss how to create our own 
+server using Java.
 
 Creating your own server that receives UDC data is fairly straightforward.
 Let's create a simple one using Apache's HttpComponents library,
 the same library that UDC uses to upload data.
 Specifically, we can create a server by simply extending Apache's tutorial
 web server.\footnote{\url{http://hc.apache.org/httpcomponents-core-ga/httpcore/examples/org/apache/http/examples/ElementalHttpServer.java}}
+You can find this server in our github repository.\footnote{\url{https://github.com/wbsnipes/Teufelsberg}}
+
 First, we'll need a generic request handler to wait for HTTP connections:
 
 \begin{lstlisting}
@@ -462,7 +459,7 @@ public class BasicUDCServer {
 \end{lstlisting}
 
 \noindent
-When this server is run and it receives a UDC upload,
+When this server is running and it receives a UDC upload,
 it will print a UserId, WorkspaceId, and the time of the upload.
 UserIds are randomly generated on the client side and stored in a file in
 the developer's home directory.
