@@ -89,10 +89,10 @@ like asking the developer just after she used the tool why she used it,
 but it is impossible to definitively separate these based on the
 usage data alone.
 
-\textbf{Usage Data Never Captures Everything.}
+\textbf{Usage Data Does Not Capture Everything.}
 Researchers often want to capture ``everything,'' or at least
 everything that a developer does.
-This is fundamentally impossible, and the reason we introduced the
+This is practically impossible, and the reason we introduced the
 goal-question metric.
 If you have a system that captures all key presses, you are still
 lacking information about mouse movements.
@@ -101,8 +101,13 @@ missing the files that the developer is working with.
 If your system captures also the files, you're still lacking the
 histories of those files.
 And so on.
+In a theoretical sense, one could probably collect all observable information
+about a programmer's behavior, yet the magnitude of effort required to 
+do so would be enormous.
+Furthermore, a significant amount of important information is probably not observable,
+such as rationale and intent.
 Ultimately, usage data is all about fitness for purpose -- is the data
-you are analyzing fit for the purpose of your research questions.
+you are analyzing fit for the purpose of your research questions?
 
 To avoid these limitations, we recommend thinking systemically about how the data will be used while planning rather than thinking about usage data collection abstractly.
 Invent an ideal usage data trace, and ask yourself:
