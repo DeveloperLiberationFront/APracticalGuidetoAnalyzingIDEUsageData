@@ -550,7 +550,21 @@ The Mylyn Usage Monitor developed for the original research project and study, w
 \subsubsection{Logging Interactions with the Mylyn Monitor}
 	While the code for the Mylyn Monitor is not part of the active Mylyn project anymore, the code for the monitor and example code for using it can be found in the incubator project online\footnote{\url{http://git.eclipse.org/c/mylyn/org.eclipse.mylyn.incubator.git/tree/}} \footnote{\url{http://wiki.eclipse.org/Mylyn_Integrator_Reference\#Monitor_API}}. In the following, we will present relevant parts of the code from these examples to log the interactions.
 
-To be able to use the Mylyn Monitor code and log the events of interest there are two important classes you have to implement. First, you will need a plug-in class that extends the \texttt{org.eclipse.ui.plugin.AbstractUIPlugin} and add a listener for the events that you are interested in to the \texttt{org.eclipse.mylyn.internal.monitor.ui.MonitorUiPlugin}. Second, you will need to write the listener that creates the interaction event objects when an interaction event occurs. Let's assume you want to write a listener for selections of Java elements in the IDE. In this case you can extend the class \texttt{org.eclipse.mylyn.monitor.ui.AbstractUserInteractionMonitor} and simply override the \texttt{selectionChanged} method. By extending the \texttt{AbstractUserInteractionMonitor}, your listener will automatically be added as a post selection listener to all windows in the current workbench so that all selection events in the windows are forwarded to your listener. The relevant code for the \texttt{selectionChanged} method is:
+To be able to use the Mylyn Monitor code and log the events of interest there are two important classes you have to implement. First, you will need a plug-in class that extends 
+the following plugin: 
+
+\begin{lstlisting}
+org.eclipse.ui.plugin.AbstractUIPlugin
+\end{lstlisting}
+
+\noindent
+Then, add a listener for the events that you are interested in to:
+
+\begin{lstlisting}
+org.eclipse.mylyn.internal.monitor.ui.MonitorUiPlugin 
+\end{lstlisting}
+
+Second, you will need to write the listener that creates the interaction event objects when an interaction event occurs. Let's assume you want to write a listener for selections of Java elements in the IDE. In this case you can extend the class \texttt{org.eclipse.mylyn.monitor.ui.AbstractUserInteractionMonitor} and simply override the \texttt{selectionChanged} method. By extending the \texttt{AbstractUserInteractionMonitor}, your listener will automatically be added as a post selection listener to all windows in the current workbench so that all selection events in the windows are forwarded to your listener. The relevant code for the \texttt{selectionChanged} method is:
 
 
 % Revert list settings
@@ -607,7 +621,7 @@ import org.eclipse.jdt.core.IJavaElement;
 ...
 \end{lstlisting}
 
-The code first checks what type the selection has. If the selection is structured, and the first part of it is a Java Element, it collects the relevant information and then creates an \texttt{InteractionEvent} with the gathered information, such as the interaction kind, the structure kind and the element handle. At the end of the method, the \texttt{MonitorUiPlugin} is notified about the observed interaction event. The \texttt{MonitorUiPlugin} will then go through all registered interaction event listeners and forward the event to them. Since there is an \texttt{InteractionEventLogger} registered as part of the mylyn code, the interaction event object will be forwarded to the logger and then written out into a file. 
+The code first checks what type the selection has. If the selection is structured, and the first part of it is a Java Element, it collects the relevant information and then creates an \texttt{InteractionEvent} with the gathered information, such as the interaction kind, the structure kind and the element handle. At the end of the method, the \texttt{MonitorUiPlugin} is notified about the observed interaction event. The \texttt{MonitorUiPlugin} will then go through all registered interaction event listeners and forward the event to them. Since there is an \texttt{InteractionEventLogger} registered as part of the Mylyn code, the interaction event object will be forwarded to the logger and then written out into a file. 
 
 %TODO: wrap up the Mylyn section
 
