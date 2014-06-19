@@ -10,7 +10,7 @@ You may have more specific questions than can be answered with the UDC data or n
 
 	\item Eclipse: Usage Data Collector (UDC) discussed in section \ref{EclipseUsageDataCollector} collects commands executed in the environment and editors and views that are invoked.
 	
-	\item Eclipse: Mylyn Monitor described in section \ref{MylynMonitor} collects task oriented events and can be configured for saving data
+	\item Eclipse: Mylyn Monitor described in section \ref{MylynMonitor} collects task-oriented events and information about what code elements the programmers work with.
 	
         \item \CodingSpectator %https://github.com/vazexqi/CodingSpectator
 , discussed in section \ref{CodingSpectator}, focuses on refactoring actions and the context in which they are taken.
@@ -48,10 +48,10 @@ used these tools.
 \begin{table}
 \renewcommand{\arraystretch}{1.5}
 \begin{small}
-\begin{tabular}{p{2cm}p{4cm}p{4cm}p{3cm}}
+\begin{tabular}{p{2cm}p{4cm}p{4cm}p{4cm}}
 \textbf{Tool Name}&\textbf{Advantages}&\textbf{Disadvantages}&\textbf{Examples}\\
 \hline
-Eclipse Usage Data Collector (UDC)&Well tested, widely deployed.&Collects only data on tools; hard to infer developers' rationale.&\cite{liu2012initial,parnin2011resumption,murphy2012we}\\
+Eclipse Usage Data Collector (UDC)&Well tested, widely deployed.&Collects only data on tools; sometimes missing data.&\cite{liu2012initial,parnin2011resumption,murphy2012we}\\
 Mylyn Monitor&Collects data both about tools and the program elements the tools are used on.&No details about code beyond element names collected.&\cite{Kersten-Mylyn,ying2011influence,murphy2009using}\\
 CodingSpectator&Very detailed information collected.&Information collected largely customized to observe usage of refactoring tools.&\cite{VakilianETAL2011Richer,vakilian2012use,NegaraETAL2012Dangerous}\\
 Build-Your-Own for Visual Studio&A high degree of customizability. One of the few Visual Studio monitoring tools.&Extra work required to collect a wider variety of events.&\cite{SnipesExperiencesGamifyingSoftwareDevelopment}\\
@@ -471,7 +471,8 @@ workspace a set of data is uploaded from.
 Thus, there is normally only one UserId per computer, but there can
 be multiple WorkspaceIds per computer.
 
-While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component.
+While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component, which collects tool data like UDC, but also includes information about what program elements
+the programmer is working with.
 
 \subsection{Mylyn and the Eclipse Mylyn Monitor}
 \label{MylynMonitor}
