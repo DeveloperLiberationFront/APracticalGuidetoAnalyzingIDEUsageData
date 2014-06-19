@@ -40,7 +40,24 @@ showstringspaces=false,
 basicstyle=\footnotesize,
 emph={label}}
 
-The remainder of this section will discuss in detail how to implement the top four tools from the list above.  Where the section describes code, listings are provided based on the open source code available on GitHub (TBD). 
+The remainder of this section will discuss in detail how to implement the top four tools from the list above.  Where the section describes code, listings are provided based on the open source code available on GitHub (\url{https://github.com/wbsnipes/Teufelsberg}). 
+In Table~\ref{tab:toolsummary}, we summarize the advantages and disadvantages of each of the four tools we discuss in this chapter, as well as example papers that
+used these tools.
+
+\begin{table}
+\renewcommand{\arraystretch}{1.5}
+\begin{small}
+\begin{tabular}{p{2cm}p{4cm}p{4cm}p{3cm}}
+\textbf{Tool Name}&\textbf{Advantages}&\textbf{Disadvantages}&\textbf{Examples}\\
+\hline
+Eclipse Usage Data Collector (UDC)&Well tested, widely deployed.&Collects only data on tools; hard to infer developers' rationale.&\cite{liu2012initial,parnin2011resumption,murphy2012we}\\
+Mylyn Monitor&Collects data both about tools and the program elements the tools are used on.&No details about code beyond element names collected.&\cite{Kersten-Mylyn,ying2011influence,murphy2009using}\\
+CodingSpectator&Very detailed information collected.&Information collected largely customized to observe usage of refactoring tools.&\cite{VakilianETAL2011Richer,vakilian2012use,NegaraETAL2012Dangerous}\\
+Build-Your-Own for Visual Studio&A high degree of customizability. One of the few Visual Studio monitoring tools.&Extra work required to collect a wider variety of events.&\cite{SnipesExperiencesGamifyingSoftwareDevelopment}\\
+\end{tabular}
+\end{small}
+\caption{A summary of the four tools discussed in depth in this section.}\label{tab:toolsummary}
+\end{table}
 
 \subsection{Eclipse Usage Data Collector}
 \label{EclipseUsageDataCollector}
@@ -234,7 +251,7 @@ Another thing you may wish to do is deploy your new version of UDC via
 an Eclipse update site to the developers you want to study.
 There are many resources on the web for plugin deployment instructions,
 such as Lars Vogel's tutorial on creating
-plugins.\footnote{\url{http://www.vogella.com/tutorials/EclipsePlugIn/article.html#deployplugin_tutorial}}
+plugins.\footnote{\url{http://www.vogella.com/tutorials/EclipsePlugIn/article.html\#deployplugin\_tutorial}}
 
 \paragraph{Transmitting Data over the Internet.}
 

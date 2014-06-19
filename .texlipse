@@ -1,5 +1,5 @@
 #TeXlipse project settings
-#Tue Feb 04 09:31:30 EST 2014
+#Thu Jun 19 09:31:36 EDT 2014
 markTmpDer=true
 builderNum=2
 outputDir=
@@ -7,7 +7,7 @@ makeIndSty=
 bibrefDir=
 outputFormat=pdf
 tempDir=
-mainTexFile=asd.tex
+mainTexFile=26Snipes_MainDocument.tex
 outputFile=Analyzing IDE Usage Data.pdf
 langSpell=
 markDer=true
