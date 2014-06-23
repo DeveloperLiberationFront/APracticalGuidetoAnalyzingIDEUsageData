@@ -55,7 +55,7 @@ histories and their command invocations. For example, it records changes in
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
 
-Researchers ~\citeaffixed{V:Murphy2006How}{e.g.} used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
+Researchers ~\citeaffixed{V:Murphy2006How}{e.g.,} used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
 IDE that leverages the usage data to provide a task-focused User Interface (UI) and increase a developer's productivity~\cite{Kersten-Mylyn}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, classes, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in section \ref{MylynMonitor}.
 
 %The Mylyn team analyzed collected and analyzed usage data to provide empirical
@@ -93,7 +93,7 @@ For more information on UDC, see the included section \ref {EclipseUsageDataColl
 Studies of automated refactoring are another example of interesting research results from analyzing usage data. ~\citeasnoun{VakilianETAL2013Compositional}, and ~\citeasnoun{V:MurphyHill2012How} analyzed the Eclipse UDC
 data, developed
 custom usage data collectors~\cite{VakilianETAL2012UseDisuseMisuse}, and
-conducted survey and field studies~\citeaffixed{V:MurphyHill2012How,VakilianJohnson2014Alternate,NegaraETAL2013ManualRefactorings}{e.g.} to gain more
+conducted survey and field studies~\citeaffixed{V:MurphyHill2012How,VakilianJohnson2014Alternate,NegaraETAL2013ManualRefactorings}{e.g.,} to gain more
 insight about programmers' use of the existing automated refactorings. ~\citeasnoun{V:MurphyHill2012How} and
 ~\citeasnoun{NegaraETAL2013ManualRefactorings}
  found that programmers do not use the automated refactorings as
@@ -102,7 +102,7 @@ the factors that lead to low adoption of automated
 refactorings in ~\cite{VakilianETAL2012UseDisuseMisuse,V:MurphyHill2012How} and
 propose novel techniques for improving the usability of automated
 refactorings
-~\citeaffixed{V:MurphyHill2012How,MurphyHill2012Improving,MurphyHill2008ExtractMethod,LeeETAL2013DragDrop,MurphyHillETAL2011Gestures,GeETAL2012BeneFactor,FosterETAL2012WitchDoctor}{e.g.}.
+~\citeaffixed{V:MurphyHill2012How,MurphyHill2012Improving,MurphyHill2008ExtractMethod,LeeETAL2013DragDrop,MurphyHillETAL2011Gestures,GeETAL2012BeneFactor,FosterETAL2012WitchDoctor}{e.g.,}.
 
 With this background on usage data collection and research based on usage data, we look next at how to define usage data collection requirements based on your research goals.
 
@@ -123,13 +123,13 @@ Tailoring usage data collection to specific needs helps optimize the volume of d
 \item
 	Metric
 \subitem
-	Navigation Ratio is the proportion of the number of structured navigation commands to the number of unstructured navigation commands used by a developer in a given time period (e.g. a day).
+	Navigation Ratio is the proportion of the number of structured navigation commands to the number of unstructured navigation commands used by a developer in a given time period (e.g., a day).
 
 	    \end{itemize}
 
 The specific way to measure navigation ratio from usage data needs further refinement to determine how the usage monitor can identify these actions from available events in the IDE. This is discussed in further detail in section \ref{buildItYourself}.
 
-Assessing commands within a time duration (e.g. day) requires, for instance, that we collect a time-stamp for each command.  Simply using the time-stamp to stratify the data according to time is then a straight-forward conversion from the time-stamp to a data and grouping the events by day.
+Assessing commands within a time duration (e.g., day) requires, for instance, that we collect a time-stamp for each command.  Simply using the time-stamp to stratify the data according to time is then a straight-forward conversion from the time-stamp to a data and grouping the events by day.
 % as a "by variable" where we stratify data according to time is a straight-forward conversion.
 %The time-stamp can be converted to a date allowing data to be grouped by the day of the events.
 Similarly the time-stamp can be converted to the hour to look at events grouped by hour of any given day. Calculating duration or elapsed time for a command or set of commands adds new requirements to monitoring.  Specifically, the need to collect events like window visibility events from the operating system that relate to when the application or IDE is being used and when it is in the background or closed.
