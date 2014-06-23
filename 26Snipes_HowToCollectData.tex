@@ -8,30 +8,24 @@ You may have more specific questions than what can be answered with the UDC data
 
 \begin{itemize}
 
-\item[] For Eclipse
-\begin{itemize}
-	\item Usage Data Collector (UDC) discussed in section \ref{EclipseUsageDataCollector} collects commands executed in the environment and editors and views that are invoked.
+	\item[]Eclipse: Usage Data Collector (UDC) discussed in section \ref{EclipseUsageDataCollector} collects commands executed in the environment and editors and views that are invoked.
 	
-	\item Mylyn Monitor described in section \ref{MylynMonitor} collects task-oriented events and information about what code elements the programmers work with.
+	\item[]Eclipse: Mylyn Monitor described in section \ref{MylynMonitor} collects task-oriented events and information about what code elements the programmers work with.
 	
-    \item \CodingSpectator %https://github.com/vazexqi/CodingSpectator
+    \item[]Eclipse: \CodingSpectator %https://github.com/vazexqi/CodingSpectator
 , discussed in section \ref{CodingSpectator}, focuses on refactoring actions and the context in which they are taken.
 
-    \item \CodingTracker, by ~\citeasnoun{NegaraETAL2012Dangerous}, is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
+	\item[]VisualStudio: The Build It Yourself for Visual Studio section \ref{buildItYourself} of this chapter describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
 
-    \item \Fluorite, by ~\citeasnoun{YoonMyers2011Flourite}, is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies in ~\cite{YoonMyers2012Backtracking} and visualizing code histories in ~\cite{YoonETAL2013VisualizeChange}.
-	
 
-\end{itemize}
-\item[] For Microsoft VisualStudio
-\begin{itemize}
-	\item The Build It Yourself for Visual Studio section \ref{buildItYourself} of this chapter describes in detail how to build your own Visual Studio extension that collects all command events from the IDE.
-	
-	\item CodeAlike\footnote{\url{https://codealike.com}} is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency. 
-\end{itemize}
 
-	\item[] Hackystat by \citeasnoun{V:johnson2003beyond}, provides a framework to collect usage data from many sources.%https://code.google.com/p/hackystat/
-	
+	\item[]VisualStudio: CodeAlike\footnote{\url{https://codealike.com}} is a Visual Studio extension for personal analytics and research of usage data related to coding efficiency. 
+
+    \item[]Eclipse: \CodingTracker, by ~\citeasnoun{NegaraETAL2012Dangerous}, is a usage data collector for the Eclipse IDE that records every character insertion and deletion. \CodingTracker{} records the code edits so accurately that it can later replay them to show the changes in action. \CodingTracker{} has been used to conduct empirical studies and accurately infer high-level changes such as refactorings~\cite{NegaraETAL2013ManualRefactorings}.
+
+    \item[]Eclipse: \Fluorite, by ~\citeasnoun{YoonMyers2011Flourite}, is an Eclipse-based tool that captures usage data such as invoked commands, typed characters, cursor movements, and text selections. \Fluorite{} has been used to study programmers' backtracking strategies in ~\cite{YoonMyers2012Backtracking} and visualizing code histories in ~\cite{YoonETAL2013VisualizeChange}.
+
+	\item[]Both: Hackystat by \citeasnoun{V:johnson2003beyond}, provides a framework to collect usage data from many sources.%https://code.google.com/p/hackystat/
 \end{itemize}
 
 %lstlisting settings for section 2
