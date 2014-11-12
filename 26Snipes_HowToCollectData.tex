@@ -4,7 +4,7 @@
 There are many options for collecting usage data from IDEs.   Existing tools can provide solutions for commonly used IDEs and some support collecting data from additional sources.   Another way to start is to study data collected in previous projects such as data available in the Eclipse archive for UDC data.  This archive contains a wealth of data collected by UDC when UDC was integrated with each Eclipse version in 2009 and 2010.  The data is currently available at this URL:
 \url{http://archive.eclipse.org/projects/usagedata/}
 
-You may have more specific questions than what can be answered with the UDC data or need to collect usage data for a specific experiment.  In this section we discuss details on how to use existing data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and \CodingSpectator{} (\SecRef{CodingSpectator}).  Then we'll walk through creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks that may work for your research.
+You may have more specific questions than what can be answered with the UDC data or need to collect usage data for a specific experiment.  In this section we discuss details on how to use existing data collection tools for Eclipse including Usage Data Collector, Mylyn Monitor, and \CodingSpectator{} (\SecRef{CodingSpectator}).  Then we'll walk through creating a usage data collection extension to Microsoft Visual Studio.  Before we get into details, here is an overview of some existing frameworks.
 
 \begin{itemize}
 
@@ -69,7 +69,7 @@ community was using the Eclipse IDE.
 While UDC was included in official Eclipse releases and data was collected from
 hundreds of thousands of Eclipse users between 2008 and 2011, the project was eventually shut down,
 and UDC was removed from official Eclipse releases.
-However, the source code for UDC remains available and researchers can still use and deploy it.
+However, the source code for UDC remains available for collecting data.
 
 \subsubsection{Collected Data}
 
@@ -469,7 +469,7 @@ workspace a set of data is uploaded from.
 Thus, there is normally only one UserId per computer, but there can
 be multiple WorkspaceIds per computer.
 
-While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a research project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component, which collects tool data like UDC, but also includes information about what program elements
+While there is some coding involved, setting up the UDC for Eclipse can provide thorough usage data collection for a project using Eclipse.   For lab studies, not much setup is required.  For larger or distributed studies, some infrastructure (a web server) and code (the UDC data server) are required.  Next we look at Mylyn and the Eclipse Mylyn Monitor component, which collects tool data like UDC, but also includes information about what program elements
 the programmer is working with.
 
 \subsection{Mylyn and the Eclipse Mylyn Monitor}
@@ -798,7 +798,7 @@ several advantages:
 \begin{enumerate}
 %
 \item Subversion makes all revisions of each file easily accessible. This makes
-  troubleshooting easier for researchers.
+  troubleshooting easier.
 %
 \item For textual files, Subversion submits only the \emph{changes} made to the
   files as opposed to the entire new file. This differential data submission
@@ -822,7 +822,7 @@ of the file system to an earlier version. To handle merge conflicts,
 \CodingSpectator{} has built-in support for automatic conflict detection and
 resolution. When \CodingSpectator{} detects a merge conflict, it removes the
 developer's data from the central repository and then submits the new data. Despite
-removing the data from the central repository, the researchers can still locate
+removing the data from the central repository, it is possible to locate
 the merge conflicts and restore the data that was collected before the conflicts occurred.
 
 \CodingSpectator{} prompts the developers for their Subversion user names and
@@ -853,7 +853,7 @@ for building \CodingSpectator's update site from source code.
 
 In addition to collecting detailed refactoring data, \CodingSpectator{} provides
 a reusable infrastructure for collecting Eclipse usage data. Extending
-\CodingSpectator{} frees researchers from having to develop many features from
+\CodingSpectator{} frees you from having to develop many features from
 scratch, \eg, Subversion communications, automatic merge conflict detection and
 resolution, secure storage of Subversion credentials, and periodic update
 reminders.

@@ -1,6 +1,6 @@
 \section{Usage Data Research Concepts}
 
-In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources necessary to support your research.
+In this section we discuss background on usage data research and provide motivation for analyzing usage data by describing what we can learn from it.  With a review of Goal-Question-Metric, we discuss how to focus usage data collection with specific research goals.  To round out the concepts, we discuss additional considerations such as privacy and additional data sources that may useful.
 
 \subsection{What Is Usage Data and Why Analyze It?}
 
@@ -55,7 +55,7 @@ histories and their command invocations. For example, it records changes in
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
 
-Researchers ~\citeaffixed{V:Murphy2006How}{e.g.,} used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
+Studies ~\citeaffixed{V:Murphy2006How}{e.g.,} used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
 IDE that leverages the usage data to provide a task-focused User Interface (UI) and increase a developer's productivity~\cite{Kersten-Mylyn}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, classes, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in Section \ref{MylynMonitor}.
 
 %The Mylyn team analyzed collected and analyzed usage data to provide empirical
@@ -80,7 +80,7 @@ Data Collector (UDC)\footnote{\url{http://www.eclipse.org/epp/usagedata/}}, as p
 distribution package for several years. UDC collected data from hundreds of
 thousands of Eclipse users every month. To the best of our knowledge, the UDC
 data set\footnote{\url{http://archive.eclipse.org/projects/usagedata/}} is the largest set of IDE usage data that is publicly
-available. As described in ~\cite{MurphyHill2012Improving} and ~\cite{VakilianETAL2013Compositional}, several researchers  ~\citeaffixed{VakilianJohnson2014Alternate,VakilianETAL2013Compositional,V:MurphyHill2012How}{including} mined this large
+available. As described in ~\cite{MurphyHill2012Improving} and ~\cite{VakilianETAL2013Compositional}, several papers~\citeaffixed{VakilianJohnson2014Alternate,VakilianETAL2013Compositional,V:MurphyHill2012How}{including} mined this large
 data set to gain insight about programmers' practices and develop new tools that better fit programmers' practices.
 For more information on UDC, see the included Section \ref {EclipseUsageDataCollector} on using UDC to collect usage data from Eclipse.
 
@@ -102,7 +102,7 @@ With this background on usage data collection and research based on usage data, 
 
 \subsection{Selecting Relevant Data Based on a Goal}
 \label{SelectingData}
-Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While the general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas for research can make data collection faster and more efficient and reduce noise in the collected data.  A process for defining the desired data can follow structures such as Goal-Question-Metric defined by \citeasnoun{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, in the Experiences Gamifying Software Development \cite{SnipesExperiencesGamifyingSoftwareDevelopment} study we focused on the navigation practices of developers.  The study tried to encourage developers to use structured navigation practices (navigating source code by using commands and tools that follow dependency links and code structure models).  In that study, we defined a subset of the available data based on a Goal-Question-Metric structure as follows:
+Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While the general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas can make data collection faster and more efficient and reduce noise in the collected data.  A process for defining the desired data can follow structures such as Goal-Question-Metric defined by \citeasnoun{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, in the Experiences Gamifying Software Development \cite{SnipesExperiencesGamifyingSoftwareDevelopment} study we focused on the navigation practices of developers.  The study tried to encourage developers to use structured navigation practices (navigating source code by using commands and tools that follow dependency links and code structure models).  In that study, we defined a subset of the available data based on a Goal-Question-Metric structure as follows:
     \begin{itemize}
 \item
 	Goal
@@ -130,11 +130,11 @@ Similarly the time-stamp can be converted to the hour to look at events grouped 
 
 \subsection{Privacy Concerns}
 
-It is great to see how usage data may benefit your research. However, there are some privacy concerns your developers might and often have regarding the data collection and who the data is shared with. These privacy concerns arise mainly since the collected data may expose individual developers or it may expose parts of the source code companies are working on.  How you handle information privacy in data collection affects what you can learn from the data during analysis (see Section \ref{sec:dataAnonymity}).
+Usage data can be useful, however, there are some privacy concerns your developers might and often have regarding the data collection and who the data is shared with. These privacy concerns arise mainly since the collected data may expose individual developers or it may expose parts of the source code companies are working on.  How you handle information privacy in data collection affects what you can learn from the data during analysis (see Section \ref{sec:dataAnonymity}).
 
 To minimize privacy concerns about the collected data, steps such as encrypting sensitive pieces of information, for instance, by using a one-way hash-function can be taken. Hashing sensitive names, such as developer names, window titles, filenames or source code identifiers, provides a way to obfuscate the data and reduce the risk of information that allows identification of the developer or the projects and code they are working on. While this obfuscation makes it more difficult to analyze the exact practices, using a one-way hash-function will still allow differentiation between distinct developers, even if anonymous.
 
-Maintaining developer privacy is important but, there may be parts of your research where you need the ground truth that confirms what you observe in the usage data.  Thus you may need to know who is contributing data so you can ask them questions that establish the ground truth. A privacy policy statement helps participants and developers be more confident sharing information with you when they know they can be identified with the information.  The policy statement should specifically state who will have access to the data and what they will do with it. Limiting statements such as not reporting data at the individual level helps to reduce a developer's privacy concerns.
+Maintaining developer privacy is important but, there may be questions for which you need the ground truth that confirms what you observe in the usage data.  Thus you may need to know who is contributing data so you can ask them questions that establish the ground truth. A privacy policy statement helps participants and developers be more confident sharing information with you when they know they can be identified with the information.  The policy statement should specifically state who will have access to the data and what they will do with it. Limiting statements such as not reporting data at the individual level helps to reduce a developer's privacy concerns.
 
 \subsection{Study Scope}
 
@@ -143,6 +143,6 @@ Small studies that examine a variety of data can generate metrics that you can a
         For instance, ~\citeasnoun{wbsnipes:Robillard2004How} defined a metric on structured navigation in their observational study on how developers discover relevant code elements during maintenance. This metric can now be used in a larger industrial study setting in which structured navigation command usage is collected as usage data, even without the additional information Robillard et al. gathered for their study.
 %    For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\cite{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.
 
-Finally and most importantly, usage data may not be enough to definitively answer your research questions. While usage data tells what a developer is doing in the IDE, it usually leaves gaps in the story (see Section \ref{sec:limitations}).  Augmenting usage data with additional data sources such as developer feedback, task descriptions, and change histories (see Section \ref{sec:IncludingOtherSources}) can fill in the details necessary to understanding user behavior.
+Finally and most importantly, usage data may not be enough to definitively solve a problem or inquiry. While usage data tells what a developer is doing in the IDE, it usually leaves gaps in the story (see Section \ref{sec:limitations}).  Augmenting usage data with additional data sources such as developer feedback, task descriptions, and change histories (see Section \ref{sec:IncludingOtherSources}) can fill in the details necessary to understand user behavior.
 
 
