@@ -1,16 +1,18 @@
-\documentclass{book}
+\documentclass[authoryear]{elsarticle}
 %\usepackage{cite}
-\usepackage{harvard}
+%\usepackage{harvard}
+	\usepackage{natbib}
 \input{26Snipes_macros}
 \usepackage{alltt}
 \usepackage{pdfpages}
 \usepackage{enumitem}
 \usepackage{url}
+\usepackage{hyperref}
 \begin{document}
-\bibliographystyle{agsm}
+%\bibliographystyle{agsm}
 \title{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
 
-\chapter{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
+%\chapter{A Practical Guide to Analyzing IDE Usage Data\vspace{-0ex}}
 \author{
 Will Snipes, Emerson Murphy-Hill,
 Thomas Fritz, Mohsen Vakilian \\
@@ -32,9 +34,7 @@ As software development evolved, many developers began using Integrated Developm
 Instrumenting the IDE involves extending the IDE within a provided API framework.  Eclipse and Visual Studio support a rich API framework allowing logging of many commands and actions as they occur.  Leveraging this API, thre are new tools that observe all the commands developers use, developer actions within the editor such as browsing or inserting new code, and other add-in tools developers use.  Section~\ref{SecHowToCollectData} provides a how-to guide for implementing tools to collect data from Eclipse or Visual Studio.  
 
 Collecting IDE usage data provides an additional view of how developers produce software to help advance the practice of software engineering.  
-The most obvious application of usage data is to analyze how developers spend their time in the IDE by classifying the events in the usage log and tracking time between each event.  Through usage data analysis, we gain a better understanding of the developer's time allocation and can identify opportunities to save time such as reducing build time or improving source code search and navigation tools.  Beyond time analysis, researchers have applied usage data to quantify developers use of practices such as the study of types of refactoring by~\citeasnoun{V:MurphyHill2012How} that found developers mostly perform minor refactoring while making other changes.  In another example,~\citeasnoun{Carter2010Are} leverage usage data to discover areas of the code where developers have difficulty with comprehension and should ask for assistance from more experienced developers.  One study determined whether developers are doing test driven development properly by writing the tests first then writing code to make those tests pass or are doing it improperly by writing tests against previously written code~\cite{Kou2010Operational}.  ~\citeasnoun{fritzBookChapter} describe how to collect and process data for recommendation systems including tools and analysis methods, and they discuss important findings from developer usage data analysis.    These works provide a good background and examples where usage data provided necessary information to answer interesting research questions in software engineering.
-
-%For example, usage data supports analysis of how developers spend their time~\cite{V:johnson2003beyond}, developer actions that might benefit from greater tool support~\cite{V:MurphyHill2012How}, where developers have difficulty comprehending code~\cite{Carter2010Are}, even whether they are following specific practices such as test-driven development~\cite{Kou2010Operational}.   With these data, we can answer questions such as the level of expertise developers have for an area of source code~\cite{Fritz2010Degreeofknowledge}.   In another example, ~\citeasnoun{fritzBookChapter} describes how to collect and process data for recommendation systems including tools, analysis methods, and important findings from developer usage data analysis.    
+The most obvious application of usage data is to analyze how developers spend their time in the IDE by classifying the events in the usage log and tracking time between each event.  Through usage data analysis, we gain a better understanding of the developer's time allocation and can identify opportunities to save time such as reducing build time or improving source code search and navigation tools.  Beyond time analysis, researchers have applied usage data to quantify developers use of practices such as the study of types of refactoring by~\citet{V:MurphyHill2012How} that found developers mostly perform minor refactoring while making other changes.  In another example,~\citet{Carter2010Are} leverage usage data to discover areas of the code where developers have difficulty with comprehension and should ask for assistance from more experienced developers.  One study determined whether developers are doing test driven development properly by writing the tests first then writing code to make those tests pass or are doing it improperly by writing tests against previously written code~\citep{Kou2010Operational}.  ~\citet{fritzBookChapter} describe how to collect and process data for recommendation systems including tools and analysis methods, and they discuss important findings from developer usage data analysis.    These works provide a good background and examples where usage data provided necessary information to answer interesting research questions in software engineering.
 
 There are limits, however, to what IDE usage data can tell us.  The missing elements include the developer's mental model of the code, and how they intend to alter the code to suit new requirements.  The developers' experience, design ideas, and constraints they keep in mind during an implementation activity are factors that we must obtain separately.  
 
@@ -124,7 +124,7 @@ the limitations of collecting and analyzing usage data.
 
 \section{Conclusion}
 
-Analyzing IDE usage data provides insights into many developer activities which help identify ways we can improve software engineering productivity.  For example, one study found developers spend more than half of their time browsing and reading source code (excluding editing and all other activities in the IDE)~\cite{SnipesExperiencesGamifyingSoftwareDevelopment}.  This finding supports initiatives to build and promote tools that improve the navigation experience by supporting structural navigation.  Other references mentioned in this chapter leveraged usage data to identify opportunities to improve refactoring tools~\cite{VakilianJohnson2014Alternate,MurphyHill2012Improving}.  By identifying task contexts through usage data, Mylyn made improvements to how developers manage their code and task context~\cite{Kersten-Mylyn}.  
+Analyzing IDE usage data provides insights into many developer activities which help identify ways we can improve software engineering productivity.  For example, one study found developers spend more than half of their time browsing and reading source code (excluding editing and all other activities in the IDE)~\citep{SnipesExperiencesGamifyingSoftwareDevelopment}.  This finding supports initiatives to build and promote tools that improve the navigation experience by supporting structural navigation.  Other references mentioned in this chapter leveraged usage data to identify opportunities to improve refactoring tools~\citep{VakilianJohnson2014Alternate,MurphyHill2012Improving}.  By identifying task contexts through usage data, Mylyn made improvements to how developers manage their code and task context~\citep{Kersten-Mylyn}.  
 
 If the last two decades could be labeled the era
 of big data collection,
@@ -155,7 +155,7 @@ Science Foundation under grant number 1252995.
 \section{Code Listings}
 \input{26Snipes_CodeListings}
 
-\bibliographystyle{abbrv}
+
 \bibliography{26Snipes_Bibliography} 
 
 

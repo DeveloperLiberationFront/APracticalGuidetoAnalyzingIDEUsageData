@@ -49,18 +49,18 @@ data about a subset of the IDE's state machine. While a combination of video rec
 An example of a usage data collection and analysis project with wide adoption
 in practice is the Mylyn project (previously known as Mylar). Mylyn started as a research project that later became part of Eclipse and that exhibits both of the advantages of understanding programmer's practices and improving tool support.
 
-Mylyn by ~\citeasnoun{Kersten-Mylar2005} was one of the first usage data collectors in IDEs. It was
+Mylyn by ~\citet{Kersten-Mylar2005} was one of the first usage data collectors in IDEs. It was
 implemented as a plug-in for the Eclipse IDE and captured developers' navigation
 histories and their command invocations. For example, it records changes in
 selections, views, perspectives as well as invocations of commands such as
 delete, copy, and automated refactoring. By now, the Mylyn project ships with the official distribution of Eclipse.
 
-Studies ~\citeaffixed{V:Murphy2006How}{e.g.,} used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
-IDE that leverages the usage data to provide a task-focused User Interface (UI) and increase a developer's productivity~\cite{Kersten-Mylyn}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, classes, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in Section \ref{MylynMonitor}.
+Studies, e.g.~\citep{V:Murphy2006How}, used the Mylyn project to collect and then analyze usage data to gather empirical evidence on the usage frequency of various features of Eclipse.  In addition to collecting usage data, Mylyn introduces new features to the Eclipse
+IDE that leverages the usage data to provide a task-focused User Interface (UI) and increase a developer's productivity~\citep{Kersten-Mylyn}. In particular, Mylyn introduces the concept of a \emph{task context}. A task context comprises a developer's interactions in the IDE that are related to the task, such as selections and edits of code entities (\eg, files, classes, and packages). Mylyn analyzes the interactions for a task and uses the information to surface relevant information with less clutter in various features such as outline, navigation, and auto-completion.  More information on collecting data from Mylyn is in Section \ref{MylynMonitor}.
 
 %The Mylyn team analyzed collected and analyzed usage data to provide empirical
 %evidence about the usage frequency of various features of
-%Eclipse~\cite{V:Murphy2006How}.
+%Eclipse~\citep{V:Murphy2006How}.
 %
 
 %In addition to collecting usage data, Mylyn provided new features to the Eclipse
@@ -80,29 +80,28 @@ Data Collector (UDC)\footnote{\url{http://www.eclipse.org/epp/usagedata/}}, as p
 distribution package for several years. UDC collected data from hundreds of
 thousands of Eclipse users every month. To the best of our knowledge, the UDC
 data set\footnote{\url{http://archive.eclipse.org/projects/usagedata/}} is the largest set of IDE usage data that is publicly
-available. As described in ~\cite{MurphyHill2012Improving} and ~\cite{VakilianETAL2013Compositional}, several papers~\citeaffixed{VakilianJohnson2014Alternate,VakilianETAL2013Compositional,V:MurphyHill2012How}{including} mined this large
+available. As described in ~\citep{MurphyHill2012Improving} and ~\citep{VakilianETAL2013Compositional}, several papers including~\citep{VakilianJohnson2014Alternate,VakilianETAL2013Compositional,V:MurphyHill2012How}, mined this large
 data set to gain insight about programmers' practices and develop new tools that better fit programmers' practices.
 For more information on UDC, see the included Section \ref {EclipseUsageDataCollector} on using UDC to collect usage data from Eclipse.
 
-Studies of automated refactoring are another example of interesting research results from analyzing usage data. ~\citeasnoun{VakilianETAL2013Compositional}, and ~\citeasnoun{V:MurphyHill2012How} analyzed the Eclipse UDC
+Studies of automated refactoring are another example of interesting research results from analyzing usage data. ~\citet{VakilianETAL2013Compositional}, and ~\citet{V:MurphyHill2012How} analyzed the Eclipse UDC
 data, developed
-custom usage data collectors~\cite{VakilianETAL2012UseDisuseMisuse}, and
-conducted survey and field studies~\citeaffixed{V:MurphyHill2012How,VakilianJohnson2014Alternate,NegaraETAL2013ManualRefactorings}{e.g.,} to gain more
-insight about programmers' use of the existing automated refactorings. ~\citeasnoun{V:MurphyHill2012How} and
-~\citeasnoun{NegaraETAL2013ManualRefactorings}
+custom usage data collectors~\citep{VakilianETAL2012UseDisuseMisuse}, and
+conducted survey and field studies,  e.g.~\citep{V:MurphyHill2012How,VakilianJohnson2014Alternate,NegaraETAL2013ManualRefactorings}, to gain more
+insight about programmers' use of the existing automated refactorings. ~\citet{V:MurphyHill2012How} and
+~\citet{NegaraETAL2013ManualRefactorings}
  found that programmers do not use the automated refactorings as
 much as refactoring experts expect. This finding motivated researchers to study
 the factors that lead to low adoption of automated
-refactorings in ~\cite{VakilianETAL2012UseDisuseMisuse,V:MurphyHill2012How} and
+refactorings in ~\citep{VakilianETAL2012UseDisuseMisuse,V:MurphyHill2012How} and
 propose novel techniques for improving the usability of automated
-refactorings
-~\citeaffixed{V:MurphyHill2012How,MurphyHill2012Improving,MurphyHill2008ExtractMethod,LeeETAL2013DragDrop,MurphyHillETAL2011Gestures,GeETAL2012BeneFactor,FosterETAL2012WitchDoctor}{e.g.,}.
+refactorings e.g.~\citep{V:MurphyHill2012How,MurphyHill2012Improving,MurphyHill2008ExtractMethod,LeeETAL2013DragDrop,MurphyHillETAL2011Gestures,GeETAL2012BeneFactor,FosterETAL2012WitchDoctor}.
 
 With this background on usage data collection and research based on usage data, we look next at how to define usage data collection requirements based on your research goals.
 
 \subsection{Selecting Relevant Data Based on a Goal}
 \label{SelectingData}
-Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While the general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas can make data collection faster and more efficient and reduce noise in the collected data.  A process for defining the desired data can follow structures such as Goal-Question-Metric defined by \citeasnoun{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, in the Experiences Gamifying Software Development \cite{SnipesExperiencesGamifyingSoftwareDevelopment} study we focused on the navigation practices of developers.  The study tried to encourage developers to use structured navigation practices (navigating source code by using commands and tools that follow dependency links and code structure models).  In that study, we defined a subset of the available data based on a Goal-Question-Metric structure as follows:
+Tailoring usage data collection to specific needs helps optimize the volume of data and privacy concerns when collecting information from software development applications.  While the general solutions described in the next sections collect all events from the Integrated Development Environment (IDE), limiting the data collection to specific areas can make data collection faster and more efficient and reduce noise in the collected data.  A process for defining the desired data can follow structures such as Goal-Question-Metric defined by \citet{basili-GQM}  that refines a high-level goal into specific metrics to generate from data.  For example, in the Experiences Gamifying Software Development \citep{SnipesExperiencesGamifyingSoftwareDevelopment} study we focused on the navigation practices of developers.  The study tried to encourage developers to use structured navigation practices (navigating source code by using commands and tools that follow dependency links and code structure models).  In that study, we defined a subset of the available data based on a Goal-Question-Metric structure as follows:
     \begin{itemize}
 \item
 	Goal
@@ -140,8 +139,8 @@ Maintaining developer privacy is important but, there may be questions for which
 
 Small studies that examine a variety of data can generate metrics that you can apply to data collected in bigger studies where the additional information might not be available. 
 %    with larger data source that does not have augmented data.  
-        For instance, ~\citeasnoun{wbsnipes:Robillard2004How} defined a metric on structured navigation in their observational study on how developers discover relevant code elements during maintenance. This metric can now be used in a larger industrial study setting in which structured navigation command usage is collected as usage data, even without the additional information Robillard et al. gathered for their study.
-%    For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\cite{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.
+        For instance, ~\citet{wbsnipes:Robillard2004How} defined a metric on structured navigation in their observational study on how developers discover relevant code elements during maintenance. This metric can now be used in a larger industrial study setting in which structured navigation command usage is collected as usage data, even without the additional information Robillard et al. gathered for their study.
+%    For example, the metric structured navigation defined by Robillard et al.  in their study on how developers discover relevant code elements in maintenance\citep{wbsnipes:Robillard2004How}, supports a larger study where we can observe structured navigation command use in an industrial setting.
 
 Finally and most importantly, usage data may not be enough to definitively solve a problem or inquiry. While usage data tells what a developer is doing in the IDE, it usually leaves gaps in the story (see Section \ref{sec:limitations}).  Augmenting usage data with additional data sources such as developer feedback, task descriptions, and change histories (see Section \ref{sec:IncludingOtherSources}) can fill in the details necessary to understand user behavior.
 
