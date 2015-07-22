@@ -1,4 +1,1 @@
-ASDChapter
-==========
-
-Collaboration site for developing A Practical Guide to Analyzing IDE Usage Data
+A Practical Guide to Analyzing IDE Usage Data. Will Snipes, Emerson Murphy-Hill, Thomas Fritz, Mohsen Vakilian, Kosta Damevski, Anil Nair, David Shepherd. The Art and Science of Analyzing Software Data, 2015.
